@@ -1,0 +1,1220 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf8">
+    <script type="text/javascript" src="http://cl.gialen.com:20800/site_lib/jquery-1.7.2.min.js"></script>
+
+    <script type="text/javascript" src="http://cl.gialen.com:20800/site_lib/jeditable/jeditable4.js"></script>
+    <script type="text/javascript" src="http://cl.gialen.com:20800/site_lib/htmltable2csv/htmltable2csv2.js"></script>
+    <script type="text/javascript" src="http://cl.gialen.com:20800/site_lib/htmltable2csv/htmltable2csv4.js"></script>
+    <script type="text/javascript" src="http://cl.gialen.com:20800/site_lib/zeroclipboard/ZeroClipboard.js"></script>
+    <!--<script type="text/javascript" src="http://cl.gialen.com:20800/site_lib/sorter/jquery.tablesorter.js"></script>-->
+    <script type="text/javascript" src="http://cl.gialen.com:20800/site_lib/sparkline/sparkline.js"></script>
+    <!--<script type="text/javascript" src="http://cl.gialen.com:20800/site_lib/tablefilter/picnet.table.filter.min.js"></script>-->
+    <script type="text/javascript" src="http://cl.gialen.com:20800/site_lib/KeyTable-1.1.7/KeyTable.js"></script>
+    <script type="text/javascript" src="http://cl.gialen.com:20800/site_lib/DataTables-1.9.4/DataTables.min.js"></script>
+    <style type="text/css">
+        /* 
+
+	TableCloth	
+	by Alen Grakalic, brought to you by cssglobe.com
+	
+            */
+            
+            /* general styles */
+            
+            table, td{
+                    font:100% Arial, Helvetica, sans-serif; 
+            }
+            table{border-collapse:collapse;margin:1em 0; width:1200px;}
+            th, td{text-align:left;padding:.5em;border:1px solid #fff;}
+            th{background:#328aa4 url(tr_back.gif) repeat-x;color:#fff;}
+            td{background:#e5f1f4;}
+            
+            /* tablecloth styles */
+            
+            tr.even td{background:#e5f1f4;}
+            tr.odd td{background:#f8fbfc;}
+            
+            th.over, tr.even th.over, tr.odd th.over{background:#4a98af;}
+            th.down, tr.even th.down, tr.odd th.down{background:#bce774;}
+            th.selected, tr.even th.selected, tr.odd th.selected{}
+            
+            td.over, tr.even td.over, tr.odd td.over{background:#ecfbd4;}
+            td.down, tr.even td.down, tr.odd td.down{background:#bce774;color:#fff;}
+            td.selected, tr.even td.selected, tr.odd td.selected{background:#bce774;color:#555;}
+            
+            /* use this if you want to apply different styleing to empty table cells*/
+            td.empty, tr.odd td.empty, tr.even td.empty{background:#fff;}
+            
+            table.KeyTable td.focus {
+                border: 3px solid #3366FF;
+            }
+            
+            
+
+.dataTables_length {
+    
+
+    width: 200px;
+}
+.dataTables_filter {
+    text-align: right;
+    left: 700px
+    width: 300px;
+}
+/************************************/
+.dataTables_wrapper {
+    clear: both;
+    position: relative;
+}
+.dataTables_processing {
+    background-color: white;
+    border: 1px solid #DDDDDD;
+    color: #999999;
+    font-size: 14px;
+    height: 30px;
+    left: 50%;
+    margin-left: -125px;
+    margin-top: -15px;
+    padding: 14px 0 2px;
+    position: absolute;
+    text-align: center;
+    top: 50%;
+    width: 250px;
+}
+.dataTables_length {
+    float: left;
+    width: 40%;
+}
+.dataTables_filter {
+    float: right;
+    text-align: right;
+    width: 50%;
+}
+.dataTables_info {
+    float: left;
+    width: 60%;
+}
+.dataTables_paginate {
+    float: right;
+    text-align: right;
+}
+.paginate_disabled_previous, .paginate_enabled_previous, .paginate_disabled_next, .paginate_enabled_next {
+    color: #111111 !important;
+    cursor: pointer;
+    float: left;
+    height: 19px;
+}
+.paginate_disabled_previous:hover, .paginate_enabled_previous:hover, .paginate_disabled_next:hover, .paginate_enabled_next:hover {
+    text-decoration: none !important;
+}
+.paginate_disabled_previous:active, .paginate_enabled_previous:active, .paginate_disabled_next:active, .paginate_enabled_next:active {
+    outline: medium none;
+}
+.paginate_disabled_previous, .paginate_disabled_next {
+    color: #666666 !important;
+}
+.paginate_disabled_previous, .paginate_enabled_previous {
+    padding-left: 23px;
+}
+.paginate_disabled_next, .paginate_enabled_next {
+    margin-left: 10px;
+    padding-right: 23px;
+}
+.paginate_disabled_previous {
+    background: url("../images/back_disabled.png") no-repeat scroll left top transparent;
+}
+.paginate_enabled_previous {
+    background: url("../images/back_enabled.png") no-repeat scroll left top transparent;
+}
+.paginate_enabled_previous:hover {
+    background: url("../images/back_enabled_hover.png") no-repeat scroll left top transparent;
+}
+.paginate_disabled_next {
+    background: url("../images/forward_disabled.png") no-repeat scroll right top transparent;
+}
+.paginate_enabled_next {
+    background: url("../images/forward_enabled.png") no-repeat scroll right top transparent;
+}
+.paginate_enabled_next:hover {
+    background: url("../images/forward_enabled_hover.png") no-repeat scroll right top transparent;
+}
+
+.paginate_disabled_previous {
+    background-image: url("http://cl.gialen.com:20800/site_lib/DataTables-1.9.4/media/images/back_disabled.png");
+}
+.paginate_enabled_previous {
+    background-image: url("http://cl.gialen.com:20800/site_lib/DataTables-1.9.4/media/images/back_enabled.png");
+}
+.paginate_disabled_next {
+    background-image: url("http://cl.gialen.com:20800/site_lib/DataTables-1.9.4/media/images/forward_disabled.png");
+}
+.paginate_enabled_next {
+    background-image: url("http://cl.gialen.com:20800/site_lib/DataTables-1.9.4/media/images/forward_enabled.png");
+}
+
+/******************************************/
+.section {
+    background: none repeat scroll 0 0 #EFEFEF;
+    margin: 0 0 5px;
+    width: 1200px;
+}
+ul.tabs {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border-bottom: 1px solid #DDDDDD;
+    height: 28px;
+    line-height: 25px;
+    list-style: none outside none;
+}
+.tabs li {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background: none repeat scroll 0 0 #F9F9F9;
+    border-color: #E4E4E4 #E4E4E4 #F9F9F9;
+    border-image: none;
+    border-style: solid;
+    border-width: 1px;
+    color: #777777;
+    cursor: pointer;
+    display: inline;
+    float: left;
+    margin: 0 1px -1px 0;
+    padding: 0 13px 1px;
+    position: relative;
+}
+.tabs li:hover, .vertical .tabs li:hover {
+    background: none repeat scroll 0 0 #FFFFDF;
+    border: 1px solid #FFCA95;
+    color: #FF7700;
+    padding: 0 13px;
+}
+.tabs li.current {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background: none repeat scroll 0 0 #EFEFEF;
+    border-color: #D4D4D4 #D4D4D4 #EFEFEF;
+    border-image: none;
+    border-style: solid;
+    border-width: 1px;
+    color: #444444;
+    padding: 0 13px 2px;
+}
+.box {
+    
+    display: none;
+    
+}
+
+.box.visible {
+    display: block;
+}
+
+                       
+    </style>
+
+    <title>门店订货数据</title>
+
+</head>
+<body>
+<script>
+    
+    
+   
+    
+    (function($) {
+        $(function() {
+        
+          $('ul.tabs').delegate('li:not(.current)', 'click', function() {
+            $(this).addClass('current').siblings().removeClass('current')
+              .parents('div.section').find('div.box').eq($(this).index()).fadeIn(150).siblings('div.box').hide();
+          })
+        
+       })
+       })(jQuery)
+    
+    
+
+
+
+    $(document).ready(function() {
+        var userid = {{userid}}
+        
+       
+        
+        var oTable = $('#fmtable').dataTable({
+            
+            "fnDrawCallback": function( oSettings ) {
+               
+              },
+            "oLanguage": {
+                "sSearch": "搜索:",
+                "sLengthMenu": '显示 <select>'+
+                  '<option value="10">10</option>'+
+                  '<option value="20">20</option>'+                  
+                  '<option value="50">50</option>'+
+                  '<option value="-1">All</option>'+
+                  '</select> 条记录',
+                "sInfo": "当前显示的是从第 _START_ 到第 _END_ 条记录 (共 _TOTAL_ 条)",
+                "sInfoFiltered": " 　来源记录共 _MAX_ 条"
+              },
+            
+            "fnFooterCallback": function (nFoot, aaData, iStart, iEnd, aiDisplay ) {
+                //console.log(aiDisplay)
+                var total_count = 0;
+                var total_costs = 0;
+                var total_allstock = 0;
+                var total_alloc = 0;
+                var total_sales = 0;
+                var total_week1 = 0;
+                var total_week2 = 0;
+                var total_week3 = 0;
+                var total_week4 = 0;
+                /*Calculate the total for all rows, even outside this page*/
+                var i;
+                for (i in aiDisplay) {
+                    /*Have to strip out extra characters so parsefloat and parseInt work right*/
+                    
+                    total_count += parseInt(aaData[aiDisplay[i]][5].replace(',',''));
+                    total_costs += parseFloat(aaData[aiDisplay[i]][6].replace('$', '').replace(',',''));
+                    total_allstock += fmparseInt(aaData[aiDisplay[i]][10]);
+                    total_alloc += fmparseInt(aaData[aiDisplay[i]][11]);
+                    //total_sales += parseInt(aaData[aiDisplay[i]][11].replace(',',''));
+                    total_sales += fmparseInt(aaData[aiDisplay[i]][12]);
+                    total_week1 += fmparseInt(aaData[aiDisplay[i]][13]);
+                    total_week2 += fmparseInt(aaData[aiDisplay[i]][14]);
+                    total_week3 += fmparseInt(aaData[aiDisplay[i]][15]);
+                    total_week4 += fmparseInt(aaData[aiDisplay[i]][16]);
+                 }
+         
+                var pageTotal_costs = 0;
+                var pageTotal_count = 0;
+                var pageTotal_allstock = 0;
+                var pageTotal_alloc = 0;
+                var pageTotal_sales = 0;
+                var pageTotal_week1 = 0;
+                var pageTotal_week2 = 0;
+                var pageTotal_week3 = 0;
+                var pageTotal_week4 = 0;
+         
+                /*calculate totals for this page*/
+                for (var i = iStart; i < iEnd; i++) {
+                    pageTotal_count += parseInt(aaData[aiDisplay[i]][5].replace(',',''));
+                    pageTotal_costs += parseFloat(aaData[aiDisplay[i]][6].replace('$', '').replace(',',''));
+                    pageTotal_allstock += fmparseInt(aaData[aiDisplay[i]][10]);
+                    pageTotal_alloc += fmparseInt(aaData[aiDisplay[i]][11]);
+                    pageTotal_sales += fmparseInt(aaData[aiDisplay[i]][12]);
+                    pageTotal_week1 += fmparseInt(aaData[aiDisplay[i]][13]);
+                    pageTotal_week2 += fmparseInt(aaData[aiDisplay[i]][14]);
+                    pageTotal_week3 += fmparseInt(aaData[aiDisplay[i]][15]);
+                    pageTotal_week4 += fmparseInt(aaData[aiDisplay[i]][16]);
+                }
+                //console.log("t:"+total_count)
+                //console.log("p:"+pageTotal_count)
+                /*modify the footer row*/
+                var nCells = nFoot.getElementsByTagName('th');
+         
+                nCells[5].innerHTML = '<center>' + pageTotal_count + '<br>(' + total_count + ')</center>';
+                nCells[10].innerHTML = pageTotal_allstock + '<br>(' + total_allstock + ')';
+                nCells[11].innerHTML = pageTotal_alloc + '<br>(' + total_alloc + ')';
+                nCells[12].innerHTML = pageTotal_sales + '<br>(' + total_sales + ')';
+                nCells[13].innerHTML = pageTotal_week1 + '<br>(' + total_week1 + ')';
+                nCells[14].innerHTML = pageTotal_week2 + '<br>(' + total_week2 + ')';
+                nCells[15].innerHTML = pageTotal_week3 + '<br>(' + total_week3 + ')';
+                nCells[16].innerHTML = pageTotal_week4 + '<br>(' + total_week4 + ')';
+                
+         
+                //nCells[6].innerHTML = pageTotal_costs + '<br>(' + total_costs + ')';
+            }
+        
+                      
+            });
+        
+        var oTable2 = $('#fmtable2').dataTable({
+            
+            "fnDrawCallback": function( oSettings ) {
+                
+              },
+            "oLanguage": {
+                "sSearch": "搜索:",
+                "sLengthMenu": '显示 <select>'+
+                  '<option value="10">10</option>'+
+                  '<option value="20">20</option>'+                  
+                  '<option value="50">50</option>'+
+                  '<option value="-1">All</option>'+
+                  '</select> 条记录',
+                "sInfo": "当前显示的是从第 _START_ 到第 _END_ 条记录 (共 _TOTAL_ 条)",
+                "sInfoFiltered": " 　来源记录共 _MAX_ 条"
+              },
+            
+            "fnFooterCallback": function (nFoot, aaData, iStart, iEnd, aiDisplay ) {
+                //console.log(aiDisplay)
+                var total_count = 0;
+                var total_costs = 0;
+                var total_allstock = 0;
+                var total_alloc = 0;
+                var total_sales = 0;
+                var total_week1 = 0;
+                var total_week2 = 0;
+                var total_week3 = 0;
+                var total_week4 = 0;
+                /*Calculate the total for all rows, even outside this page*/
+                var i;
+                for (i in aiDisplay) {
+                    /*Have to strip out extra characters so parsefloat and parseInt work right*/
+                    
+                    total_count += parseInt(aaData[aiDisplay[i]][5].replace(',',''));
+                    total_costs += parseFloat(aaData[aiDisplay[i]][6].replace('$', '').replace(',',''));
+                    total_allstock += fmparseInt(aaData[aiDisplay[i]][10]);
+                    total_alloc += fmparseInt(aaData[aiDisplay[i]][11]);
+                    //total_sales += parseInt(aaData[aiDisplay[i]][11].replace(',',''));
+                    total_sales += fmparseInt(aaData[aiDisplay[i]][12]);
+                    total_week1 += fmparseInt(aaData[aiDisplay[i]][13]);
+                    total_week2 += fmparseInt(aaData[aiDisplay[i]][14]);
+                    total_week3 += fmparseInt(aaData[aiDisplay[i]][15]);
+                    total_week4 += fmparseInt(aaData[aiDisplay[i]][16]);
+                 }
+         
+                var pageTotal_costs = 0;
+                var pageTotal_count = 0;
+                var pageTotal_allstock = 0;
+                var pageTotal_alloc = 0;
+                var pageTotal_sales = 0;
+                var pageTotal_week1 = 0;
+                var pageTotal_week2 = 0;
+                var pageTotal_week3 = 0;
+                var pageTotal_week4 = 0;
+         
+                /*calculate totals for this page*/
+                for (var i = iStart; i < iEnd; i++) {
+                    pageTotal_count += parseInt(aaData[aiDisplay[i]][5].replace(',',''));
+                    pageTotal_costs += parseFloat(aaData[aiDisplay[i]][6].replace('$', '').replace(',',''));
+                    pageTotal_allstock += fmparseInt(aaData[aiDisplay[i]][10]);
+                    pageTotal_alloc += fmparseInt(aaData[aiDisplay[i]][11]);
+                    pageTotal_sales += fmparseInt(aaData[aiDisplay[i]][12]);
+                    pageTotal_week1 += fmparseInt(aaData[aiDisplay[i]][13]);
+                    pageTotal_week2 += fmparseInt(aaData[aiDisplay[i]][14]);
+                    pageTotal_week3 += fmparseInt(aaData[aiDisplay[i]][15]);
+                    pageTotal_week4 += fmparseInt(aaData[aiDisplay[i]][16]);
+                }
+                //console.log("t:"+total_count)
+                //console.log("p:"+pageTotal_count)
+                /*modify the footer row*/
+                var nCells = nFoot.getElementsByTagName('th');
+         
+                nCells[5].innerHTML = '<center>' + pageTotal_count + '<br>(' + total_count + ')</center>';
+                nCells[10].innerHTML = pageTotal_allstock + '<br>(' + total_allstock + ')';
+                nCells[11].innerHTML = pageTotal_alloc + '<br>(' + total_alloc + ')';
+                nCells[12].innerHTML = pageTotal_sales + '<br>(' + total_sales + ')';
+                nCells[13].innerHTML = pageTotal_week1 + '<br>(' + total_week1 + ')';
+                nCells[14].innerHTML = pageTotal_week2 + '<br>(' + total_week2 + ')';
+                nCells[15].innerHTML = pageTotal_week3 + '<br>(' + total_week3 + ')';
+                nCells[16].innerHTML = pageTotal_week4 + '<br>(' + total_week4 + ')';
+                
+         
+                //nCells[6].innerHTML = pageTotal_costs + '<br>(' + total_costs + ')';
+            }
+        
+                      
+            });
+        
+        var oTable3 = $('#fmtable3').dataTable({
+            
+            "fnDrawCallback": function( oSettings ) {
+                
+              },
+            "oLanguage": {
+                "sSearch": "搜索:",
+                "sLengthMenu": '显示 <select>'+
+                  '<option value="10">10</option>'+
+                  '<option value="20">20</option>'+                  
+                  '<option value="50">50</option>'+
+                  '<option value="-1">All</option>'+
+                  '</select> 条记录',
+                "sInfo": "当前显示的是从第 _START_ 到第 _END_ 条记录 (共 _TOTAL_ 条)",
+                "sInfoFiltered": " 　来源记录共 _MAX_ 条"
+              },
+            
+            "fnFooterCallback": function (nFoot, aaData, iStart, iEnd, aiDisplay ) {
+                //console.log(aiDisplay)
+                var total_count = 0;
+                var total_costs = 0;
+                var total_allstock = 0;
+                var total_alloc = 0;
+                var total_sales = 0;
+                var total_week1 = 0;
+                var total_week2 = 0;
+                var total_week3 = 0;
+                var total_week4 = 0;
+                /*Calculate the total for all rows, even outside this page*/
+                var i;
+                for (i in aiDisplay) {
+                    /*Have to strip out extra characters so parsefloat and parseInt work right*/
+                    
+                    total_count += parseInt(aaData[aiDisplay[i]][5].replace(',',''));
+                    total_costs += parseFloat(aaData[aiDisplay[i]][6].replace('$', '').replace(',',''));
+                    total_allstock += fmparseInt(aaData[aiDisplay[i]][10]);
+                    total_alloc += fmparseInt(aaData[aiDisplay[i]][11]);
+                    //total_sales += parseInt(aaData[aiDisplay[i]][11].replace(',',''));
+                    total_sales += fmparseInt(aaData[aiDisplay[i]][12]);
+                    total_week1 += fmparseInt(aaData[aiDisplay[i]][13]);
+                    total_week2 += fmparseInt(aaData[aiDisplay[i]][14]);
+                    total_week3 += fmparseInt(aaData[aiDisplay[i]][15]);
+                    total_week4 += fmparseInt(aaData[aiDisplay[i]][16]);
+                 }
+         
+                var pageTotal_costs = 0;
+                var pageTotal_count = 0;
+                var pageTotal_allstock = 0;
+                var pageTotal_alloc = 0;
+                var pageTotal_sales = 0;
+                var pageTotal_week1 = 0;
+                var pageTotal_week2 = 0;
+                var pageTotal_week3 = 0;
+                var pageTotal_week4 = 0;
+         
+                /*calculate totals for this page*/
+                for (var i = iStart; i < iEnd; i++) {
+                    pageTotal_count += parseInt(aaData[aiDisplay[i]][5].replace(',',''));
+                    pageTotal_costs += parseFloat(aaData[aiDisplay[i]][6].replace('$', '').replace(',',''));
+                    pageTotal_allstock += fmparseInt(aaData[aiDisplay[i]][10]);
+                    pageTotal_alloc += fmparseInt(aaData[aiDisplay[i]][11]);
+                    pageTotal_sales += fmparseInt(aaData[aiDisplay[i]][12]);
+                    pageTotal_week1 += fmparseInt(aaData[aiDisplay[i]][13]);
+                    pageTotal_week2 += fmparseInt(aaData[aiDisplay[i]][14]);
+                    pageTotal_week3 += fmparseInt(aaData[aiDisplay[i]][15]);
+                    pageTotal_week4 += fmparseInt(aaData[aiDisplay[i]][16]);
+                }
+                //console.log("t:"+total_count)
+                //console.log("p:"+pageTotal_count)
+                /*modify the footer row*/
+                var nCells = nFoot.getElementsByTagName('th');
+         
+                nCells[5].innerHTML = '<center>' + pageTotal_count + '<br>(' + total_count + ')</center>';
+                nCells[10].innerHTML = pageTotal_allstock + '<br>(' + total_allstock + ')';
+                nCells[11].innerHTML = pageTotal_alloc + '<br>(' + total_alloc + ')';
+                nCells[12].innerHTML = pageTotal_sales + '<br>(' + total_sales + ')';
+                nCells[13].innerHTML = pageTotal_week1 + '<br>(' + total_week1 + ')';
+                nCells[14].innerHTML = pageTotal_week2 + '<br>(' + total_week2 + ')';
+                nCells[15].innerHTML = pageTotal_week3 + '<br>(' + total_week3 + ')';
+                nCells[16].innerHTML = pageTotal_week4 + '<br>(' + total_week4 + ')';
+                
+         
+                //nCells[6].innerHTML = pageTotal_costs + '<br>(' + total_costs + ')';
+            }
+        
+                      
+            });
+        
+　　　　var keys = new KeyTable( {
+            "table": document.getElementById('fmtable'),
+            "datatable": oTable,
+            "focus": [6, 0]
+	} );
+        
+        var keys2 = new KeyTable( {
+            "table": document.getElementById('fmtable2'),
+            "datatable": oTable2,
+            //"focus": [6, 0]
+	} );
+        
+        var keys3 = new KeyTable( {
+            "table": document.getElementById('fmtable3'),
+            "datatable": oTable3,
+            //"focus": [6, 0]
+	} );
+    
+    
+    　　keys.event.action( 6, null,function (nCell) {
+			// Block KeyTable from performing any events while jEditable is in edit mode 
+			setTimeout(function(){
+                            keys.block = true;
+			
+			// Initialise the Editable instance for this table 
+			$(nCell).editable( function (sVal) {
+				// Submit function (local only) - unblock KeyTable 
+				keys.block = false;
+                                //console.log(sVal)
+				return sVal;
+			}, { 
+				"onblur": 'submit',
+                                "oncomplete":function(x, y){
+                                    
+                                    var z1 =  Number(y) - Number(x)
+                                    var z2 =  Number($("#totalqty").html())
+                                    var z = z1 + z2
+                                    $("#totalqty").html(String(z))
+                                    //console.log(z)
+                                },
+                                "checkvalue":function(newvalue, oldvalue, checkrule){
+                                    var x = Number(newvalue)
+                                    if (!x) {
+                                        return oldvalue}
+                                    else {
+                                        var dhmax = Number(checkrule.dhmax)
+                                        var dhmin = Number(checkrule.dhmin)
+                                        if (x > dhmax) { return checkrule.dhmax }
+                                        if (x < dhmin) { return checkrule.dhmin }
+                                        return newvalue
+                                    }
+                                    
+                                },
+				"onreset": function(){ 
+					//Unblock KeyTable, but only after this 'esc' key event has finished. Otherwise
+					//it will 'esc' KeyTable as well
+					//
+					setTimeout( function () {keys.block = false;}, 0);
+                                
+                                },
+                                
+				
+			} );
+			
+			// Dispatch click event to go into edit mode - Saf 4 needs a timeout...
+			setTimeout( function () { $(nCell).click(); }, 0 );
+                        }, 50)
+                        
+		}  );
+        
+        keys.event.action( 9, null,function (nCell) {
+                    
+                    var spcode = $(nCell).attr("spcode")
+                    setTimeout(function(){
+                            keys.block = true;
+			
+			// Initialise the Editable instance for this table 
+			$(nCell).editable( function (sVal) {
+				// Submit function (local only) - unblock KeyTable 
+				keys.block = false;
+                                //console.log(sVal)
+				return sVal;
+			}, { 
+				"onblur": 'submit',
+                                "oncomplete":function(x, y){
+                                    var oldmaxstock = x.split("__")[0]
+                                    var oldminstock = x.split("__")[1]
+                                    var newmaxstock = y.split("__")[0]
+                                    var newminstock = y.split("__")[1]
+                                    
+                                    applyMaxMinStock(userid, spcode, oldmaxstock, oldminstock, newmaxstock, newminstock)
+                                    //console.log(z)
+                                },
+                                "checkvalue":function(newvalue, oldvalue, checkrule){
+                                    var x = newvalue.split("__")
+                                    if (x.length === 2) {
+                                        var newmax = x[0]
+                                        var newmin = x[1]
+                                        if (Number(newmax) >= Number(newmin) && Number(newmin) >0){
+                                            return newvalue
+                                        } else {
+                                            return oldvalue
+                                        }
+                                        
+                                    } else{
+                                        return oldvalue
+                                    }
+                                    
+                                    
+                                },
+				"onreset": function(){ 
+					//Unblock KeyTable, but only after this 'esc' key event has finished. Otherwise
+					//it will 'esc' KeyTable as well
+					//
+					setTimeout( function () {keys.block = false;}, 0);
+                                
+                                },
+                                
+				
+			} );
+			
+			// Dispatch click event to go into edit mode - Saf 4 needs a timeout...
+			setTimeout( function () { $(nCell).click(); }, 0 );
+                        }, 50)
+            
+            
+                }  );
+        
+
+      
+        keys2.event.action( 6, null,function (nCell) {
+			// Block KeyTable from performing any events while jEditable is in edit mode
+			setTimeout(function(){
+                            keys2.block = true;
+			
+			// Initialise the Editable instance for this table 
+			$(nCell).editable( function (sVal) {
+				// Submit function (local only) - unblock KeyTable 
+				keys2.block = false;
+                                //console.log(sVal)
+				return sVal;
+			}, { 
+				"onblur": 'submit',
+                                "oncomplete":function(x, y){
+                                    
+                                    var z1 =  Number(y) - Number(x)
+                                    var z2 =  Number($("#totalqty").html())
+                                    var z = z1 + z2
+                                    $("#totalqty").html(String(z))
+                                    //console.log(z)
+                                },
+                                "checkvalue":function(newvalue, oldvalue, checkrule){
+                                    var x = Number(newvalue)
+                                    if (!x) {
+                                        return oldvalue}
+                                    else {
+                                        var dhmax = Number(checkrule.dhmax)
+                                        var dhmin = Number(checkrule.dhmin)
+                                        if (x > dhmax) { return checkrule.dhmax }
+                                        if (x < dhmin) { return checkrule.dhmin }
+                                        return newvalue
+                                    }
+                                    
+                                },
+				"onreset": function(){ 
+					
+					setTimeout( function () {keys2.block = false;}, 0);
+                                
+                                },
+                                
+				
+			} );
+			
+			// Dispatch click event to go into edit mode - Saf 4 needs a timeout...//
+			setTimeout( function () { $(nCell).click(); }, 0 );
+                        }, 0)
+                        
+		}  );
+        
+        
+        keys2.event.action( 9, null,function (nCell) {
+                    
+                    var spcode = $(nCell).attr("spcode")
+                    setTimeout(function(){
+                            keys2.block = true;
+			
+			// Initialise the Editable instance for this table 
+			$(nCell).editable( function (sVal) {
+				// Submit function (local only) - unblock KeyTable 
+				keys2.block = false;
+                                //console.log(sVal)
+				return sVal;
+			}, { 
+				"onblur": 'submit',
+                                "oncomplete":function(x, y){
+                                    var oldmaxstock = x.split("__")[0]
+                                    var oldminstock = x.split("__")[1]
+                                    var newmaxstock = y.split("__")[0]
+                                    var newminstock = y.split("__")[1]
+                                    
+                                    applyMaxMinStock(userid, spcode, oldmaxstock, oldminstock, newmaxstock, newminstock)
+                                    //console.log(z)
+                                },
+                                "checkvalue":function(newvalue, oldvalue, checkrule){
+                                    var x = newvalue.split("__")
+                                    if (x.length === 2) {
+                                        var newmax = x[0]
+                                        var newmin = x[1]
+                                        if (Number(newmax) >= Number(newmin) && Number(newmin) >0){
+                                            return newvalue
+                                        } else {
+                                            return oldvalue
+                                        }
+                                        
+                                    } else{
+                                        return oldvalue
+                                    }
+                                    
+                                    
+                                },
+				"onreset": function(){ 
+					//Unblock KeyTable, but only after this 'esc' key event has finished. Otherwise
+					//it will 'esc' KeyTable as well
+					//
+					setTimeout( function () {keys2.block = false;}, 0);
+                                
+                                },
+                                
+				
+			} );
+			
+			// Dispatch click event to go into edit mode - Saf 4 needs a timeout...
+			setTimeout( function () { $(nCell).click(); }, 0 );
+                        }, 50)
+            
+            
+                }  );
+        
+        keys3.event.action( 6, null,function (nCell) {
+			// Block KeyTable from performing any events while jEditable is in edit mode
+			setTimeout(function(){
+                            keys3.block = true;
+			
+			// Initialise the Editable instance for this table 
+			$(nCell).editable( function (sVal) {
+				// Submit function (local only) - unblock KeyTable 
+				keys3.block = false;
+                                //console.log(sVal)
+				return sVal;
+			}, { 
+				"onblur": 'submit',
+                                "oncomplete":function(x, y){
+                                    
+                                    var z1 =  Number(y) - Number(x)
+                                    var z2 =  Number($("#totalqty").html())
+                                    var z = z1 + z2
+                                    $("#totalqty").html(String(z))
+                                    //console.log(z)
+                                },
+                                "checkvalue":function(newvalue, oldvalue, checkrule){
+                                    var x = Number(newvalue)
+                                    if (!x) {
+                                        return oldvalue}
+                                    else {
+                                        var dhmax = Number(checkrule.dhmax)
+                                        var dhmin = Number(checkrule.dhmin)
+                                        if (x > dhmax) { return checkrule.dhmax }
+                                        if (x < dhmin) { return checkrule.dhmin }
+                                        return newvalue
+                                    }
+                                    
+                                },
+				"onreset": function(){ 
+					
+					setTimeout( function () {keys3.block = false;}, 0);
+                                
+                                },
+                                
+				
+			} );
+			
+			// Dispatch click event to go into edit mode - Saf 4 needs a timeout...//
+			setTimeout( function () { $(nCell).click(); }, 0 );
+                        }, 0)
+                        
+		}  );
+        
+        
+        keys3.event.action( 9, null,function (nCell) {
+                    
+                    var spcode = $(nCell).attr("spcode")
+                    setTimeout(function(){
+                            keys3.block = true;
+			
+			// Initialise the Editable instance for this table 
+			$(nCell).editable( function (sVal) {
+				// Submit function (local only) - unblock KeyTable 
+				keys3.block = false;
+                                //console.log(sVal)
+				return sVal;
+			}, { 
+				"onblur": 'submit',
+                                "oncomplete":function(x, y){
+                                    var oldmaxstock = x.split("__")[0]
+                                    var oldminstock = x.split("__")[1]
+                                    var newmaxstock = y.split("__")[0]
+                                    var newminstock = y.split("__")[1]
+                                    
+                                    applyMaxMinStock(userid, spcode, oldmaxstock, oldminstock, newmaxstock, newminstock)
+                                    //console.log(z)
+                                },
+                                "checkvalue":function(newvalue, oldvalue, checkrule){
+                                    var x = newvalue.split("__")
+                                    if (x.length === 2) {
+                                        var newmax = x[0]
+                                        var newmin = x[1]
+                                        if (Number(newmax) >= Number(newmin) && Number(newmin) >0){
+                                            return newvalue
+                                        } else {
+                                            return oldvalue
+                                        }
+                                        
+                                    } else{
+                                        return oldvalue
+                                    }
+                                    
+                                    
+                                },
+				"onreset": function(){ 
+					//Unblock KeyTable, but only after this 'esc' key event has finished. Otherwise
+					//it will 'esc' KeyTable as well
+					//
+					setTimeout( function () {keys3.block = false;}, 0);
+                                
+                                },
+                                
+				
+			} );
+			
+			// Dispatch click event to go into edit mode - Saf 4 needs a timeout...
+			setTimeout( function () { $(nCell).click(); }, 0 );
+                        }, 50)
+            
+            
+                }  );
+        
+        
+        
+              
+        
+        
+        $('.sparklines').each( function(){
+                $(this).click(function(){
+                    $(this).sparkline('html', { type:'bar', barColor: 'red' });	
+                
+                })
+		
+                
+            
+            
+        
+        })
+        
+        
+        $("#button__io").bind('click', function(){
+            //alert("x")
+            $("#div_2").trigger('showedit', [{"Id":'y'}])
+        
+        })
+        
+        $("#button__savesp").click(function(){
+		    //console.log( $("#content").html())
+		    
+		    /*var value = $("#div_2").html()
+		    value = $(value).table2CSV({separator: '\t',delivery:"value"});//同步
+		    //console.log(value)*/
+		    
+		    $.ajax({
+			type: "POST",
+			url: "/senddhinfo/",
+			data:{"userid":""},                        
+			dataType: "html",
+			cache:false,
+			async:false,
+			//ifModified :false, //实时更新，在ie中设为ture，在ff中设为false。
+			error:function(data, testStatus){alert("无法保存数据")},
+			success:function(data){
+			    $("#div_2").html("<table><tr><th>商品条码</th><th>商品代码</th><th>商品名称</th><th>订货数量</th><th>单价</th><th>订货金额</th></tr></table>")
+				
+				
+				
+			}
+		    })
+                    alert("该项功能等待佳讯接口")
+		    
+		})
+        
+         $('#div_2').editable('xxxxx', {                               //故意返回错误
+             type      : 'textarea',
+             indicator : 'import...',
+             tooltip   : '',
+             data      : function(value, setting){
+                var csvstr = $(value).table2CSV({separator: '\t',delivery:"value"});
+                
+                return csvstr
+             },
+             cancel    : '返回',
+             event     : 'showedit',
+             submit    : '',
+             oncomplete   : function(){
+
+                
+                
+             }
+         });
+         
+         
+	init()
+        init2()
+        
+        $("#insult__maxmin").bind("click", function(){
+            window.open("/mana1/insult_maxmin", "z")
+        
+        })
+		
+		
+	
+    });
+    
+    
+    var clip, clip2 ;
+    function init() {
+                clip = new ZeroClipboard.Client();
+                clip.setHandCursor( true );
+                
+                clip.addEventListener('load', function (client) {
+                        //alert("y")
+                });
+                
+                clip.addEventListener('mouseDown', function (client) {
+                        //alert("x")
+                        //alert(getnewcsv())
+                        //clip.setText(getnewcsv());
+                        clip.setText($("#fmtable").table2CSV4({separator: '\t',delivery:"value"}), $("#fmtable2").table2CSV4({separator: '\t',delivery:"value"}));
+                        //alert($("#fmtable").table2CSV({separator: '\t',delivery:"value"}))
+                        //clip.setText("x");
+                });
+                
+                clip.addEventListener('complete', function (client, text) {
+                        if (text.length>0){
+                            alert("复制成功")
+                        } else{
+                            alert("复制失败")
+                        }
+                });
+                
+                clip.glue( 'button__copy');
+            }
+    
+    function init2() {
+                clip2 = new ZeroClipboard.Client();
+                clip2.setHandCursor( true );
+                
+                clip2.addEventListener('load', function (client) {
+                        //alert("y")
+                });
+                
+                clip2.addEventListener('mouseDown', function (client) {
+                        //alert("x")
+                        //alert(getnewcsv())
+                        //clip.setText(getnewcsv());
+                        clip2.setText2($("#fmtable3").table2CSV4({separator: '\t',delivery:"value"}))
+                        //alert($("#fmtable").table2CSV({separator: '\t',delivery:"value"}))
+                        //clip.setText("x");
+                });
+                
+                clip2.addEventListener('complete', function (client, text) {
+                        if (text.length>0){
+                            alert("复制成功")
+                        } else{
+                            alert("复制失败")
+                        }
+                });
+                
+                clip2.glue( 'button__copy__wl');
+            }
+            
+    fmparseInt = function(fmstr){
+        var fmint = parseInt(fmstr)
+        if (fmint) {
+            return fmint
+        } else {
+            return 0
+        }
+    }
+    
+    var applyMaxMinStock = function(userid, spcode, oldmaxstock, oldminstock, newmaxstock, newminstock){
+        $.ajax({
+            type: "POST",
+            url: "/applyMaxMinStock/",
+            data:{"userid":userid, "spcode":spcode, "oldmaxstock":oldmaxstock, "oldminstock":oldminstock, "newmaxstock":newmaxstock, "newminstock":newminstock},                        
+            dataType: "text",
+            cache:false,
+            async:false,
+            //ifModified :false, //实时更新，在ie中设为ture，在ff中设为false。
+            success:function(data){
+                
+            },
+            error:function(){
+                alert("无法上传上下限申请数据")
+            }
+        });
+    }
+    
+</script>
+<div id='div_all'>
+    <h1>{{mdname}}:商品订单</h1>
+    
+        <!--<input id="button__savesp" type="button" value="提交佳讯">-->
+        <!--<input id="button__io" type="button" value="导出">-->
+        
+    
+    <p>
+        <table>
+        <tr><td>订货总品项</td><td>{{totalsku}}</td><td>建议订货总数量</td><td>{{totalqty}}</td><td>实际订货总数量</td><td id="totalqty">{{totalqty}}</td><td><center><input id="button__copy" type="button" value="复制订单"><input id="button__copy__wl" type="button" value="复制物料订单"><input id="insult__maxmin" type="button" value="查询上下限"></center></td></tr>
+        </table>
+    </p>
+    
+    
+    <div class="section">
+        <ul class="tabs">
+            <li class="current">有图商品</li>
+            <li>无图商品</li>
+            <li>物料赠品</li>
+        </ul>
+        <div class= "box visible">
+            
+            <div class="edit_area" id="div_2" style="height:200;align=left;width:1200px">
+                <table  id="fmtable">
+                <thead>
+                <tr><th>大类</th><th>中类</th><th>条形码</th><th>商品代码</th><th>商品名称</th><th>建议订货数量</th><th style="color:red">订货数量</th><th>商品状态</th><th>配货单位</th><th>上下限</th><th>昨日库存</th><th>在途</th><th>28天销售</th><th>lw1</th><th>lw2</th><th>lw3</th><th>lw4</th><th>促销</th></tr>
+                </thead>
+                <tbody>
+                {% for rs in result %}
+                <tr>
+                {% for i in rs %}
+                
+                <!--<td style="background:#FFFF33;">{{ i|safe }}</td>-->
+                {% endfor %}
+                <td style="background:#99ff66;">{{ rs.0|safe }}</td>
+                <td style="background:#99ff66;">{{ rs.1|safe }}</td>
+                <td style="background:#99ff66;">{{ rs.2|safe }}</td>
+                {% if rs.18 == 'y' %}
+                    <td style="background:#99ff66;color:red">{{ rs.3|safe }}</td>
+                    <td style="background:#99ff66;color:red">{{ rs.4|safe }}</td>
+                {% else %}
+                    <td style="background:#99ff66;">{{ rs.3|safe }}</td>
+                    <td style="background:#99ff66;">{{ rs.4|safe }}</td>
+                {% endif %}
+                <td style="background:#99ff66;">{{ rs.5|safe }}</td>
+                <td style="background:#99ff66;" class='input' dhmax='{{ rs.12|safe }}' dhmin='{{ rs.13|safe }}'>{{ rs.6|safe }}</td>
+                <td style="background:#99ff66;">{{ rs.7|safe }}</td>
+                <td style="background:#99ff66;">{{ rs.8|safe }}</td>
+                <td style="background:#99ff66;" class='maxminvalue' spcode='{{ rs.3|safe }}'>{{ rs.9|safe }}</td>
+                <td style="background:#99ff66;">{{ rs.10|safe }}</td>
+                <td style="background:#99ff66;">{{ rs.19|safe }}</td>
+                <td style="background:#99ff66;">{{ rs.11|safe }}</td>
+                <td style="background:#99ff66;">{{ rs.14|safe }}</td>
+                <td style="background:#99ff66;">{{ rs.15|safe }}</td>
+                <td style="background:#99ff66;">{{ rs.16|safe }}</td>
+                <td style="background:#99ff66;">{{ rs.17|safe }}</td>
+                {% if rs.18 == 'y' %}
+                    <td style="background:#99ff66;">促销</td>
+                {% else %}
+                    <td style="background:#99ff66;"></td>
+                {% endif %}
+                
+                
+                
+                
+                
+                
+                </tr>
+                {% endfor %}
+                </tbody>
+                <tfoot>
+                <tr><th>小计<br>合计</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
+                </tfoot>
+                </table>
+            </div>
+        </div>
+        
+        <div class="box">        
+        
+            <div class="edit_area2" id="div_3" style="height:200;align=left;width:1200px">
+                <table  id="fmtable2">
+                <thead>
+                <tr><th>大类</th><th>中类</th><th>条形码</th><th>商品代码</th><th>商品名称</th><th>建议订货数量</th><th style="color:red">订货数量</th><th>商品状态</th><th>配货单位</th><th>上下限</th><th>昨日库存</th><th>在途</th><th>28天销售</th><th>lw1</th><th>lw2</th><th>lw3</th><th>lw4</th><th>促销</th></tr>
+                </thead>
+                <tbody>
+                {% for rs in result2 %}
+                <tr>
+                {% for i in rs %}
+                
+                <!--<td style="background:#FFFF33;">{{ i|safe }}</td>-->
+                {% endfor %}
+                <td style="background:#99ff66;">{{ rs.0|safe }}</td>
+                <td style="background:#99ff66;">{{ rs.1|safe }}</td>
+                <td style="background:#99ff66;">{{ rs.2|safe }}</td>
+                {% if rs.18 == 'y' %}
+                    <td style="background:#99ff66;color:red">{{ rs.3|safe }}</td>
+                    <td style="background:#99ff66;color:red">{{ rs.4|safe }}</td>
+                {% else %}
+                    <td style="background:#99ff66;">{{ rs.3|safe }}</td>
+                    <td style="background:#99ff66;">{{ rs.4|safe }}</td>
+                {% endif %}
+                <td style="background:#99ff66;">{{ rs.5|safe }}</td>
+                <td style="background:#99ff66;" class='input' dhmax='{{ rs.12|safe }}' dhmin='{{ rs.13|safe }}'>{{ rs.6|safe }}</td>
+                <td style="background:#99ff66;">{{ rs.7|safe }}</td>
+                <td style="background:#99ff66;">{{ rs.8|safe }}</td>
+                <td style="background:#99ff66;" class='maxminvalue' spcode='{{ rs.3|safe }}'>{{ rs.9|safe }}</td>
+                <td style="background:#99ff66;">{{ rs.10|safe }}</td>
+                <td style="background:#99ff66;">{{ rs.19|safe }}</td>
+                <td style="background:#99ff66;">{{ rs.11|safe }}</td>
+                <td style="background:#99ff66;">{{ rs.14|safe }}</td>
+                <td style="background:#99ff66;">{{ rs.15|safe }}</td>
+                <td style="background:#99ff66;">{{ rs.16|safe }}</td>
+                <td style="background:#99ff66;">{{ rs.17|safe }}</td>
+                {% if rs.18 == 'y' %}
+                    <td style="background:#99ff66;">促销</td>
+                {% else %}
+                    <td style="background:#99ff66;"></td>
+                {% endif %}
+                
+                
+                
+                
+                
+                
+                </tr>
+                {% endfor %}
+                </tbody>
+                <tfoot>
+                <tr><th>小计<br>合计</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
+                </tfoot>
+                </table>
+            </div>
+        </div>
+        <div class="box">        
+        
+            <div class="edit_area3" id="div_4" style="height:200;align=left;width:1200px">
+                <table  id="fmtable3">
+                <thead>
+                <tr><th>大类</th><th>中类</th><th>条形码</th><th>商品代码</th><th>商品名称</th><th>建议订货数量</th><th style="color:red">订货数量</th><th>商品状态</th><th>配货单位</th><th>上下限</th><th>昨日库存</th><th>在途</th><th>28天销售</th><th>lw1</th><th>lw2</th><th>lw3</th><th>lw4</th><th>促销</th></tr>
+                </thead>
+                <tbody>
+                {% for rs in result3 %}
+                <tr>
+                {% for i in rs %}
+                
+                <!--<td style="background:#FFFF33;">{{ i|safe }}</td>-->
+                {% endfor %}
+                <td style="background:#99ff66;">{{ rs.0|safe }}</td>
+                <td style="background:#99ff66;">{{ rs.1|safe }}</td>
+                <td style="background:#99ff66;">{{ rs.2|safe }}</td>
+                {% if rs.18 == 'y' %}
+                    <td style="background:#99ff66;color:red">{{ rs.3|safe }}</td>
+                    <td style="background:#99ff66;color:red">{{ rs.4|safe }}</td>
+                {% else %}
+                    <td style="background:#99ff66;">{{ rs.3|safe }}</td>
+                    <td style="background:#99ff66;">{{ rs.4|safe }}</td>
+                {% endif %}
+                <td style="background:#99ff66;">{{ rs.5|safe }}</td>
+                <td style="background:#99ff66;" class='input' dhmax='{{ rs.12|safe }}' dhmin='{{ rs.13|safe }}'>{{ rs.6|safe }}</td>
+                <td style="background:#99ff66;">{{ rs.7|safe }}</td>
+                <td style="background:#99ff66;">{{ rs.8|safe }}</td>
+                <td style="background:#99ff66;" class='maxminvalue' spcode='{{ rs.3|safe }}'>{{ rs.9|safe }}</td>
+                <td style="background:#99ff66;">{{ rs.10|safe }}</td>
+                <td style="background:#99ff66;">{{ rs.19|safe }}</td>
+                <td style="background:#99ff66;">{{ rs.11|safe }}</td>
+                <td style="background:#99ff66;">{{ rs.14|safe }}</td>
+                <td style="background:#99ff66;">{{ rs.15|safe }}</td>
+                <td style="background:#99ff66;">{{ rs.16|safe }}</td>
+                <td style="background:#99ff66;">{{ rs.17|safe }}</td>
+                {% if rs.18 == 'y' %}
+                    <td style="background:#99ff66;">促销</td>
+                {% else %}
+                    <td style="background:#99ff66;"></td>
+                {% endif %}
+                
+                
+                
+                
+                
+                
+                </tr>
+                {% endfor %}
+                </tbody>
+                <tfoot>
+                <tr><th>小计<br>合计</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
+                </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+

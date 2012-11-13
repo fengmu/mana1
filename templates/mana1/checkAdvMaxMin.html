@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+    "http://www.w3.org/TR/html4/strict.dtd"
+    >
+<html lang="zh">
+    <script type="text/javascript" src="/static/mana1/js/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="/static/mana1/js/jquery-ui-1.8.22.custom/js/jquery-ui-1.8.22.custom.min.js"></script>
+    
+    <script type="text/javascript" src="/static/mana1/js/jeditable2.js"></script>
+    <script type="text/javascript" src="/static/mana1/js/htmltable2csv2.js"></script>
+    <link type="text/css" href="/static/mana1/js/jquery-ui-1.8.22.custom/css/ui-lightness/jquery-ui-1.8.22.custom.css" rel="stylesheet" />
+    <style type="text/css">
+        /* 
+
+	TableCloth	
+	by Alen Grakalic, brought to you by cssglobe.com
+	
+            */
+            
+            /* general styles */
+            
+            table, td{
+                    font:100% Arial, Helvetica, sans-serif; 
+            }
+            table{border-collapse:collapse;margin:1em 0; }
+            th, td{text-align:left;padding:.5em;border:1px solid #fff;}
+            th{background:#328aa4 url(tr_back.gif) repeat-x;color:#fff;}
+            td{background:#e5f1f4;}
+            
+            /* tablecloth styles */
+            
+            tr.even td{background:#e5f1f4;}
+            tr.odd td{background:#f8fbfc;}
+            
+            th.over, tr.even th.over, tr.odd th.over{background:#4a98af;}
+            th.down, tr.even th.down, tr.odd th.down{background:#bce774;}
+            th.selected, tr.even th.selected, tr.odd th.selected{}
+            
+            td.over, tr.even td.over, tr.odd td.over{background:#ecfbd4;}
+            td.down, tr.even td.down, tr.odd td.down{background:#bce774;color:#fff;}
+            td.selected, tr.even td.selected, tr.odd td.selected{background:#bce774;color:#555;}
+            
+            /* use this if you want to apply different styleing to empty table cells*/
+            td.empty, tr.odd td.empty, tr.even td.empty{background:#fff;}
+	    
+	    
+    </style>
+
+<head>
+    <title>审核门店修改上下限申请y</title>
+    
+</head>
+<body>
+<script type="text/javascript">
+    $(function(){
+	$("#button__io").click(function(){
+		//console.log( $("#content").html())
+		$("input[type='checkbox']").each(function(){
+			    
+			    if ($(this).attr("checked")) {
+				    $(this).attr("checked", "checked")
+			       } else {
+				    $(this).removeAttr("checked")
+			       }
+			       
+			    
+		})    //同步
+		
+		$("#content").trigger('showedit', [{"Id":'y'}]) 
+	    })
+	
+	$("#content").editable('/mana1/tranedit/', { 
+	    type      : 'textarea',
+	    cancel    : 'Cancel',            
+	    submit    : 'OK',
+	    data      :  function(value, setting){
+		
+		return $(value).table2CSV({separator: '\t',delivery:"value"});                                                            
+	    },
+	    indicator : 'Saving...',
+	    event     : 'showedit',
+	    height    : '450px',
+	    tooltip   : 'Click to edit',
+	    callback  : function(){
+		//alert("x")
+	    }
+	});
+
+	$("#button_sl").toggle(
+	    function() {
+		$("input[type=checkbox]").each(function(){
+		    $(this).attr("checked", "checked")		
+		})
+	    },
+	    
+	    function() {
+		$("input[type=checkbox]").each(function(){
+		    $(this).removeAttr("checked")		
+		})
+	    }
+	)
+	
+	$("#button__save").bind('click',function(){
+        //var myobj=new Object();
+	    $("input[type='checkbox']").each(function(){
+			    
+			    if ($(this).attr("checked")) {
+				    $(this).attr("checked", "checked")
+			       } else {
+				    $(this).removeAttr("checked")
+			       }
+			       
+			    
+		})  
+	
+	    var myobj={}
+	    myobj["table"]=$("#content").table2CSV({separator: '\t',delivery:"table"})
+	    myobj["tag"]="save"
+	    var myjson=JSON.stringify(myobj);
+	    $.ajax({
+		type:"POST",
+		url:"/mana1/save_checkadvmaxmin/",
+		data:"myjson="+myjson,
+		datatype:"html",
+		success: function(msg){
+		    $("#content").html(msg)
+		}
+	    })
+	})
+	
+	$("#button__del").bind('click',function(){
+	    //var myobj=new Object();
+	    $("input[type='checkbox']").each(function(){
+			    
+			    if ($(this).attr("checked")) {
+				    $(this).attr("checked", "checked")
+			       } else {
+				    $(this).removeAttr("checked")
+			       }
+			       
+			    
+		})
+	    
+	    var myobj={}
+	    myobj["table"]=$("#content").table2CSV({separator: '\t',delivery:"table"})
+	    myobj["tag"]="del"
+	    var myjson=JSON.stringify(myobj);
+	    $.ajax({
+		type:"POST",
+		url:"/mana1/check_advmaxmin/",
+		data:{"myjson":myjson},
+		datatype:"html",
+		success: function(msg){
+		    $("#content").html(msg)
+		},
+		error:function(){
+		    alert("删除数据失败")
+		}
+	    
+	    })
+	})
+	
+	
+    })
+
+</script>
+    <h1>审核门店上下限修改申请</h1>
+    <div>
+            
+		
+	
+	<p>
+	<input id="button__save" type="button" value="同意">
+	<input id="button__io"  type="button" value="导入导出">
+	<input id="button__del" type="button" value="不同意">
+	</p>
+        <div id='content'>
+	    {% autoescape off %}
+	    {{MaxMinTable}}
+	    {% endautoescape %}
+	</div>
+	
+	<label id="button_sl" style="color:grey;font:80%">&nbsp;全选</label>
+	<P style="color:red">
+	　　不同意的，数据被删除
+	</p>
+        
+    </div>
+</body>
+</html>

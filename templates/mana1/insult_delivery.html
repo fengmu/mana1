@@ -1,0 +1,113 @@
+<!--=============================================================================
+#     FileName: insult_delivery.html
+#         Desc: 
+#       Author: solomon
+#        Email: 253376634@qq.com
+#     HomePage: 
+#      Version: 0.0.1
+#   LastChange: 2012-08-23 10:54:49
+#      History:
+=============================================================================-->
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf8">
+<script type="text/javascript" src="/static/mana1/js/jquery-1.7.2.js"></script>
+<link href="/static/mana1/css/tablecloth.css" rel="stylesheet" type="text/css" media="screen"/>
+<script type="text/javascript" src="/static/mana1/js/tablesorter_min.js"></script>
+<script type="text/javascript" src="/static/mana1/js/jquery.jeditable.js"></script>
+<script type="text/javascript" src="/static/mana1/js/htmltable2csv.js"></script>
+<script type="text/javascript">
+var i=1
+$(document).ready(function(){
+    $("#sub").bind('click',function(){
+        postdata();
+    });
+    $("#io").bind("click", function(){
+         $("#edit_area").css("height","200");
+         $("#tips").empty();
+         $("#edit_area").trigger('showedit', [{"Id":'y'}])
+    });
+    
+    $('#edit_area').editable('', {
+             type      : 'textarea',
+             indicator : '...',
+             data      : function(value, setting){
+                return $(value).table2CSV({separator: '\t',delivery:"value"});
+             },
+             cancel    : 'Cancel',
+             event     : 'showedit',
+             submit    : 'OK'
+    });
+});
+
+function postdata(){                              //提交数据函数
+    var myobj=new Object();
+    myobj={}
+    myobj["braid"]=$("#text1").val();
+    myobj["braname"]=$("#text2").val();
+    myobj["weekdelivery"]=$("select").val();
+
+    var jsonlist=JSON.stringify(myobj);
+
+    $.ajax({ //调用jquery的ajax方法
+      type: "POST", //设置ajax方法提交数据的形式
+      url: "/mana1/insult_delivery/", //把数据提交到
+      data: "jsonlist="+jsonlist, //输入框中的值作为提交的数据
+      success: function(msg){ //提交成功后的回调，msg变量是输出的内容。
+        //alert("数据提交成功"); //如果有必要，可以把msg变量的值显示到某个DIV元素中
+        json=JSON.parse(msg);
+        str="<thead><tr><th>门店代码</th><th>门店名称</th><th>配送日</th><th>插入日期</th></tr></thead><tbody>"
+        for(var i=0;i<json.length;i++)
+        {
+           str+="<tr><td>"+json[i].braid+"</td><td>"+json[i].braname+"</td><td>"+json[i].weekdelivery+"</td><td>"+json[i].adddate+"</td></tr>";
+        }
+        str+="</tbody>"
+        $("#result").html(str)
+        $("#result").tablesorter();
+      }
+    });
+}
+
+</script>
+<style>
+    #chaxun tr td{
+        border: 1px solid #E5F1F4;
+    }
+    #chaxun tr th{
+        border: 1px solid #E5F1F4;
+    }
+</style>
+<title>查询门店订货日期</title>
+</head>
+<body>
+<h1>查询门店订货日期</h1>
+<table width="1000" id='chaxun'>
+        <tr><th colspan="7">请输入查询条件:</th></tr>
+        <tr>
+            <td>门店代码</td><td><input type='text' id='text1'/></td>
+            <td>门店名称</td><td><input type='text' id='text2'/></td>
+            <td>配送日</td>
+            <td style="text-align:left;">
+                <select style="width:100px">
+                    <option value="" selected="selected">请选择...</option>
+                    <option value="星期一">星期一</option>
+                    <option value="星期二">星期二</option>
+                    <option value="星期三">星期三</option>
+                    <option value="星期四">星期四</option>
+                    <option value="星期五">星期五</option>
+                    <option value="星期六">星期六</option>
+                    <option value="星期日">星期日</option>
+                </select>
+        　　</td>
+        
+            <td><input type="button" id="sub" value="&nbsp;查&nbsp;询&nbsp;"/>&nbsp;<input type="button" id="io" value="&nbsp;导&nbsp;出&nbsp;"/></td>
+        </tr>
+</table>
+<div id="edit_area" style="align=left">
+<table width="1000" id='result' class="tablesorter">
+</table>
+</div>
+<table width="1000" id="tips">
+<tr><td><p align="left">提示：</p><p align="left">&nbsp;&nbsp;条件全为空则显示所有结果。门店代码商品代码支持多重查询，如要查询时代花园店和棠景店可在门店代码输：02001,02002 格式以英文逗号分隔。</p><p></p></td></tr>
+</table>
+</body>

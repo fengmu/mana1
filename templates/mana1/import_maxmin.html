@@ -1,0 +1,113 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf8">
+<script type="text/javascript" src="/static/mana1/js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="/static/mana1/js/jquery.jeditable.js"></script>
+<script type="text/javascript" src="/static/mana1/js/htmltable2csv.js"></script>
+<script src="/static/mana1/js/jquery-ui-1.8.22.custom/development-bundle/ui/jquery.ui.core.js"></script>
+<script src="/static/mana1/js/jquery-ui-1.8.22.custom/development-bundle/ui/jquery.ui.widget.js"></script>
+<script src="/static/mana1/js/jquery-ui-1.8.22.custom/development-bundle/ui/jquery.ui.datepicker.js"></script>
+<script src="/static/mana1/js/jquery-ui-1.8.22.custom/development-bundle/ui/i18n/jquery.ui.datepicker-zh-CN.js"></script>
+<link href="/static/mana1/js/jquery-ui-1.8.22.custom/development-bundle/themes/base/jquery.ui.all.css" rel="stylesheet" />
+<link href="/static/mana1/css/tablecloth.css" rel="stylesheet" type="text/css" media="screen"/>
+<script>
+$(function() {
+    $("#droplist").val("A")
+    $("#startdate").val("")
+    $("#enddate").val("")
+    
+    $(".datepicker").datepicker({dateFormat :"yy-mm-dd",});
+    $("#droplist").change(function(){
+        if ($("#droplist").val()=="B"){
+            $("#set_banben").css("display","inline");
+        }
+        else{
+            $("#set_banben").css("display","none");
+        }
+    });
+    
+    $("#import").bind('click',function(){
+         $("#edit_area").trigger('showedit', [{"Id":'y'}])
+    });
+    
+    $('#edit_area').editable('/mana1/import_maxmin/', {
+             type      : 'textarea',
+             indicator : 'Saving...',
+             data      : function(value, setting){
+                return $(value).table2CSV({separator: '\t',delivery:"value"});
+             },
+             cancel    : 'Cancel',
+             event     : 'showedit',
+             submit    : 'OK'
+        });
+    
+    //function trim_column(){
+
+    //}
+
+    $("#save").bind('click',function(){
+        //var myobj=new Object();
+        var myobj={}
+        myobj["table"]=$("#edit_area").table2CSV({separator: '\t',delivery:"table"})
+        //trim_column(myobj["table"],0,1,)
+        myobj["banben"]=$("#droplist").val()
+        myobj["startdate"]="";
+        myobj["enddate"]="";
+        if ($("#droplist").val()=='B'){
+            myobj["startdate"]=$("#startdate").val();
+            myobj["enddate"]=$("#enddate").val();
+        }
+        var myjson=JSON.stringify(myobj);
+        $.ajax({
+            type:"POST",
+            url:"/mana1/save_maxmin/",
+            data:"myjson="+myjson,
+            success: function(msg){
+                json=JSON.parse(msg);
+                str="<table width='800'><tr><th>商品代码</th><th>商品名称</th><th>门店代码</th><th>门店名称</th><th>上限</th><th>下限</th><th>导入情况</th></tr>"
+                for(var i=0;i<json.length;i++)
+                {
+                    str+="<tr><td>"+json[i].proid+"</td><td>"+json[i].proname+"</td><td>"+json[i].braid+"</td><td>"+json[i].braname+"</td><td>"+json[i].maxval+"</td><td>"+json[i].minval+"</td>"
+                    if (json[i].info=="插入成功!")
+                    str+="<td>"+json[i].info+"</td></tr>";
+                    else
+                    str+="<td style='background-color:#FFFF00;'>"+json[i].info+"</td></tr>";
+                }
+                str+="</table>"
+                $("#edit_area").html(str)
+            },
+            error:function(){
+                alert("上下限数据无法保存")
+            }
+        });
+    });
+});
+</script>
+<title>设置商品上下限</title>
+</head>
+<body>
+<h1>设置商品上下限</h1>
+<button id="save">保存</button>
+<button id="import">导入</button>
+<p>
+版本设置:
+<select id='droplist'>
+    <option value='A'>A版本(默认)</option>
+    <option value='B'>B版本</option>
+</select>
+<span style="display:none" id="set_banben">
+&nbsp;
+<label>开始日期：</label>
+<input type="text" class="datepicker" id="startdate"/>
+&nbsp;
+<label>结束日期：</label>
+<input type="text" class="datepicker" id="enddate"/>
+</p>
+</span>
+<div id="edit_area" style="height:400;width:850;align=left">
+<table width="800">
+    <tr><th>商品代码</th><th>商品名称</th><th>门店代码</th><th>门店名称</th><th>上限</th><th>下限</th></tr>
+</table>
+</div>
+</table>
+</body>

@@ -1,0 +1,155 @@
+<!--=============================================================================
+#     FileName: insult_sugvalue.html
+#         Desc: 
+#       Author: solomon
+#        Email: 253376634@qq.com
+#     HomePage: 
+#      Version: 0.0.1
+#   LastChange: 2012-08-13 16:17:29
+#      History:
+=============================================================================-->
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf8">
+<script type="text/javascript" src="/static/mana1/js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="/static/mana1/js/tablesorter_min.js"></script>
+<script type="text/javascript" src="/static/mana1/js/jquery.jeditable.js"></script>
+<script type="text/javascript" src="/static/mana1/js/htmltable2csv.js"></script>
+<link href="/static/mana1/css/tablecloth.css" rel="stylesheet" type="text/css" media="screen"/>
+<script>
+var i=1
+$(document).ready(function(){
+    $("#sub").bind('click',function(){
+        postdata("sub");
+    });
+    $("#juji").bind('click',function(){
+        postdata("juji");
+    });
+    $("#io").bind("click", function(){
+         $("#edit_area").css("height","200");
+         $("#tips").empty();
+         $("#edit_area").trigger('showedit', [{"Id":'y'}]);
+    });
+    
+    $('#edit_area').editable('', {
+             type      : 'textarea',
+             indicator : '...',
+             data      : function(value, setting){
+                return $(value).table2CSV({separator: '\t',delivery:"value"});
+             },
+             cancel    : 'Cancel',
+             event     : 'showedit',
+             submit    : 'OK'
+    });
+});
+
+function postdata(ty){                              //提交数据函数
+    var myobj=new Object();
+    myobj={}
+    myobj["spcode"]=$("#text1").val();
+    myobj["spname"]=$("#text2").val();
+    myobj["mdcode"]=$("#text3").val();
+    myobj["mdname"]=$("#text4").val();
+
+    var jsonlist=JSON.stringify(myobj);
+
+    $.ajax({ //调用jquery的ajax方法
+          type: "POST", //设置ajax方法提交数据的形式
+          url: "/mana1/insult_sugvalue/", //把数据提交到
+          data: "jsonlist="+jsonlist+"&ty="+ty, //输入框中的值作为提交的数据
+          success: function(msg){ //提交成功后的回调，msg变量是输出的内容。
+          //alert("数据提交成功"); //如果有必要，可以把msg变量的值显示到某个DIV元素中
+          if(msg!="[]"){
+                json=JSON.parse(msg);
+                var str="";
+                var row=0;
+                var myobj2={}
+                if (json[0]["商品代码"]){
+                    str+="<th>商品代码</th>"
+                }
+                if (json[0]["商品名称"]){
+                    str+="<th>商品名称</th>"
+                }
+                if (json[0]["门店代码"]){
+                    str+="<th>门店代码</th>"
+                }
+                if (json[0]["门店名称"]){
+                    str+="<th>门店名称</th>"
+                }
+                if (json[0]["建议配货量"]){
+                    str+="<th>建议配货量</th>"
+                }
+                if (json[0]["配货总金额"]){
+                    str+="<th>配货总金额</th>"
+                }
+                str="<thead><tr>"+str+"</tr></thead><tbody>"
+                for(var i=0;i<json.length;i++)
+                {
+                    str+="<tr>"
+                    if (json[i]["商品代码"]){
+                        str+="<td>"+json[i]["商品代码"]+"</td>"
+                    }
+                    if (json[i]["商品名称"]){
+                        str+="<td>"+json[i]["商品名称"]+"</td>"
+                    }
+                    if (json[i]["门店代码"]){
+                        str+="<td>"+json[i]["门店代码"]+"</td>"
+                    }
+                    if (json[i]["门店名称"]){
+                        str+="<td>"+json[i]["门店名称"]+"</td>"
+                    }
+                    if (json[i]["建议配货量"]){
+                        str+="<td>"+json[i]["建议配货量"]+"</td>"
+                    }
+                    if (json[i]["配货总金额"]){
+                        str+="<td>"+json[i]["配货总金额"]+"</td>"
+                    }
+                    str+="</tr>"
+                }
+                str+="</tbody>"
+                $("#result").html(str)
+                $("#result").tablesorter();
+          }
+          else
+          {
+              $("#result").html("")
+          }
+        }
+    });
+}
+
+</script>
+<style>
+    .chaxun tr td{
+        border: 1px solid #E5F1F4;
+    }
+    .chaxun tr th{
+        border: 1px solid #E5F1F4;
+    }
+</style>
+<title>配货量建议值查询</title>
+</head>
+<body><h1>配货量建议值查询</h1>
+    <table width="600" class='chaxun'>
+        <tr><th colspan="4">请输入查询条件:</th></tr>
+        <tr>
+            <td>商品代码</td><td><input type='text' id='text1'/></td>
+            <td>商品名称</td><td><input type='text' id='text2'/></td>
+        </tr>
+        <tr>
+            <td>门店代码</td><td><input type='text' id='text3'/></td>
+            <td>门店名称</td><td><input type='text' id='text4'/></td>
+        </tr>
+        <tr>
+            <td colspan=4><input type="button" id="sub" value="&nbsp;查&nbsp;询&nbsp;"/>&nbsp;<input type="button" id="juji" value="&nbsp;聚&nbsp;集&nbsp;"/>&nbsp;<input type="button" id="io" value="&nbsp;导&nbsp;出&nbsp;"/></td>
+        </tr>
+    </table>
+<div id="edit_area" style="align=left">
+<table width="1000" id='result' class="tablesorter">
+</table>
+</div>
+<p></p>
+<table width="600" id="tips">
+<tr><td><p align="left">提示：</p><p align="left">&nbsp;&nbsp;为空则显示所有结果。门店代码商品代码支持多重查询，如要查询时代花园店和棠景店可在门店代码输：02001,02002 格式以英文逗号分隔。</p><p></p></td></tr>
+</table>
+</body>

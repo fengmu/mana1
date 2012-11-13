@@ -1,0 +1,89 @@
+<!--=============================================================================
+#     FileName: chaxun.html
+#         Desc: 
+#       Author: solomon
+#        Email: 253376634@qq.com
+#     HomePage: 
+#      Version: 0.0.1
+#   LastChange: 2012-08-09 10:32:18
+#      History:
+=============================================================================-->
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf8">
+<script type="text/javascript" src="/static/mana1/js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="/static/mana1/js/jquery.jeditable.js"></script>
+<script type="text/javascript" src="/static/mana1/js/htmltable2csv.js"></script>
+<script type="text/javascript" src="/static/mana1/js/tablesorter_min.js"></script>
+<link href="/static/mana1/css/tablecloth.css" rel="stylesheet" type="text/css" media="screen"/>
+<script>
+
+$(document).ready(function(){
+    $("#button__io").bind('click', function(){
+            //alert("x")
+        $("#edit_area").trigger('showedit', [{"Id":'y'}])
+        
+    })
+    
+    
+    $('#edit_area').editable('', {
+             type      : 'textarea',
+             indicator : '...',
+             data      : function(value, setting){
+                return $(value).table2CSV({separator: '\t',delivery:"value"});
+             },
+             cancel    : 'Cancel',
+             event     : 'showedit',
+             submit    : 'OK'
+    });
+});
+
+
+
+
+</script>
+<style>
+    .chaxun tr td{
+        border: 1px solid #E5F1F4;
+    }
+    .chaxun tr th{
+        border: 1px solid #E5F1F4;
+    }
+</style>
+<title>查询商品配送单位(供应链管理)</title>
+</head>
+<body>
+<h1>查询商品配送单位(供应链管理)</h1>
+
+<p>
+        
+        <input id="button__io" type="button" value="导出">
+        
+    </p>
+<div id="edit_area" style="align=left">
+<table width="1200" id='result' class="tablesorter">
+    <thead>
+        <tr><th>条形码</th><th>商品代码</th><th>商品名称</th><th>配货单位</th></tr>
+        </thead>
+        <tbody>
+        {% for rs in result %}
+        <tr>
+        
+        
+       
+        <td style="background:#99ff66;">{{ rs.barcode }}</td>
+        <td style="background:#99ff66;">{{ rs.proid }}</td>
+        <td style="background:#99ff66;">{{ rs.proname }}</td>
+        <td style="background:#99ff66;">{{ rs.packetqty1 }}</td>
+        
+        
+        
+        
+        
+        </tr>
+        {% endfor %}
+        </tbody>
+</table>
+</div>
+
+</body>
