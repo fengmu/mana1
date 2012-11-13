@@ -171,10 +171,10 @@ $(document).ready(function(){
             //alert("数据提交成功"); //如果有必要，可以把msg变量的值显示到某个DIV元素中
             msg1=msg.replace("'","%27");
             json=JSON.parse(msg1);
-            str="<thead><tr><th>门店代码</th><th>门店名称</th><th>商品代码</th><th>商品名称</th><th>大类</th><th>中类</th><th>小类</th><th>LW1</th><th>LW2</th><th>LW3</th><th>LW4</th><th>上限</th><th>下限</th><th>原上限</th><th>原下限</th></tr></thead><tbody>"
+            str="<thead><tr><th>门店代码</th><th>门店名称</th><th>大类</th><th>中类</th><th>小类</th><th>商品代码</th><th>商品名称</th><th>LW1</th><th>LW2</th><th>LW3</th><th>LW4</th><th>上限</th><th>下限</th><th>原上限</th><th>原下限</th></tr></thead><tbody>"
             for(var i=0;i<json.length;i++)
             {
-               str+="<tr><td>"+json[i].braid+"</td><td>"+json[i].braname+"</td><td>"+json[i].proid+"</td><td>"+unescape(json[i].proname)+"</td><td>"+json[i].prodl + "</td><td>"+json[i].prozl +"</td><td>"+json[i].proxl+"</td><td>"+json[i].week1_amt+"</td><td>"+json[i].week2_amt+"</td><td>"+json[i].week3_amt+"</td><td>"+json[i].week4_amt+"</td><td>"+json[i].maxval+"</td><td>"+json[i].minval+"</td><td>"+json[i].oldmaxval+"</td><td>"+json[i].oldminval+"</td></tr>";
+               str+="<tr><td>"+json[i].braid+"</td><td>"+json[i].braname+"</td><td>"+json[i].prodl + "</td><td>"+json[i].prozl +"</td><td>"+json[i].proxl+"</td><td>"+json[i].proid+"</td><td>"+unescape(json[i].proname)+"</td><td>"+json[i].week1_qty+"</td><td>"+json[i].week2_qty+"</td><td>"+json[i].week3_qty+"</td><td>"+json[i].week4_qty+"</td><td style='color:red'>"+json[i].maxval+"</td><td style='color:red'>"+json[i].minval+"</td><td>"+json[i].oldmaxval+"</td><td>"+json[i].oldminval+"</td></tr>";
             }
             str+="</tbody>"
             $("#result").html(str)
@@ -226,7 +226,7 @@ $(document).ready(function(){
 <br /><br />
 <div id="edit_area" style="align=left">
 <table width="95%" id='result' class="tablesorter">
-    <thead><tr><th>门店代码</th><th>门店名称</th><th>商品代码</th><th>商品名称</th><th>大类</th><th>中类</th><th>小类</th><th>LW1</th><th>LW2</th><th>LW3</th><th>LW4</th><th>上限</th><th>下限</th><th>原上限</th><th>原下限</th></tr></thead><tbody>
+    <thead><tr><th>门店代码</th><th>门店名称</th><th>大类</th><th>中类</th><th>小类</th><th>商品代码</th><th>商品名称</th><th>LW1</th><th>LW2</th><th>LW3</th><th>LW4</th><th>上限</th><th>下限</th><th>原上限</th><th>原下限</th></tr></thead><tbody>
 </tbody>
 </table>
 </div>

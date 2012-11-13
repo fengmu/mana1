@@ -24,7 +24,7 @@ def insult_shangxiaxian(request):
     if request.method=='POST':
         result=[]
         mendian=request.POST['mendian']
-        res=confsql.runquery(sqlstr=" select t1.braid,t1.mdname,t1.proid,t1.spname,t1.prodl_id||'_'||t1.prodl,t1.prozl_id||'_'||t1.prozl,t1.proxl_id||'_'||t1.proxl,week1_amt,week2_amt,week3_amt,week4_amt,t1.maxval,t1.minval,t1.oldmaxval,t1.oldminval from xiaoshou28_maxmin t1 where braid='"+mendian+"' limit 20000")
+        res=confsql.runquery(sqlstr=" select t1.braid,t1.mdname,t1.proid,t1.spname,t1.prodl_id||'_'||t1.prodl,t1.prozl_id||'_'||t1.prozl,t1.proxl_id||'_'||t1.proxl,week1_qty,week2_qty,week3_qty,week4_qty,t1.maxval,t1.minval,t1.oldmaxval,t1.oldminval from xiaoshou28_maxmin t1 where braid='"+mendian+"' limit 20000")
         for rs in res:
             items={}
             items['braid']=rs[0]
@@ -34,10 +34,10 @@ def insult_shangxiaxian(request):
             items['prodl']=rs[4]
             items['prozl']=rs[5]
             items['proxl']=rs[6]
-            items['week1_amt']=rs[7]
-            items['week2_amt']=rs[8]
-            items['week3_amt']=rs[9]
-            items['week4_amt']=rs[10]
+            items['week1_qty']=int(rs[7] or 0)
+            items['week2_qty']=int(rs[8] or 0)
+            items['week3_qty']=int(rs[9] or 0)
+            items['week4_qty']=int(rs[10] or 0)
             items['maxval']=int(rs[11] or 0)
             items['minval']=int(rs[12] or 0)
             items['oldmaxval']=int(rs[13] or 0)
