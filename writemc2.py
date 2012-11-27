@@ -13,34 +13,34 @@ def main():
     log("***********************" + str(today) + "******************************")
     log("writemc:"+str(today)+" start at "+str(time.asctime()))
     
-    download.main()
-    log("donwnload:"+str(today)+" end at "+str(time.asctime()))
+    #download.main()
+    #log("donwnload:"+str(today)+" end at "+str(time.asctime()))
     #print " end at "+str(time.asctime())
     
     
-    process.main()
-    log("process:"+str(today)+" end at "+str(time.asctime()))
-    print "process:"+str(today)+" end at "+str(time.asctime())
+    #process.main()
+    #log("process:"+str(today)+" end at "+str(time.asctime()))
+    #print "process:"+str(today)+" end at "+str(time.asctime())
     
-    processcl.main()
-    log("processcl:"+str(today)+" end at "+str(time.asctime()))   
-    print "processcl:"+str(today)+" end at "+str(time.asctime())
+    #processcl.main()
+    #log("processcl:"+str(today)+" end at "+str(time.asctime()))   
+    #print "processcl:"+str(today)+" end at "+str(time.asctime())
     
-    processdh.main()
-    log("processdh:"+str(today)+" end at "+str(time.asctime()))
-    print "processdh:"+str(today)+" end at "+str(time.asctime())
+    #processdh.main()
+    #log("processdh:"+str(today)+" end at "+str(time.asctime()))
+    #print "processdh:"+str(today)+" end at "+str(time.asctime())
     
     importmemdh.main()
     log("importmemdh:"+str(today)+" end at "+str(time.asctime()))
     print "importmemdh:"+str(today)+" end at "+str(time.asctime())
     
-    processrep.main()
-    log("processrep:"+str(today)+" end at "+str(time.asctime()))
-    print "processrep:"+str(today)+" end at "+str(time.asctime())
+    #processrep.main()
+    #log("processrep:"+str(today)+" end at "+str(time.asctime()))
+    #print "processrep:"+str(today)+" end at "+str(time.asctime())
     
-    shangxiaxian_jisuan.main()
-    log("shangxiaxian_jisuan"+str(today)+" end at "+str(time.asctime()))
-    print "shangxiaxian_jisuan"+str(today)+" end at "+str(time.asctime())
+    #shangxiaxian_jisuan.main()
+    #log("shangxiaxian_jisuan"+str(today)+" end at "+str(time.asctime()))
+    #print "shangxiaxian_jisuan"+str(today)+" end at "+str(time.asctime())
     
     
 

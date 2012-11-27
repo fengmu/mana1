@@ -123,7 +123,7 @@ def insert_cl(conn, cur, mdcode, spcodes):
     for x in spcodes:
         #print str(x)
         sqlstr = """insert into cl values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"""
-        cur.execute(sqlstr, (mdcode, x[0], x[1], x[2], x[3], x[4],x[5], x[6], x[7], x[8], x[9], x[10]))
+        cur.execute(sqlstr, (mdcode, x[0], x[1], x[2], x[3], x[4],x[5], x[6], x[8], x[9], x[10], x[11]))
         conn.commit()
 
 

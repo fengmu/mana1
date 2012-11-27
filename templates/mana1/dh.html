@@ -4,8 +4,8 @@
     <script type="text/javascript" src="http://cl.gialen.com:20800/site_lib/jquery-1.7.2.min.js"></script>
 
     <script type="text/javascript" src="http://cl.gialen.com:20800/site_lib/jeditable/jeditable4.js"></script>
-    <script type="text/javascript" src="http://cl.gialen.com:20800/site_lib/htmltable2csv/htmltable2csv2.js"></script>
-    <script type="text/javascript" src="http://cl.gialen.com:20800/site_lib/htmltable2csv/htmltable2csv4.js"></script>
+    <!--<script type="text/javascript" src="http://cl.gialen.com:20800/site_lib/htmltable2csv/htmltable2csv2.js"></script>
+    <script type="text/javascript" src="http://cl.gialen.com:20800/site_lib/htmltable2csv/htmltable2csv4.js"></script>-->
     <script type="text/javascript" src="http://cl.gialen.com:20800/site_lib/zeroclipboard/ZeroClipboard.js"></script>
     <!--<script type="text/javascript" src="http://cl.gialen.com:20800/site_lib/sorter/jquery.tablesorter.js"></script>-->
     <script type="text/javascript" src="http://cl.gialen.com:20800/site_lib/sparkline/sparkline.js"></script>
@@ -245,7 +245,7 @@ ul.tabs {
         
        
         
-        var oTable = $('#fmtable').dataTable({
+        oTable = $('#fmtable').dataTable({
             
             "fnDrawCallback": function( oSettings ) {
                
@@ -253,10 +253,99 @@ ul.tabs {
             "oLanguage": {
                 "sSearch": "搜索:",
                 "sLengthMenu": '显示 <select>'+
+                　'<option value="-1">All</option>'+
                   '<option value="10">10</option>'+
                   '<option value="20">20</option>'+                  
                   '<option value="50">50</option>'+
-                  '<option value="-1">All</option>'+
+                  
+                  '</select> 条记录',
+                "sInfo": "当前显示的是从第 _START_ 到第 _END_ 条记录 (共 _TOTAL_ 条)",
+                "sInfoFiltered": " 　来源记录共 _MAX_ 条"
+              },
+            "fnFooterCallback": function (nFoot, aaData, iStart, iEnd, aiDisplay ) {
+                //console.log(aiDisplay)
+                var total_count = 0;
+                var total_costs = 0;
+                var total_allstock = 0;
+                var total_alloc = 0;
+                var total_sales = 0;
+                var total_week1 = 0;
+                var total_week2 = 0;
+                var total_week3 = 0;
+                var total_week4 = 0;
+                /*Calculate the total for all rows, even outside this page*/
+                var i;
+                for (i in aiDisplay) {
+                    /*Have to strip out extra characters so parsefloat and parseInt work right*/
+                    
+                    total_count += parseInt(aaData[aiDisplay[i]][5].replace(',',''));
+                    total_costs += parseFloat(aaData[aiDisplay[i]][6].replace('$', '').replace(',',''));
+                    total_allstock += fmparseInt(aaData[aiDisplay[i]][10]);
+                    total_alloc += fmparseInt(aaData[aiDisplay[i]][11]);
+                    //total_sales += parseInt(aaData[aiDisplay[i]][11].replace(',',''));
+                    total_sales += fmparseInt(aaData[aiDisplay[i]][12]);
+                    total_week1 += fmparseInt(aaData[aiDisplay[i]][13]);
+                    total_week2 += fmparseInt(aaData[aiDisplay[i]][14]);
+                    total_week3 += fmparseInt(aaData[aiDisplay[i]][15]);
+                    total_week4 += fmparseInt(aaData[aiDisplay[i]][16]);
+                 }
+         
+                var pageTotal_costs = 0;
+                var pageTotal_count = 0;
+                var pageTotal_allstock = 0;
+                var pageTotal_alloc = 0;
+                var pageTotal_sales = 0;
+                var pageTotal_week1 = 0;
+                var pageTotal_week2 = 0;
+                var pageTotal_week3 = 0;
+                var pageTotal_week4 = 0;
+         
+                /*calculate totals for this page*/
+                for (var i = iStart; i < iEnd; i++) {
+                    pageTotal_count += parseInt(aaData[aiDisplay[i]][5].replace(',',''));
+                    pageTotal_costs += parseFloat(aaData[aiDisplay[i]][6].replace('$', '').replace(',',''));
+                    pageTotal_allstock += fmparseInt(aaData[aiDisplay[i]][10]);
+                    pageTotal_alloc += fmparseInt(aaData[aiDisplay[i]][11]);
+                    pageTotal_sales += fmparseInt(aaData[aiDisplay[i]][12]);
+                    pageTotal_week1 += fmparseInt(aaData[aiDisplay[i]][13]);
+                    pageTotal_week2 += fmparseInt(aaData[aiDisplay[i]][14]);
+                    pageTotal_week3 += fmparseInt(aaData[aiDisplay[i]][15]);
+                    pageTotal_week4 += fmparseInt(aaData[aiDisplay[i]][16]);
+                }
+                //console.log("t:"+total_count)
+                //console.log("p:"+pageTotal_count)
+                /*modify the footer row*/
+                var nCells = nFoot.getElementsByTagName('th');
+         
+                nCells[5].innerHTML = '<center>' + pageTotal_count + '<br>(' + total_count + ')</center>';
+                nCells[10].innerHTML = pageTotal_allstock + '<br>(' + total_allstock + ')';
+                nCells[11].innerHTML = pageTotal_alloc + '<br>(' + total_alloc + ')';
+                nCells[12].innerHTML = pageTotal_sales + '<br>(' + total_sales + ')';
+                nCells[13].innerHTML = pageTotal_week1 + '<br>(' + total_week1 + ')';
+                nCells[14].innerHTML = pageTotal_week2 + '<br>(' + total_week2 + ')';
+                nCells[15].innerHTML = pageTotal_week3 + '<br>(' + total_week3 + ')';
+                nCells[16].innerHTML = pageTotal_week4 + '<br>(' + total_week4 + ')';
+                
+         
+                //nCells[6].innerHTML = pageTotal_costs + '<br>(' + total_costs + ')';
+            }
+        
+                      
+            });
+        
+        oTable2 = $('#fmtable2').dataTable({
+            
+            "fnDrawCallback": function( oSettings ) {
+                
+              },
+            "oLanguage": {
+                "sSearch": "搜索:",
+                "sLengthMenu": '显示 <select>'+
+                　'<option value="-1">All</option>'+
+                  '<option value="10">10</option>'+
+                  '<option value="20">20</option>'+                  
+                  '<option value="50">50</option>'+
+                  
                   '</select> 条记录',
                 "sInfo": "当前显示的是从第 _START_ 到第 _END_ 条记录 (共 _TOTAL_ 条)",
                 "sInfoFiltered": " 　来源记录共 _MAX_ 条"
@@ -333,7 +422,7 @@ ul.tabs {
                       
             });
         
-        var oTable2 = $('#fmtable2').dataTable({
+        oTable3 = $('#fmtable3').dataTable({
             
             "fnDrawCallback": function( oSettings ) {
                 
@@ -341,98 +430,11 @@ ul.tabs {
             "oLanguage": {
                 "sSearch": "搜索:",
                 "sLengthMenu": '显示 <select>'+
+                　'<option value="-1">All</option>'+
                   '<option value="10">10</option>'+
                   '<option value="20">20</option>'+                  
                   '<option value="50">50</option>'+
-                  '<option value="-1">All</option>'+
-                  '</select> 条记录',
-                "sInfo": "当前显示的是从第 _START_ 到第 _END_ 条记录 (共 _TOTAL_ 条)",
-                "sInfoFiltered": " 　来源记录共 _MAX_ 条"
-              },
-            
-            "fnFooterCallback": function (nFoot, aaData, iStart, iEnd, aiDisplay ) {
-                //console.log(aiDisplay)
-                var total_count = 0;
-                var total_costs = 0;
-                var total_allstock = 0;
-                var total_alloc = 0;
-                var total_sales = 0;
-                var total_week1 = 0;
-                var total_week2 = 0;
-                var total_week3 = 0;
-                var total_week4 = 0;
-                /*Calculate the total for all rows, even outside this page*/
-                var i;
-                for (i in aiDisplay) {
-                    /*Have to strip out extra characters so parsefloat and parseInt work right*/
-                    
-                    total_count += parseInt(aaData[aiDisplay[i]][5].replace(',',''));
-                    total_costs += parseFloat(aaData[aiDisplay[i]][6].replace('$', '').replace(',',''));
-                    total_allstock += fmparseInt(aaData[aiDisplay[i]][10]);
-                    total_alloc += fmparseInt(aaData[aiDisplay[i]][11]);
-                    //total_sales += parseInt(aaData[aiDisplay[i]][11].replace(',',''));
-                    total_sales += fmparseInt(aaData[aiDisplay[i]][12]);
-                    total_week1 += fmparseInt(aaData[aiDisplay[i]][13]);
-                    total_week2 += fmparseInt(aaData[aiDisplay[i]][14]);
-                    total_week3 += fmparseInt(aaData[aiDisplay[i]][15]);
-                    total_week4 += fmparseInt(aaData[aiDisplay[i]][16]);
-                 }
-         
-                var pageTotal_costs = 0;
-                var pageTotal_count = 0;
-                var pageTotal_allstock = 0;
-                var pageTotal_alloc = 0;
-                var pageTotal_sales = 0;
-                var pageTotal_week1 = 0;
-                var pageTotal_week2 = 0;
-                var pageTotal_week3 = 0;
-                var pageTotal_week4 = 0;
-         
-                /*calculate totals for this page*/
-                for (var i = iStart; i < iEnd; i++) {
-                    pageTotal_count += parseInt(aaData[aiDisplay[i]][5].replace(',',''));
-                    pageTotal_costs += parseFloat(aaData[aiDisplay[i]][6].replace('$', '').replace(',',''));
-                    pageTotal_allstock += fmparseInt(aaData[aiDisplay[i]][10]);
-                    pageTotal_alloc += fmparseInt(aaData[aiDisplay[i]][11]);
-                    pageTotal_sales += fmparseInt(aaData[aiDisplay[i]][12]);
-                    pageTotal_week1 += fmparseInt(aaData[aiDisplay[i]][13]);
-                    pageTotal_week2 += fmparseInt(aaData[aiDisplay[i]][14]);
-                    pageTotal_week3 += fmparseInt(aaData[aiDisplay[i]][15]);
-                    pageTotal_week4 += fmparseInt(aaData[aiDisplay[i]][16]);
-                }
-                //console.log("t:"+total_count)
-                //console.log("p:"+pageTotal_count)
-                /*modify the footer row*/
-                var nCells = nFoot.getElementsByTagName('th');
-         
-                nCells[5].innerHTML = '<center>' + pageTotal_count + '<br>(' + total_count + ')</center>';
-                nCells[10].innerHTML = pageTotal_allstock + '<br>(' + total_allstock + ')';
-                nCells[11].innerHTML = pageTotal_alloc + '<br>(' + total_alloc + ')';
-                nCells[12].innerHTML = pageTotal_sales + '<br>(' + total_sales + ')';
-                nCells[13].innerHTML = pageTotal_week1 + '<br>(' + total_week1 + ')';
-                nCells[14].innerHTML = pageTotal_week2 + '<br>(' + total_week2 + ')';
-                nCells[15].innerHTML = pageTotal_week3 + '<br>(' + total_week3 + ')';
-                nCells[16].innerHTML = pageTotal_week4 + '<br>(' + total_week4 + ')';
-                
-         
-                //nCells[6].innerHTML = pageTotal_costs + '<br>(' + total_costs + ')';
-            }
-        
-                      
-            });
-        
-        var oTable3 = $('#fmtable3').dataTable({
-            
-            "fnDrawCallback": function( oSettings ) {
-                
-              },
-            "oLanguage": {
-                "sSearch": "搜索:",
-                "sLengthMenu": '显示 <select>'+
-                  '<option value="10">10</option>'+
-                  '<option value="20">20</option>'+                  
-                  '<option value="50">50</option>'+
-                  '<option value="-1">All</option>'+
+                  
                   '</select> 条记录',
                 "sInfo": "当前显示的是从第 _START_ 到第 _END_ 条记录 (共 _TOTAL_ 条)",
                 "sInfoFiltered": " 　来源记录共 _MAX_ 条"
@@ -551,13 +553,17 @@ ul.tabs {
                                 },
                                 "checkvalue":function(newvalue, oldvalue, checkrule){
                                     var x = Number(newvalue)
+                                    var rowpos = oTable.fnGetPosition(nCell)[0]      //获得cell位置
+                                    //console.log(rowpos)
                                     if (!x) {
+                                        oTable.fnUpdate(oldvalue, rowpos, 6)
                                         return oldvalue}
                                     else {
                                         var dhmax = Number(checkrule.dhmax)
                                         var dhmin = Number(checkrule.dhmin)
                                         if (x > dhmax) { return checkrule.dhmax }
                                         if (x < dhmin) { return checkrule.dhmin }
+                                        oTable.fnUpdate(newvalue, rowpos, 6)
                                         return newvalue
                                     }
                                     
@@ -661,14 +667,17 @@ ul.tabs {
                                     //console.log(z)
                                 },
                                 "checkvalue":function(newvalue, oldvalue, checkrule){
+                                    var rowpos = oTable2.fnGetPosition(nCell)[0]
                                     var x = Number(newvalue)
                                     if (!x) {
+                                        oTable2.fnUpdate(oldvalue, rowpos, 6)
                                         return oldvalue}
                                     else {
                                         var dhmax = Number(checkrule.dhmax)
                                         var dhmin = Number(checkrule.dhmin)
                                         if (x > dhmax) { return checkrule.dhmax }
                                         if (x < dhmin) { return checkrule.dhmin }
+                                        oTable2.fnUpdate(newvalue, rowpos, 6)
                                         return newvalue
                                     }
                                     
@@ -769,14 +778,17 @@ ul.tabs {
                                     //console.log(z)
                                 },
                                 "checkvalue":function(newvalue, oldvalue, checkrule){
+                                    var rowpos = oTable3.fnGetPosition(nCell)[0]
                                     var x = Number(newvalue)
                                     if (!x) {
+                                        oTable3.fnUpdate(oldvalue, rowpos, 6)
                                         return oldvalue}
                                     else {
                                         var dhmax = Number(checkrule.dhmax)
                                         var dhmin = Number(checkrule.dhmin)
                                         if (x > dhmax) { return checkrule.dhmax }
                                         if (x < dhmin) { return checkrule.dhmin }
+                                        oTable3.fnUpdate(newvalue, rowpos, 6)
                                         return newvalue
                                     }
                                     
@@ -933,6 +945,8 @@ ul.tabs {
             window.open("/mana1/insult_maxmin", "z")
         
         })
+        
+        
 		
 		
 	
@@ -941,18 +955,21 @@ ul.tabs {
     
     var clip, clip2 ;
     function init() {
+                
                 clip = new ZeroClipboard.Client();
                 clip.setHandCursor( true );
                 
                 clip.addEventListener('load', function (client) {
-                        //alert("y")
+                       
                 });
                 
-                clip.addEventListener('mouseDown', function (client) {
+                clip.addEventListener('mousedown', function (client) {
                         //alert("x")
                         //alert(getnewcsv())
                         //clip.setText(getnewcsv());
-                        clip.setText($("#fmtable").table2CSV4({separator: '\t',delivery:"value"}), $("#fmtable2").table2CSV4({separator: '\t',delivery:"value"}));
+                        //console.log(fm2csv(oTable.fnGetData()).join('\r\n'))
+                        //console.log(fm2csv(oTable2.fnGetData()).join('\r\n'))
+                        clip.setText(fm2csv(oTable.fnGetData()).join('\r\n'), fm2csv(oTable2.fnGetData()).join('\r\n'))
                         //alert($("#fmtable").table2CSV({separator: '\t',delivery:"value"}))
                         //clip.setText("x");
                 });
@@ -969,18 +986,20 @@ ul.tabs {
             }
     
     function init2() {
+                
                 clip2 = new ZeroClipboard.Client();
                 clip2.setHandCursor( true );
                 
                 clip2.addEventListener('load', function (client) {
-                        //alert("y")
+                      
                 });
                 
                 clip2.addEventListener('mouseDown', function (client) {
                         //alert("x")
                         //alert(getnewcsv())
                         //clip.setText(getnewcsv());
-                        clip2.setText2($("#fmtable3").table2CSV4({separator: '\t',delivery:"value"}))
+                        
+                        clip2.setText2(fm2csv(oTable3.fnGetData()).join('\r\n'))
                         //alert($("#fmtable").table2CSV({separator: '\t',delivery:"value"}))
                         //clip.setText("x");
                 });
@@ -1023,6 +1042,18 @@ ul.tabs {
         });
     }
     
+    function fm2csv(Tabledata){
+        result = []
+        if (Tabledata.length > 0){
+            for (i in Tabledata) {
+                y = [Tabledata[i][3] + '\t' + Tabledata[i][6]]
+                result.push(y)
+            }
+        }
+        return result        
+        
+    }
+    
 </script>
 <div id='div_all'>
     <h1>{{mdname}}:商品订单</h1>
@@ -1040,9 +1071,11 @@ ul.tabs {
     
     <div class="section">
         <ul class="tabs">
-            <li class="current">有图商品</li>
-            <li>无图商品</li>
+            <li class="current">陈列商品</li>
+            <li>专架和促销商品</li>
             <li>物料赠品</li>
+            <li>清货商品</li>
+            <li>会员日商品</li>
         </ul>
         <div class= "box visible">
             
@@ -1061,7 +1094,7 @@ ul.tabs {
                 <td style="background:#99ff66;">{{ rs.0|safe }}</td>
                 <td style="background:#99ff66;">{{ rs.1|safe }}</td>
                 <td style="background:#99ff66;">{{ rs.2|safe }}</td>
-                {% if rs.18 == 'y' %}
+                {% if rs.18 == 'T' %}
                     <td style="background:#99ff66;color:red">{{ rs.3|safe }}</td>
                     <td style="background:#99ff66;color:red">{{ rs.4|safe }}</td>
                 {% else %}
@@ -1080,8 +1113,8 @@ ul.tabs {
                 <td style="background:#99ff66;">{{ rs.15|safe }}</td>
                 <td style="background:#99ff66;">{{ rs.16|safe }}</td>
                 <td style="background:#99ff66;">{{ rs.17|safe }}</td>
-                {% if rs.18 == 'y' %}
-                    <td style="background:#99ff66;">促销</td>
+                {% if rs.18 == 'T' %}
+                    <td style="background:#99ff66;color:red">促销</td>
                 {% else %}
                     <td style="background:#99ff66;"></td>
                 {% endif %}
@@ -1118,7 +1151,7 @@ ul.tabs {
                 <td style="background:#99ff66;">{{ rs.0|safe }}</td>
                 <td style="background:#99ff66;">{{ rs.1|safe }}</td>
                 <td style="background:#99ff66;">{{ rs.2|safe }}</td>
-                {% if rs.18 == 'y' %}
+                {% if rs.18 == 'T' %}
                     <td style="background:#99ff66;color:red">{{ rs.3|safe }}</td>
                     <td style="background:#99ff66;color:red">{{ rs.4|safe }}</td>
                 {% else %}
@@ -1137,8 +1170,8 @@ ul.tabs {
                 <td style="background:#99ff66;">{{ rs.15|safe }}</td>
                 <td style="background:#99ff66;">{{ rs.16|safe }}</td>
                 <td style="background:#99ff66;">{{ rs.17|safe }}</td>
-                {% if rs.18 == 'y' %}
-                    <td style="background:#99ff66;">促销</td>
+                {% if rs.18 == 'T' %}
+                    <td style="background:#99ff66;color:red">促销</td>
                 {% else %}
                     <td style="background:#99ff66;"></td>
                 {% endif %}
@@ -1157,7 +1190,9 @@ ul.tabs {
                 </table>
             </div>
         </div>
-        <div class="box">        
+        <div class="box">
+            
+            
         
             <div class="edit_area3" id="div_4" style="height:200;align=left;width:1200px">
                 <table  id="fmtable3">
@@ -1174,7 +1209,7 @@ ul.tabs {
                 <td style="background:#99ff66;">{{ rs.0|safe }}</td>
                 <td style="background:#99ff66;">{{ rs.1|safe }}</td>
                 <td style="background:#99ff66;">{{ rs.2|safe }}</td>
-                {% if rs.18 == 'y' %}
+                {% if rs.18 == 'T' %}
                     <td style="background:#99ff66;color:red">{{ rs.3|safe }}</td>
                     <td style="background:#99ff66;color:red">{{ rs.4|safe }}</td>
                 {% else %}
@@ -1193,8 +1228,8 @@ ul.tabs {
                 <td style="background:#99ff66;">{{ rs.15|safe }}</td>
                 <td style="background:#99ff66;">{{ rs.16|safe }}</td>
                 <td style="background:#99ff66;">{{ rs.17|safe }}</td>
-                {% if rs.18 == 'y' %}
-                    <td style="background:#99ff66;">促销</td>
+                {% if rs.18 == 'T' %}
+                    <td style="background:#99ff66;color:red">促销</td>
                 {% else %}
                     <td style="background:#99ff66;"></td>
                 {% endif %}
@@ -1212,6 +1247,12 @@ ul.tabs {
                 </tfoot>
                 </table>
             </div>
+        </div>
+    　　<div class="box">
+            
+        </div>
+        <div class="box">
+            
         </div>
     </div>
 </div>

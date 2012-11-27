@@ -45,6 +45,7 @@ def setMdTotal(conn,cur):
     sqlstr += " from dhalldata"
     sqlstr += " where delivery = 'T' and dhtag = 'T' "
     sqlstr += " and assortment is not null and status < '5' and suggest > 0 and shelf > '-1' "
+    sqlstr += " and total_qty > 0"
     sqlstr += " group by mdcode, mdname"
     cur.execute(sqlstr)
     conn.commit()

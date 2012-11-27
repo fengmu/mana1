@@ -17,7 +17,8 @@ yqfiles = ['product',
            'v_allstock',
            'v_com_branch',
            'alloc','pmt',
-           'v_sale_daily']
+           'v_sale_daily',
+           'v_com_product']
 
 #需要清空的数据表
 tables = ["product;",
@@ -39,6 +40,7 @@ tables = ["product;",
           "dhalldata",
           "dhpauserules_today",
           "xiaoshou28_maxmin",
+          "v_com_product"
           #"dhrules_today_minlimit",
           #"dhrules_today_maxlimit",
           #"product_gl_packetqty"
@@ -50,7 +52,8 @@ qydic = {"product":"product",
          'v_com_branch':'branch',
          'alloc':'alloc',
          'pmt':'pmt',
-         'v_sale_daily':'v_sale_daily'}
+         'v_sale_daily':'v_sale_daily',
+         'v_com_product': 'v_com_product'}
 
 dataserver = {"host":"localhost",
               "port":5432,
@@ -96,6 +99,8 @@ def main():
     
     setTodayPmt(conn, cur)
     print " setTodayPmt "+str(time.asctime())
+    
+
    
     
     
@@ -309,6 +314,14 @@ def setXiaoshou(conn, cur):
     sqlstr="insert into xiaoshou28 select * from v_sale_daily"    
     cur.execute(sqlstr)
     conn.commit()
+    
+    #*** 调试用 ××××
+    sqlstr = """
+                 delete from xiaoshou28 where braid not in ('02058','02186', '02203', '02204','02216','02196', '04340')"""
+        
+    cur.execute(sqlstr)
+    conn.commit()
+    #******************
 
     #第一周
     startdate = datetime.datetime.strftime(datetime.datetime.now()-datetime.timedelta(days=7),"%Y-%m-%d")
@@ -755,9 +768,9 @@ def setDelPausedhspSql(mdcode="", xcode="", excode=""):
             
 def setTodayPmt(conn, cur):
     #today = datetime.datetime.now().strftime('%Y-%m-%d')
-    today = datetime.datetime.strftime(datetime.datetime.now()+ datetime.timedelta(days=7),"%Y-%m-%d")  #规则提前一周
+    today = datetime.datetime.strftime(datetime.datetime.now(),"%Y-%m-%d")  #规则提前一周
     sqlstr = " delete from pmt where enddate < '" + today +"';"
-    sqlstr += " delete from pmt where pmtdescription not like '%1215%'; "
+    sqlstr += " delete from pmt where pmtdescription not like '%CU'; "
     sqlstr += " delete from pmt where startdate > '" + today + "'; "  #促销标记
     cur.execute(sqlstr)
     conn.commit()

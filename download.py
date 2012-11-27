@@ -10,7 +10,8 @@ yqfiles = ['product',
            'v_allstock',
            'v_com_branch',
            'alloc','pmt',
-           'v_sale_daily']
+           'v_sale_daily',
+           'v_com_product']
 
 downloaddir = 'D:\\getdata\\ftp\\'
 

@@ -138,8 +138,12 @@ def save_maxmin(request):
     for rs in rs1:
         if rs[6]=='':
             adddate=datetime.datetime.now().strftime('%Y-%m-%d') #最后追加插入日期
-            sqlstr="insert into maxmin(braid,proid,maxval,minval,banben,startdate,enddate,adddate) values('"+rs[2]+"','"+rs[0]+"','"+rs[4]+"','"+rs[5]+"','"+banben+"','"+startdate+"','"+enddate+"','"+adddate+"')"
-            log(sqlstr)
+            
+            sqlstr = "delete from maxmin where braid ='" + rs[2] + "' and proid='" + rs[0] + "' and banben='" + banben + "';"
+            confsql.runSql(sqlstr)  #数据库
+            
+            sqlstr =" insert into maxmin(braid,proid,maxval,minval,banben,startdate,enddate,adddate) values('"+rs[2]+"','"+rs[0]+"','"+rs[4]+"','"+rs[5]+"','"+banben+"','"+startdate+"','"+enddate+"','"+adddate+"')"
+            
             confsql.runSql(sqlstr)  #数据库
             rs[6]='插入成功!'
         res={}

@@ -46,10 +46,12 @@ def main():
     
    
     
-    mdcodes = insult_mdcodes(conn, cur, "deliveryval")
+    mdcodes = insult_mdcodes(conn, cur, "deliveryval")     #今天配货的门店
+    
     set_dhdata(conn, cur, mdcodes)
     
-    mdcodes = insult_mdcodes(conn, cur, "deliveryval")
+    mdcodes = insult_mdcodes(conn, cur, "delivery")        #可配货的门店
+    
     set_allSpDhinfo(conn, cur, mdcodes)
     
             
@@ -95,35 +97,56 @@ def set_dhdata(conn, cur, mdcodes):
 
 
 
-def fmWebDh(conn, cur, mdcode):
+
+
+def fmWebDh_dv(conn, cur, mdcode):
     """spdl, spzl, barcode, spcode, spname, dhamount, indhamount, statusconvert(prostatus), propacketqty, maxminstock, curstock, saletotal, indhamount_max, indhamount_min, saleweek1, saleweek2,saleweek3, saleweek4, cuxiao, curalloc]"""
     
     usercode = mdcode
     userid = theFmWebSql.getUserInfo(usercode)["UserId"]
     
+    print mdcode
     
-    sqlstr = "select mdcode, mdname, prodl_id, prodl, prozl_id, prozl, spcode, spname, suggest, suggest, status, packetqty1, maxval, minval, curqty, total_qty, yqmaxlimit, yqminlimit, week1_qty, week2_qty, week3_qty, week4_qty, cuxiao_1, allocqty, normalprice, assortment, barcode from dhalldata where assortment is not null and status < '5' and suggest > 0 and shelf > '-1' and dhtag='T' and mdcode='"+mdcode+"'"    
+    sqlstr = "select mdcode, mdname, prodl_id, prodl, prozl_id, prozl, spcode, spname, suggest, suggest, status, packetqty1, maxval, minval, curqty, total_qty, yqmaxlimit, yqminlimit, week1_qty, week2_qty, week3_qty, week4_qty, cuxiao_1, allocqty, normalprice, assortment, barcode from dhalldata where assortment is not null and status < '5' and suggest > 0 and shelf > '-1' and dhtag='T' and mdcode='"+mdcode+"'"
+    
+    
     cur.execute(sqlstr)
     result=cur.fetchall()
     conn.commit()
     
+
+    mdname = result[0][1]    
+        
     result1 = [ x for x in result if x[25] == 'youtu']
+    
     result2 = [ x for x in result if x[25] == 'wutu' and x[2] != '05']
+   
     result3 = [ x for x in result if x[25] == 'wutu' and x[2] == '05']
     
-    mdname =  result1[0][1]
+    
+    
+    
+   
     
     result1_a = [ [x[2]+'_'+x[3], x[4]+'_'+x[5], x[26], x[6], x[7], str(convert(x[8])), str(convert(x[9])), statusconvert(x[10]), str(convert(x[11])),str(convert(x[12]))+'__'+str(convert(x[13])), str(convert(x[14])), str(convert(x[15])), x[16].strip(), x[17].strip(), str(convert(x[18])), str(convert(x[19])), str(convert(x[20])), str(convert(x[21])), x[22], str(convert(x[23]))] for x in result1]
     
+   
+    
     result2_a = [ [x[2]+'_'+x[3], x[4]+'_'+x[5], x[26], x[6], x[7], str(convert(x[8])), str(convert(x[9])), statusconvert(x[10]), str(convert(x[11])),str(convert(x[12]))+'__'+str(convert(x[13])), str(convert(x[14])), str(convert(x[15])), x[16].strip(), x[17].strip(), str(convert(x[18])), str(convert(x[19])), str(convert(x[20])), str(convert(x[21])), x[22], str(convert(x[23]))] for x in result2]
     
+   
+    
     result3_a =[ [x[2]+'_'+x[3], x[4]+'_'+x[5], x[26], x[6], x[7], str(convert(x[8])), str(convert(x[9])), statusconvert(x[10]), str(convert(x[11])),str(convert(x[12]))+'__'+str(convert(x[13])), str(convert(x[14])), str(convert(x[15])), x[16].strip(), x[17].strip(), str(convert(x[18])), str(convert(x[19])), str(convert(x[20])), str(convert(x[21])), x[22], str(convert(x[23]))] for x in result3]
+    
+   
     
     result12 = result1+ result2
     suggestlist = [x[8] for x in result12]
     
+   
     totalsku = len(result1_a + result2_a)
     totalqty = reduce(lambda x, y: x+y, suggestlist)
+    
     
     
     fp = open('d:/vcms/lib/py/mana1/templates/mana1/dh.html')
@@ -131,7 +154,79 @@ def fmWebDh(conn, cur, mdcode):
     fp.close()
     
     
+    
+    
     html=t.render(Context({'userid': userid, 'result':result1_a, 'result2':result2_a, 'result3':result3_a, 'totalsku':totalsku, 'totalqty':str(totalqty), 'mdname':mdname}))
+        
+        
+    
+        
+    return html
+
+def fmWebDh(conn, cur, mdcode):
+    """spdl, spzl, barcode, spcode, spname, dhamount, indhamount, statusconvert(prostatus), propacketqty, maxminstock, curstock, saletotal, indhamount_max, indhamount_min, saleweek1, saleweek2,saleweek3, saleweek4, cuxiao, curalloc]"""
+    
+    usercode = mdcode
+    userid = theFmWebSql.getUserInfo(usercode)["UserId"]
+    
+    
+    #sqlstr = "select mdcode, mdname, prodl_id, prodl, prozl_id, prozl, spcode, spname, suggest, suggest, status, packetqty1, maxval, minval, curqty, total_qty, yqmaxlimit, yqminlimit, week1_qty, week2_qty, week3_qty, week4_qty, cuxiao_1, allocqty, normalprice, assortment, barcode from dhalldata where assortment is not null and status < '5' and suggest > 0 and shelf > '-1' and dhtag='T' and mdcode='"+mdcode+"'"
+   
+    sqlstr = "select mdcode, mdname, prodl_id, prodl, prozl_id, prozl, spcode, spname, suggest, suggest, status, packetqty1, maxval, minval, curqty, total_qty, yqmaxlimit, yqminlimit, week1_qty, week2_qty, week3_qty, week4_qty, cuxiao_1, allocqty, normalprice, assortment, barcode from dhalldata where assortment is not null and status < '5' and suggest > 0 and shelf > '-1' and dhtag='T' and total_qty > 0 and mdcode='"+mdcode+"'"
+    
+    
+    cur.execute(sqlstr)
+    result=cur.fetchall()
+    conn.commit()
+    
+    try:
+        mdname = result[0][1]
+        
+        result1 = [ x for x in result if x[25] == 'youtu']
+        
+        result2 = [ x for x in result if x[25] == 'wutu' and x[2] != '05']
+       
+        result3 = [ x for x in result if x[25] == 'wutu' and x[2] == '05']
+        
+        
+        
+        
+       
+        
+        result1_a = [ [x[2]+'_'+x[3], x[4]+'_'+x[5], x[26], x[6], x[7], str(convert(x[8])), str(convert(x[9])), statusconvert(x[10]), str(convert(x[11])),str(convert(x[12]))+'__'+str(convert(x[13])), str(convert(x[14])), str(convert(x[15])), x[16].strip(), x[17].strip(), str(convert(x[18])), str(convert(x[19])), str(convert(x[20])), str(convert(x[21])), x[22], str(convert(x[23]))] for x in result1]
+        
+       
+        
+        result2_a = [ [x[2]+'_'+x[3], x[4]+'_'+x[5], x[26], x[6], x[7], str(convert(x[8])), str(convert(x[9])), statusconvert(x[10]), str(convert(x[11])),str(convert(x[12]))+'__'+str(convert(x[13])), str(convert(x[14])), str(convert(x[15])), x[16].strip(), x[17].strip(), str(convert(x[18])), str(convert(x[19])), str(convert(x[20])), str(convert(x[21])), x[22], str(convert(x[23]))] for x in result2]
+        
+       
+        
+        result3_a =[ [x[2]+'_'+x[3], x[4]+'_'+x[5], x[26], x[6], x[7], str(convert(x[8])), str(convert(x[9])), statusconvert(x[10]), str(convert(x[11])),str(convert(x[12]))+'__'+str(convert(x[13])), str(convert(x[14])), str(convert(x[15])), x[16].strip(), x[17].strip(), str(convert(x[18])), str(convert(x[19])), str(convert(x[20])), str(convert(x[21])), x[22], str(convert(x[23]))] for x in result3]
+        
+       
+        
+        result12 = result1+ result2
+        suggestlist = [x[8] for x in result12]
+        
+       
+        totalsku = len(result1_a + result2_a)
+        totalqty = reduce(lambda x, y: x+y, suggestlist)
+        
+        
+        
+        fp = open('d:/vcms/lib/py/mana1/templates/mana1/dh.html')
+        t = Template(fp.read())
+        fp.close()
+        
+        
+        
+        
+        html=t.render(Context({'userid': userid, 'result':result1_a, 'result2':result2_a, 'result3':result3_a, 'totalsku':totalsku, 'totalqty':str(totalqty), 'mdname':mdname}))
+        
+        
+    except:
+        html=u'系统不能生成订货值'
+        
     return html
 
 def convert(x):
@@ -187,12 +282,19 @@ def fmWebAllsp(conn, cur, mdcode):
     usercode = mdcode
     userid = theFmWebSql.getUserInfo(usercode)["UserId"]
     
-    sqlstr = "select mdcode, mdname, prodl_id, prodl, prozl_id, prozl, spcode, spname, suggest, suggest, status, packetqty1, maxval, minval, curqty, total_qty, yqmaxlimit, yqminlimit, week1_qty, week2_qty, week3_qty, week4_qty, cuxiao_1, allocqty, normalprice, assortment, barcode from dhalldata where assortment is not null  and shelf > '-' and mdcode='"+mdcode+"'"    
+    
+    #sqlstr = "select mdcode, mdname, prodl_id, prodl, prozl_id, prozl, spcode, spname, suggest, suggest, status, packetqty1, maxval, minval, curqty, total_qty, yqmaxlimit, yqminlimit, week1_qty, week2_qty, week3_qty, week4_qty, cuxiao_1, allocqty, normalprice, assortment, barcode from dhalldata where assortment is not null  and shelf > '-1' and mdcode='"+mdcode+"'"
+    
+    sqlstr = "select mdcode, mdname, prodl_id, prodl, prozl_id, prozl, spcode, spname, suggest, suggest, status, packetqty1, maxval, minval, curqty, total_qty, yqmaxlimit, yqminlimit, week1_qty, week2_qty, week3_qty, week4_qty, cuxiao_1, allocqty, normalprice, assortment, barcode from dhalldata where assortment is not null and status < '5' and suggest > 0 and shelf > '-1' and dhtag='T' and mdcode='"+mdcode+"'"
+    
+    
+    
+    
     cur.execute(sqlstr)
     result=cur.fetchall()
     conn.commit()
     
-    Dhinfo = {'delivery':'今天不是订货日', 'spcode':''}
+    Dhinfo = {'delivery':'', 'spcode':''}
     
     if len(result)>0:    
         for x in result:

@@ -147,7 +147,7 @@
 	    var myjson=JSON.stringify(myobj);
 	    $.ajax({
 		type:"POST",
-		url:"/mana1/check_advmaxmin/",
+		url:"/mana1/save_checkadvmaxmin/",
 		data:{"myjson":myjson},
 		datatype:"html",
 		success: function(msg){

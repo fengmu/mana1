@@ -54,8 +54,7 @@ def dhalldatainit(conn,cur):
 def basedisplay(conn,cur):
     #基本陈列量算法：
     '''
-    normalprice<15 4
-    normalprice>=15 and normalprice<30 3
+    normalprice<30 3
     normalprice>=30 and normalprice<50 2.5
     normalprice>=50 and normalprice<100 2
     normalprice>=100 and normalprice<200 1.5
@@ -64,23 +63,13 @@ def basedisplay(conn,cur):
     '''
     try:
         sqlstr="""update xiaoshou28_maxmin
-        set basedisplay=4
-        where price<15
-        """
-        cur.execute(sqlstr)
-        conn.commit()
-    except:
-        log("更新<15基本陈列量失败！")
-
-    try:
-        sqlstr="""update xiaoshou28_maxmin
         set basedisplay=3
-        where price>=15 and price<30
+        where price<30
         """
         cur.execute(sqlstr)
         conn.commit()
     except:
-        log("更新>=15基本陈列量失败！")
+        log("更新<30基本陈列量失败！")
 
     try:
         sqlstr="""update xiaoshou28_maxmin
@@ -165,7 +154,7 @@ def manuse(conn,cur):
     #男士护理品下限=基本陈列面数量+安全库存（2天）+送货周期（2天）；
     try:
         sqlstr=""" update xiaoshou28_maxmin
-        set minval=basedisplay+total_qty/28*2+total_qty/28*2
+        set minval=basedisplay+COALESCE(total_qty, 0)/28*2+COALESCE(total_qty, 0)/28*2
         where prodl like '%男士%'
         """
         cur.execute(sqlstr)
@@ -252,21 +241,21 @@ def dongji(conn,cur):
         conn.commit()
 
         sqlstr=""" update xiaoshou28_maxmin
-        set maxval=9,minval=6
+        set maxval=4,minval=3
         where price>=35 and proxl='唇膏'
         """
         cur.execute(sqlstr)
         conn.commit()
 
         sqlstr=""" update xiaoshou28_maxmin
-        set maxval=9,minval=6
+        set maxval=4,minval=3
         where price>=35 and proxl='唇彩'
         """
         cur.execute(sqlstr)
         conn.commit()
 
         sqlstr=""" update xiaoshou28_maxmin
-        set maxval=9,minval=6
+        set maxval=4,minval=3
         where price>=35 and proxl='唇蜜'
         """
         cur.execute(sqlstr)

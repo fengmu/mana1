@@ -21,7 +21,7 @@ dataserver = {"host":"localhost",
               "user":"fengmu",
               "pwd": "zj",
               "database":"yq3"}
-logfile="D:/vcms/lib/py/mana1/processdh.py"
+logfile="D:/vcms/lib/py/mana1/mylog.log"
 
 def main():
     conn = psycopg2.connect(host=dataserver["host"], port=dataserver["port"],user=dataserver["user"],password=dataserver["pwd"],database=dataserver["database"])
@@ -40,6 +40,8 @@ def main():
     dhalldata_update(conn,cur)
 
     sp(conn,cur)
+    
+    mdsp(conn, cur)
 
     packetqty1(conn,cur)
 
@@ -120,6 +122,15 @@ def dhalldata_insert(conn,cur):
         """
         cur.execute(sqlstr)
         conn.commit()
+        
+        #*** 调试用 ××××
+        sqlstr = """
+                 delete from dhalldata where mdcode not in ('02058','02186', '02203', '02204','02216','02196', '04340')"""
+        
+        cur.execute(sqlstr)
+        conn.commit()
+        #*****************
+        
     except:
         functions.log("向dhalldata插入数据失败！",logfile)
 
@@ -167,6 +178,20 @@ def sp(conn,cur):
         conn.commit()
     except:
         functions.log("sp更新数据失败！",logfile)
+        
+def mdsp(conn, cur):
+    #6.1 mdsp
+    try:
+        sqlstr = """
+            update dhalldata
+            set status = t.status
+            from v_com_product as t
+            where spcode = t.proid and mdcode = t.braid
+        """
+        cur.execute(sqlstr)
+        conn.commit()
+    except:
+        functions.log("mdsp更新数据失败")
 
 def packetqty1(conn,cur):
     #7.packetqty1
@@ -337,5 +362,8 @@ def setMdTotal(conn,cur):
     sqlstr += " group by braid,braname"
     cur.execute(sqlstr)
     conn.commit()
+    
+if __name__ == "__main__":
+    main()
 
 

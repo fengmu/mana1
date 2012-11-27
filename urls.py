@@ -54,7 +54,25 @@ urlpatterns = patterns('',
     url(r'^rewrite/$', 'mana1.rewrite.rewrite'),                      #自动补货检查
     url(r'^rewrite_verify/$', 'mana1.rewrite_verify.rewrite_verify'), #审核重写
     url(r'^cleanmc_verify/$', 'mana1.cleanmc_verify.cleanmc_verify'), #审核重写
+    
+    url(r'^insult_quantou/','mana1.quantou.insult_quantou'), #上下限计算规则中的拳头商品设置
+    url(r'^import_quantou/','mana1.quantou.import_quantou'), 
+    url(r'^save_quantou/','mana1.quantou.save_quantou'), 
+    url(r'^delete_quantou/','mana1.quantou.delete_quantou'), 
+    url(r'^deleteData_quantou/','mana1.quantou.deleteData_quantou'),
 
+
+    url(r'^insult_tianshu/','mana1.tianshu.insult_tianshu'), #上下限计算规则中的配送周期设置
+    url(r'^import_tianshu/','mana1.tianshu.import_tianshu'), 
+    url(r'^save_tianshu/','mana1.tianshu.save_tianshu'), 
+    url(r'^delete_tianshu/','mana1.tianshu.delete_tianshu'), 
+    url(r'^deleteData_tianshu/','mana1.tianshu.deleteData_tianshu'),
+    
+    url(r'^insult_basedisplay/','mana1.basedisplay.insult_basedisplay'), #上下限计算规则中的基本陈列量设置
+    url(r'^import_basedisplay/','mana1.basedisplay.import_basedisplay'), 
+    url(r'^save_basedisplay/','mana1.basedisplay.save_basedisplay'), 
+    url(r'^delete_basedisplay/','mana1.basedisplay.delete_basedisplay'), 
+    url(r'^deleteData_basedisplay/','mana1.basedisplay.deleteData_basedisplay'), 
     
     
    

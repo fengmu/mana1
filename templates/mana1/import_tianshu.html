@@ -1,0 +1,68 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf8">
+<script type="text/javascript" src="/static/mana1/js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="/static/mana1/js/jquery.jeditable.js"></script>
+<script type="text/javascript" src="/static/mana1/js/htmltable2csv.js"></script>
+<link href="/static/mana1/css/tablecloth.css" rel="stylesheet" type="text/css" media="screen"/>
+<script>
+$(function() {
+    $("#import").bind('click',function(){
+         $("#edit_area").trigger('showedit', [{"Id":'y'}])
+    });
+
+    $('#edit_area').editable('/mana1/import_tianshu/', {
+             type      : 'textarea',
+             indicator : 'Saving...',
+             data      : function(value, setting){
+                return $(value).table2CSV({separator: '\t',delivery:"value"});
+             },
+             cancel    : 'Cancel',
+             event     : 'showedit',
+             submit    : 'OK'
+    });
+
+    $("#save").bind('click',function(){
+        //var myobj=new Object();
+        var myobj={}
+        myobj["table"]=$("#edit_area").table2CSV({separator: '\t',delivery:"table"})
+        //trim_column(myobj["table"],0,1,)
+        var myjson=JSON.stringify(myobj);
+        $.ajax({
+            type:"POST",
+            url:"/mana1/save_tianshu/",
+            data:"myjson="+myjson,
+            success: function(msg){
+                json=JSON.parse(msg);
+                str="<table width='800'><tr><th>门店代码</th><th>门店名称</th><th>安全库存天数</th><th>配送周期天数</th></tr>"
+                for(var i=0;i<json.length;i++)
+                {
+                    str+="<tr><td>"+json[i].braid+"</td><td>"+json[i].braname+"</td><td>"+json[i].anquankucun+"</td><td>"+json[i].peisongzhouqi+"</td>"
+                    if (json[i].info=="插入成功!")
+                    str+="<td>"+json[i].info+"</td></tr>";
+                    else
+                    str+="<td style='background-color:#FFFF00;'>"+json[i].info+"</td></tr>";
+                }
+                str+="</table>"
+                $("#edit_area").html(str)
+            },
+            error:function(){
+                alert("错误，数据无法保存！")
+            }
+        });
+    });
+});
+</script>
+<title>拳头商品导入</title>
+</head>
+<body>
+<h1>拳头商品导入</h1>
+<button id="save">保存</button>
+<button id="import">导入</button>
+</body>
+<div id="edit_area" style="height:400px;width:850;align=left">
+<table width="800">
+    <tr><th>门店代码</th><th>门店名称</th><th>安全库存天数</th><th>配送周期天数</th></tr>
+</table>
+</div>
+</table>
