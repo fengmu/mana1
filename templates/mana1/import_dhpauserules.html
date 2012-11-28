@@ -1,4 +1,5 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="content-type" content="text/html;charset=utf8">
 <script type="text/javascript" src="/static/mana1/js/jquery-1.7.2.js"></script>
@@ -8,6 +9,8 @@
 <script>
 $(function() {
     $("#import").bind('click',function(){
+         $("#edit_area").css("height","200");
+         $("#tips").empty()
          $("#edit_area").trigger('showedit', [{"Id":'y'}])
     });
     
@@ -59,14 +62,13 @@ $(function() {
 <h1>暂停配货范围规则导入</h1>
 <button id="save">保存</button>
 <button id="import">导入</button>
-<table width="1200" id="tips">
-    <tr><td><p align="left">说明：</p><p align="left">代码说明只能填写“商品代码”,“小类代码”,“中类代码”,“大类代码”或为空；时间格式为：yyyy-mm-dd。</p><p></p></td></tr>
-</table>
-</body>
 <div id="edit_area" style="height:400px;width:850;align=left">
 <table width="1200">
     <tr><th>门店代码</th><th>门店名称</th><th>代码</th><th>名称</th><th>代码说明</th><th>规则开始时间</th><th>规则结束时间</th></tr>
 </table>
 </div>
+<table width="1200" id="tips">
+    <tr><td><p align="left">说明：</p><p align="left">代码说明只能填写“商品代码”,“小类代码”,“中类代码”,“大类代码”或为空；时间格式为：yyyy-mm-dd。</p><p></p></td></tr>
 </table>
-
+</body>
+</html>

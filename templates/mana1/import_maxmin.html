@@ -1,4 +1,5 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="content-type" content="text/html;charset=utf8">
 <script type="text/javascript" src="/static/mana1/js/jquery-1.7.2.js"></script>
@@ -27,6 +28,8 @@ $(function() {
     });
     
     $("#import").bind('click',function(){
+         $("#edit_area").css("height","200");
+         $("#tips").empty();
          $("#edit_area").trigger('showedit', [{"Id":'y'}])
     });
     
@@ -40,10 +43,6 @@ $(function() {
              event     : 'showedit',
              submit    : 'OK'
         });
-    
-    //function trim_column(){
-
-    //}
 
     $("#save").bind('click',function(){
         //var myobj=new Object();
@@ -111,3 +110,4 @@ $(function() {
 </div>
 </table>
 </body>
+</html>

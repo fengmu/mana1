@@ -8,6 +8,7 @@
 <script>
 $(function() {
     $("#import").bind('click',function(){
+         $("#edit_area").css("height","200");
          $("#edit_area").trigger('showedit', [{"Id":'y'}])
     });
 
@@ -59,10 +60,10 @@ $(function() {
 <h1>拳头商品导入</h1>
 <button id="save">保存</button>
 <button id="import">导入</button>
-</body>
 <div id="edit_area" style="height:400px;width:850;align=left">
 <table width="800">
     <tr><th>门店代码</th><th>门店名称</th><th>安全库存天数</th><th>配送周期天数</th></tr>
 </table>
 </div>
-</table>
+</body>
+</html>

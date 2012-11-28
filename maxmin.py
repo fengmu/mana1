@@ -217,7 +217,7 @@ def backup_maxmin(request):
             """
             confsql.runSql(sqlstr)
             sqlstr="select count(*) from maxmin"
-            confsql.runquery(sqlstr)
+            result=confsql.runquery(sqlstr)
             for rs in result:
                 num=rs[0]
             return HttpResponse(num)
