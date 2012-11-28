@@ -1,0 +1,69 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf8">
+<script type="text/javascript" src="/static/mana1/js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="/static/mana1/js/jquery.jeditable.js"></script>
+<script type="text/javascript" src="/static/mana1/js/htmltable2csv.js"></script>
+<link href="/static/mana1/css/tablecloth.css" rel="stylesheet" type="text/css" media="screen"/>
+<script>
+$(function() {
+    $("#import").bind('click',function(){
+         $("#edit_area").trigger('showedit', [{"Id":'y'}])
+    });
+
+    $('#edit_area').editable('/mana1/delete_maxminCuxiaori/', {
+             type      : 'textarea',
+             indicator : 'Saving...',
+             data      : function(value, setting){
+                return $(value).table2CSV({separator: '\t',delivery:"value"});
+             },
+             cancel    : 'Cancel',
+             event     : 'showedit',
+             submit    : 'OK'
+    });
+
+    $("#save").bind('click',function(){
+        //var myobj=new Object();
+        var myobj={}
+        myobj["table"]=$("#edit_area").table2CSV({separator: '\t',delivery:"table"})
+        //trim_column(myobj["table"],0,1,)
+        var myjson=JSON.stringify(myobj);
+        $.ajax({
+            type:"POST",
+            url:"/mana1/deleteData_maxminCuxiaori/",
+            data:"myjson="+myjson,
+            success: function(msg){
+                json=JSON.parse(msg);
+                str="<table width='1200'><thead><tr><th>门店代码</th><th>门店名称</th><th>代码</th><th>名称</th><th>代码说明</th><th>上限倍数</th><th>下限倍数</th><th>规则开始时间</th><th>规则结束时间</th><th>备注</th></tr></thead><tbody>"
+                for(var i=0;i<json.length;i++)
+                {
+                    str+="<tr><td>"+json[i].mdcode+"</td><td>"+json[i].mdname+"</td><td>"+json[i].xcode+"</td><td>"+json[i].name+"</td><td>"+json[i].excode+"</td><td>"+json[i].max_multiple+"</td><td>"+json[i].min_multiple+"</td><td>"+json[i].startdate+"</td><td>"+json[i].enddate+"</td><td>"+json[i].remark+"</td>"
+                    if (json[i].info=="删除成功!")
+                        str+="<td>"+json[i].info+"</td></tr>";
+                    else
+                        str+="<td style='background-color:#FFFF00;'>"+json[i].info+"</td></tr>";
+                }
+                str+="</tbody></table>"
+                $("#edit_area").html(str)
+            },
+            error:function(){
+                alert("错误，数据无法保存！")
+            }
+        });
+    });
+});
+</script>
+<title>删除每月促销日上下限倍数设置</title>
+</head>
+<body>
+<h1>删除每月促销日上下限倍数设置</h1>
+<button id="save">提交</button>
+<button id="import">导入</button>
+<div id="edit_area" style="height:400;width:850;align=left">
+<table width="1200">
+    <thead><tr><th>门店代码</th><th>门店名称</th><th>代码</th><th>名称</th><th>代码说明</th><th>上限倍数</th><th>下限倍数</th><th>规则开始时间</th><th>规则结束时间</th><th>备注</th></tr></thead>
+    <tbody></tbody>
+</table>
+</div>
+</table>
+</body>

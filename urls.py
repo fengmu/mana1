@@ -74,7 +74,12 @@ urlpatterns = patterns('',
     url(r'^delete_basedisplay/','mana1.basedisplay.delete_basedisplay'), 
     url(r'^deleteData_basedisplay/','mana1.basedisplay.deleteData_basedisplay'), 
     
-    
+    #上下限促销日放大倍数
+    url(r'^insult_maxminCuxiaori/','mana1.maxminCuxiaori.insult_maxminCuxiaori'),
+    url(r'^import_maxminCuxiaori/','mana1.maxminCuxiaori.import_maxminCuxiaori'),
+    url(r'^delete_maxminCuxiaori/','mana1.maxminCuxiaori.delete_maxminCuxiaori'),
+    url(r'^save_maxminCuxiaori/','mana1.maxminCuxiaori.save_maxminCuxiaori'),
+    url(r'^deleteData_maxminCuxiaori/','mana1.maxminCuxiaori.deleteData_maxminCuxiaori'),
    
 
 )

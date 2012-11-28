@@ -8,28 +8,28 @@
 --   LastChange: 2012-10-24 10:59:02
 --      History:
 --=============================================================================
-drop TABLE allstock;
-drop TABLE branch;
-drop TABLE product;
-drop TABLE maxminval;
-drop TABLE sugvalue;
-drop TABLE sugvalue_temp;
-drop TABLE maxmin; --用户导入
-drop TABLE delivery; --用户导入
-drop TABLE deliveryval;
-drop TABLE brainfo; --门店综合信息 供重算审核 
-drop TABLE xiaoshou
-drop TABLE xiaoshou28
-drop TABLE v_sale_daily_14
-drop TABLE v_sale_daily
-drop TABLE v_sale_daily_201208
-drop TABLE alloc
-drop TABLE pmt
-drop TABLE xiaoshou28_res
-drop TABLE xiaoshou28_res_temp
-drop TABLE xiaoshou28_res_temp
-drop TABLE product_all
-drop TABLE quantou
+drop TABLE if exists allstock;
+drop TABLE if exists branch;
+drop TABLE if exists product;
+drop TABLE if exists maxminval;
+drop TABLE if exists sugvalue;
+drop TABLE if exists sugvalue_temp;
+drop TABLE if exists maxmin; --用户导入
+drop TABLE if exists delivery; --用户导入
+drop TABLE if exists deliveryval;
+drop TABLE if exists brainfo; --门店综合信息 供重算审核 
+drop TABLE if exists xiaoshou;
+drop TABLE if exists xiaoshou28;
+drop TABLE if exists v_sale_daily_14;
+drop TABLE if exists v_sale_daily;
+drop TABLE if exists v_sale_daily_201208;
+drop TABLE if exists alloc;
+drop TABLE if exists pmt;
+drop TABLE if exists xiaoshou28_res;
+drop TABLE if exists xiaoshou28_res_temp;
+drop TABLE if exists product_all;
+drop TABLE if exists quantou;
+drop table if exists tianshu;
 
 -- 库存表
 CREATE TABLE allstock
@@ -642,8 +642,44 @@ ALTER TABLE product_all OWNER TO postgres;
 
 create table quantou
 (
-  proid character varying(100)
-)
+  proid character varying(100),
+  maxval numeric(13,2),
+  minval numeric(13,2),
+  adddate character varying(100)
+);
+
+
+create table tianshu
+(
+  braid character varying(100),
+  anquankucun numeric(12,0), --安全库存
+  peisongzhouqi numeric(12,0), --配送周期
+  adddate character varying(100)
+);
+
+
+CREATE TABLE basedisplay
+(
+  braid character varying(100),
+  proid character varying(100),
+  basedisplay numeric(12,3)
+);
+
+
+DROP TABLE if exists maxminCuxiaori;
+
+CREATE TABLE maxmincuxiaori
+(
+  mdcode character varying(100),
+  xcode character varying(100),
+  excode character varying(100),
+  max_multiple numeric(18,0),
+  min_multiple numeric(18,0),
+  startdate character varying(100),
+  enddate character varying(100),
+  remark character varying(100),
+  adddate character varying(100)
+);
 
 
 '''
