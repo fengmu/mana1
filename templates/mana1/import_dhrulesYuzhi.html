@@ -14,7 +14,7 @@ $(function() {
          $("#edit_area").trigger('showedit', [{"Id":'y'}])
     });
 
-    $('#edit_area').editable('/mana1/delete_quantou/', {
+    $('#edit_area').editable('/mana1/import_dhrulesYuzhi/', {
              type      : 'textarea',
              indicator : 'Saving...',
              data      : function(value, setting){
@@ -26,26 +26,23 @@ $(function() {
     });
 
     $("#save").bind('click',function(){
-        //var myobj=new Object();
         var myobj={}
         myobj["table"]=$("#edit_area").table2CSV({separator: '\t',delivery:"table"})
-        //trim_column(myobj["table"],0,1,)
         var myjson=JSON.stringify(myobj);
         $.ajax({
             type:"POST",
-            url:"/mana1/deleteData_quantou/",
+            url:"/mana1/save_dhrulesYuzhi/",
             data:"myjson="+myjson,
             success: function(msg){
-                msg=msg.replace("'","%27");
                 json=JSON.parse(msg);
-                str="<table width='400'><tr><th>商品代码</th><th>商品名称</th></tr>"
+                str="<table width='1200'><tr><th>门店代码</th><th>门店名称</th><th>代码</th><th>名称</th><th>代码说明</th><th>规则对象</th><th>规则值(百分比)</th><th>开始日期</th><th>结束日期</th><th>备注</th></tr>"
                 for(var i=0;i<json.length;i++)
                 {
-                    str+="<tr><td>"+json[i].proid+"</td><td>"+unescape(json[i].proname)+"</td>"
-                    if (json[i].info=="删除成功!")
-                    str+="<td>"+json[i].info+"</td></tr>";
+                    str+="<tr><td>"+json[i].mdcode+"</td><td>"+json[i].mdname+"</td><td>"+json[i].xcode+"</td><td>"+json[i].name+"</td><td>"+json[i].excode+"</td><td>"+json[i].yqkey+"</td><td>"+json[i].yqrule+"</td><td>"+json[i].yqvalue+"</td><td>"+json[i].startdate+"</td><td>"+json[i].enddate+"</td><td>"+json[i].remark+"</td>"
+                    if (json[i].info=="插入成功!")
+                        str+="<td>"+json[i].info+"</td></tr>";
                     else
-                    str+="<td style='background-color:#FFFF00;'>"+json[i].info+"</td></tr>";
+                        str+="<td style='background-color:#FFFF00;'>"+json[i].info+"</td></tr>";
                 }
                 str+="</table>"
                 $("#edit_area").html(str)
@@ -57,16 +54,19 @@ $(function() {
     });
 });
 </script>
-<title>删除拳头商品</title>
+<title>订货规则阈值比例设置</title>
 </head>
 <body>
-<h1>删除拳头商品</h1>
-<button id="save">提交</button>
+<h1>订货规则阈值比例设置</h1>
+<button id="save">保存</button>
 <button id="import">导入</button>
 <div id="edit_area" style="height:400px;width:850;align=left">
-<table width="400">
-    <tr><th>商品代码</th><th>商品名称</th></tr>
+<table width="1200">
+    <tr><th>门店代码</th><th>门店名称</th><th>代码</th><th>名称</th><th>代码说明</th><th>规则对象</th><th>规则值(百分比)</th><th>开始日期</th><th>结束日期</th><th>备注</th></tr>
 </table>
 </div>
+<table width="1200" id="tips">
+    <tr><td><p align="left">说明：</p><p align="left">代码说明只能填写“商品代码”，“品牌小类代码”，“大类代码”，“中类代码”，“小类代码”；时间格式为：yyyy-mm-dd。</p><p></p></td></tr>
+</table>
 </body>
 </html>

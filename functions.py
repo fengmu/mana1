@@ -81,10 +81,10 @@ def trim_csv(value, itemlenth=0):
         i=i+1
         if i>1 and len(line)>0: #不含首行表头字段
             rs=line.split('\t')
-            if itemlenth>0:
-                rs1.append(rs[0:itemlenth])
+            if itemlenth>0 and len(rs)>itemlenth:
+                rs1.append(rs[0:itemlenth]) #超长的给予截取
             else:
-                rs1.append(rs)
+                rs1.append(rs) #原样输出
     return rs1
 
 '''
@@ -99,7 +99,9 @@ def verifyData(rs1,length=0,required=[],**special):
     temp=[] #为了能清除上步已检查项需要个临时列表
     if length>0:
         for rs in rs1:
-            if(len(rs)!=length):
+            if(len(rs)<length):
+                for i in range(length-len(rs)): #缺的列补齐长度
+                    rs.append(u"")
                 rs.append(u"数据长度不符！")
                 temp.append(rs)
                 rs2.append(rs)
@@ -120,7 +122,7 @@ def verifyData(rs1,length=0,required=[],**special):
             for rs in temp:
                 rs1.remove(rs)
 
-    #特殊项检查
+    #************特殊项检查****************
     for sp in special:
         if sp=='maxmin': #字符类型检查
             temp=[]
@@ -245,7 +247,7 @@ def verifyData(rs1,length=0,required=[],**special):
             if len(temp)>0:
                 for rs in temp:
                     rs1.remove(rs)
-                    
+
         if sp=='dhpauserules':
             '门店代码:mdcode 五位代码或""'
             temp=[]
@@ -269,14 +271,11 @@ def verifyData(rs1,length=0,required=[],**special):
                 for rs in temp:
                     rs1.remove(rs)
 
-            
-
             'startdata, enddate'
             temp=[]
             for rs in rs1:
                 startdatestr = rs[5]
-                #log(startdatestr)
-                enddatestr = rs[6]                
+                enddatestr = rs[6]
                 try:
                     startdate = time.strptime(startdatestr, "%Y-%m-%d")
                     enddate =   time.strptime(enddatestr, "%Y-%m-%d")
@@ -286,16 +285,14 @@ def verifyData(rs1,length=0,required=[],**special):
                         #rs.append(u'错误:开始时间大于结束时间')
                         #temp.append(rs)
                         #rs2.append(rs)
-                        
-                except:                    
+
+                except:
                     rs.append(u'时间格式不对!')
                     temp.append(rs)
                     rs2.append(rs)
             if len(temp)>0:
                 for rs in temp:
                     rs1.remove(rs)
-                    
-            
 
     return (rs2,rs1) #返回不符合规则的和符合规则的
 

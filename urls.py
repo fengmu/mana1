@@ -72,7 +72,7 @@ urlpatterns = patterns('',
     url(r'^import_basedisplay/','mana1.basedisplay.import_basedisplay'), 
     url(r'^save_basedisplay/','mana1.basedisplay.save_basedisplay'), 
     url(r'^delete_basedisplay/','mana1.basedisplay.delete_basedisplay'), 
-    url(r'^deleteData_basedisplay/','mana1.basedisplay.deleteData_basedisplay'), 
+    url(r'^deleteData_basedisplay/','mana1.basedisplay.deleteData_basedisplay'),
     
     #上下限促销日放大倍数
     url(r'^insult_maxminCuxiaori/','mana1.maxminCuxiaori.insult_maxminCuxiaori'),
@@ -80,6 +80,12 @@ urlpatterns = patterns('',
     url(r'^delete_maxminCuxiaori/','mana1.maxminCuxiaori.delete_maxminCuxiaori'),
     url(r'^save_maxminCuxiaori/','mana1.maxminCuxiaori.save_maxminCuxiaori'),
     url(r'^deleteData_maxminCuxiaori/','mana1.maxminCuxiaori.deleteData_maxminCuxiaori'),
-   
+
+    #
+    url(r'^insult_dhrulesYuzhi/','mana1.dhrulesYuzhi.insult_dhrulesYuzhi'), #商品最大最小上下限规则查询
+    url(r'^import_dhrulesYuzhi/','mana1.dhrulesYuzhi.import_dhrulesYuzhi'), #商品最大最小上下限规则导入界面    
+    url(r'^save_dhrulesYuzhi/','mana1.dhrulesYuzhi.save_dhrulesYuzhi'), #商品最大最小上下限规则导入
+    url(r'^delete_dhrulesYuzhi/','mana1.dhrulesYuzhi.delete_dhrulesYuzhi'), #商品最大最小上下限规则删除界面
+    url(r'^deleteData_dhrulesYuzhi/','mana1.dhrulesYuzhi.deleteData_dhrulesYuzhi'), #商品最大最小上下限规则删除
 
 )

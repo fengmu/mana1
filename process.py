@@ -1,14 +1,8 @@
 # -*- coding: utf-8 -*-
-
-
-
 import time,datetime
 import psycopg2
 import psycopg2.extensions
 import confsql
-
-
-
 
 downloaddir = 'D:/getdata/ftp/'
 
@@ -773,20 +767,50 @@ def setTodayPmt(conn, cur):
     conn.commit()
 
 def setMaxminCuxiaori(conn, cur):
-    #--*********品牌小类*************
-    "把所有B版本中符合条件的翻倍"
-    sqlstr=""" update maxmin
-     set maxval=maxval*t3.max_multiple,minval=minval*t3.min_multiple,startdate=t3.startdate,enddate=t3.enddate
-     from product_all t2,maxmin_cuxiaori t3
-     where maxmin.banben='B'
-        and maxmin.proid=t2.proid
-        and t3.mdcode=maxmin.braid
-        and t3.excode='braxl'
-        and t3.xcode=t2.braxl_id
+    "每月促销日上下限翻倍处理"
+    #--*********商品大类*************
+    "把所有A版本中符合条件的翻倍 插入B版本"
+    sqlstr=""" insert into maxmin
+      select t1.braid,t1.proid,t1.maxval*t3.max_multiple,t1.minval*t3.min_multiple,'B' banben,t3.startdate,t3.enddate,t3.adddate
+      from maxmin t1,product_all t2,maxmincuxiaori t3
+      where t1.banben='A'
+        and t1.proid=t2.proid
+        and t3.mdcode=t1.braid
+        and t3.excode='prodl'
+        and t3.xcode=t2.prodl_id
     """
     cur.execute(sqlstr)
     conn.commit()
 
+    #--*********商品中类*************
+    "把所有A版本中符合条件的翻倍 插入B版本"
+    sqlstr=""" insert into maxmin
+      select t1.braid,t1.proid,t1.maxval*t3.max_multiple,t1.minval*t3.min_multiple,'B' banben,t3.startdate,t3.enddate,t3.adddate
+      from maxmin t1,product_all t2,maxmincuxiaori t3
+      where t1.banben='A'
+        and t1.proid=t2.proid
+        and t3.mdcode=t1.braid
+        and t3.excode='prozl'
+        and t3.xcode=t2.prozl_id
+    """
+    cur.execute(sqlstr)
+    conn.commit()
+
+    #--*********商品小类*************
+    "把所有A版本中符合条件的翻倍 插入B版本"
+    sqlstr=""" insert into maxmin
+      select t1.braid,t1.proid,t1.maxval*t3.max_multiple,t1.minval*t3.min_multiple,'B' banben,t3.startdate,t3.enddate,t3.adddate
+      from maxmin t1,product_all t2,maxmincuxiaori t3
+      where t1.banben='A'
+        and t1.proid=t2.proid
+        and t3.mdcode=t1.braid
+        and t3.excode='proxl'
+        and t3.xcode=t2.proxl_id
+    """
+    cur.execute(sqlstr)
+    conn.commit()
+
+    #--*********品牌小类*************
     "把所有A版本中符合条件的翻倍 插入B版本"
     sqlstr=""" insert into maxmin
       select t1.braid,t1.proid,t1.maxval*t3.max_multiple,t1.minval*t3.min_multiple,'B' banben,t3.startdate,t3.enddate,t3.adddate
@@ -801,18 +825,6 @@ def setMaxminCuxiaori(conn, cur):
     conn.commit()
 
     #--**********单品*************
-    "把所有B版本中符合条件的翻倍"
-    sqlstr=" update maxmin"
-    sqlstr +=" set maxval=maxval*t3.max_multiple,minval=minval*t3.min_multiple,startdate=t3.startdate,enddate=t3.enddate"
-    sqlstr +=" from product_all t2,maxmin_cuxiaori t3"
-    sqlstr +=" where maxmin.banben='B'"
-    sqlstr +="     and maxmin.proid=t2.proid"
-    sqlstr +="     and t3.mdcode=maxmin.braid"
-    sqlstr +="     and t3.excode='sp'"
-    sqlstr +="     and t3.xcode=t2.proid"
-    cur.execute(sqlstr)
-    conn.commit()
-
     "把所有A版本中符合条件的翻倍 插入B版本"
     sqlstr=""" insert into maxmin
       select t1.braid,t1.proid,t1.maxval*t3.max_multiple,t1.minval*t3.min_multiple,'B' banben,t3.startdate,t3.enddate,t3.adddate
@@ -827,7 +839,7 @@ def setMaxminCuxiaori(conn, cur):
     conn.commit()
 
 if __name__=="__main__":
-    
+
     main()
-    
+
 

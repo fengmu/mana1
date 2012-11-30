@@ -10,6 +10,8 @@
 <script>
 $(function() {
     $("#import").bind('click',function(){
+         $("#edit_area").css("height","200");
+         $("#tips").empty();
          $("#edit_area").trigger('showedit', [{"Id":'y'}])
     });
 

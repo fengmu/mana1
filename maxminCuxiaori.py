@@ -25,6 +25,12 @@ def import_maxminCuxiaori(request):
                 excode='sp'
             if rs[4]==u'品牌小类代码':
                 excode='braxl'
+            if rs[4]==u'商品大类':
+                excode='prodl'
+            if rs[4]==u'商品中类':
+                excode='prozl'
+            if rs[4]==u'商品小类':
+                excode='proxl'
             sqlstr=u"select * from maxminCuxiaori where mdcode='"+rs[0]+"' and xcode = '"+ rs[2] +"' and excode='"+excode+"' and startdate='"+rs[7]+"' and enddate = '" + rs[8] + "'"
             if confsql.checkExist(sqlstr)==1: #检查mdcode,excode,yqkey数据库是否已存在
                 rs.append(u'数据库已存在!')
@@ -48,7 +54,7 @@ def import_maxminCuxiaori(request):
         '代码说明 检查'
         temp=[]
         for rs in rs1:
-            if rs[4] <>u"商品代码" and rs[4]<>u"品牌小类代码": #商品代码或品牌小类代码
+            if rs[4] <>u"商品代码" and rs[4]<>u"品牌小类代码" and rs[4]<>u"商品大类" and rs[4]<>u"商品中类" and rs[4]<>u"商品小类":
                 rs.append(u'代码说明不符要求')
                 temp.append(rs)
                 rs2.append(rs)
@@ -162,6 +168,12 @@ def save_maxminCuxiaori(request):
             excode='sp'
         if rs[4]==u'品牌小类代码':
             excode='braxl'
+        if rs[4]==u'商品大类':
+            excode='prodl'
+        if rs[4]==u'商品中类':
+            excode='prozl'
+        if rs[4]==u'商品小类':
+            excode='proxl'
 
         adddate = time.strftime("%Y-%m-%d", time.localtime())
 
@@ -211,10 +223,32 @@ def save_maxminCuxiaori(request):
     return HttpResponse(jsonres)
 
 def insult_maxminCuxiaori(request):
-    '查询暂停补货范围规则'
+    '查询每月促销日小下限翻倍'
     t=get_template('mana1/insult_maxminCuxiaori.html')
-    sqlstr=""" select t1.mdcode,case when t3.braname is null then '' else t3.braname end,t1.xcode,t2.proname as xname,'商品代码' as excode,max_multiple,min_multiple,t1.startdate, t1.enddate,remark from maxminCuxiaori as t1 left outer join branch as t3 on (t1.mdcode=t3.braid), product_all t2 where t1.xcode=t2.proid and t1.excode='sp' union all
-    select t1.mdcode,case when t3.braname is null then '' else t3.braname end,t1.xcode,t2.proxl as xname,'品牌小类代码' as excode,max_multiple,min_multiple,t1.startdate, t1.enddate,remark from maxminCuxiaori as t1 left outer join branch as t3 on (t1.mdcode=t3.braid) ,(select proxl_id, proxl from product_all group by proxl_id, proxl) t2 where t1.xcode=t2.proxl_id and t1.excode='braxl'
+    sqlstr=""" select t1.mdcode,case when t3.braname is null then '' else t3.braname end,t1.xcode,t2.proname as xname,'商品代码' as excode,max_multiple,min_multiple,t1.startdate, t1.enddate,remark 
+        from (select * from maxminCuxiaori where excode='sp') as t1 left outer join branch as t3 
+        on (t1.mdcode=t3.braid) left outer join product_all t2 
+        on t1.xcode=t2.proid 
+    union all
+        select t1.mdcode,case when t3.braname is null then '' else t3.braname end,t1.xcode,t2.braxl as xname,'品牌小类代码' as excode,max_multiple,min_multiple,t1.startdate, t1.enddate,remark 
+        from (select * from maxminCuxiaori where excode='braxl') as t1 left outer join branch as t3 
+        on (t1.mdcode=t3.braid) left outer join (select braxl_id, braxl from product_all group by braxl_id, braxl) t2 
+        on t1.xcode=t2.braxl_id and t1.excode='braxl'
+    union all
+        select t1.mdcode,case when t3.braname is null then '' else t3.braname end,t1.xcode,t2.proxl as xname,'小类代码' as excode,max_multiple,min_multiple,t1.startdate, t1.enddate,remark 
+        from (select * from maxminCuxiaori where excode='proxl') as t1 left outer join branch as t3 
+        on (t1.mdcode=t3.braid) left outer join (select proxl_id, proxl from product_all group by proxl_id, proxl) t2 
+        on t1.xcode=t2.proxl_id and t1.excode='proxl'
+    union all
+        select t1.mdcode,case when t3.braname is null then '' else t3.braname end,t1.xcode,t2.prozl as xname,'中类代码' as excode,max_multiple,min_multiple,t1.startdate, t1.enddate,remark 
+        from (select * from maxminCuxiaori where excode='prozl') as t1 left outer join branch as t3 
+        on (t1.mdcode=t3.braid) left outer join (select prozl_id, prozl from product_all group by prozl_id, prozl) t2 
+        on t1.xcode=t2.prozl_id and t1.excode='prozl'
+    union all
+        select t1.mdcode,case when t3.braname is null then '' else t3.braname end,t1.xcode,t2.prodl as xname,'大类代码' as excode,max_multiple,min_multiple,t1.startdate, t1.enddate,remark 
+        from (select * from maxminCuxiaori where excode='prodl') as t1 left outer join branch as t3 
+        on (t1.mdcode=t3.braid) left outer join (select prodl_id, prodl from product_all group by prodl_id, prodl) t2 
+        on t1.xcode=t2.prodl_id and t1.excode='prodl'
     """
     result=confsql.runquery(sqlstr)
     html=t.render(Context({'result':result}))
@@ -235,6 +269,12 @@ def delete_maxminCuxiaori(request):
                 excode='sp'
             if rs[4]==u'品牌小类代码':
                 excode='braxl'
+            if rs[4]==u'商品大类':
+                excode='prodl'
+            if rs[4]==u'商品中类':
+                excode='prozl'
+            if rs[4]==u'商品小类':
+                excode='proxl'
             sqlstr=u"select * from maxminCuxiaori where mdcode='"+rs[0]+"' and xcode = '"+ rs[2] +"' and excode='"+excode+"' and startdate='"+rs[7]+"' and enddate = '" + rs[8] + "'"
             if confsql.checkExist(sqlstr)<>1: #检查mdcode,excode,yqkey数据库是否已存在
                 rs.append(u'数据库中不存在!')
@@ -258,7 +298,7 @@ def delete_maxminCuxiaori(request):
         '代码说明 检查'
         temp=[]
         for rs in rs1:
-            if rs[4] <>u"商品代码" and rs[4]<>u"品牌小类代码": #商品代码或品牌小类代码
+            if rs[4] <>u"商品代码" and rs[4]<>u"品牌小类代码" and rs[4]<>u"商品大类" and rs[4]<>u"商品中类" and rs[4]<>u"商品小类":
                 rs.append(u'代码说明不符要求')
                 temp.append(rs)
                 rs2.append(rs)
@@ -389,7 +429,12 @@ def deleteData_maxminCuxiaori(request):
                         excode='sp'
                     if rs[4]==u'品牌小类代码':
                         excode='braxl'
-
+                    if rs[4]==u'商品大类':
+                        excode='prodl'
+                    if rs[4]==u'商品中类':
+                        excode='prozl'
+                    if rs[4]==u'商品小类':
+                        excode='proxl'
                     confsql.runSql("delete from maxminCuxiaori where mdcode='"+rs[0]+"' and xcode='" +rs[2]+ "' and excode='"+excode+"' and startdate='"+rs[7]+"' and enddate = '" + rs[8] + "'")
                     res={}
                     res['mdcode']=rs[0]

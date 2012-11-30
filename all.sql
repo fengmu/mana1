@@ -681,6 +681,21 @@ CREATE TABLE maxmincuxiaori
   adddate character varying(100)
 );
 
+drop table if exists dhrulesYuzhi;
+CREATE TABLE dhrulesYuzhi
+(
+  mdcode character varying(16),
+  xcode character varying(16),
+  excode character varying(16),
+  yqkey character varying(16),
+  yqrule character varying(16),
+  yqvalue character varying(16),
+  startdate character varying(16),
+  enddate character varying(16),
+  remark character varying(256),
+  adddate character varying(16)
+);
+
 
 '''
 --测试数据
