@@ -172,7 +172,7 @@ def fmWebDh(conn, cur, mdcode):
     
     #sqlstr = "select mdcode, mdname, prodl_id, prodl, prozl_id, prozl, spcode, spname, suggest, suggest, status, packetqty1, maxval, minval, curqty, total_qty, yqmaxlimit, yqminlimit, week1_qty, week2_qty, week3_qty, week4_qty, cuxiao_1, allocqty, normalprice, assortment, barcode from dhalldata where assortment is not null and status < '5' and suggest > 0 and shelf > '-1' and dhtag='T' and mdcode='"+mdcode+"'"
    
-    sqlstr = "select mdcode, mdname, prodl_id, prodl, prozl_id, prozl, spcode, spname, suggest, suggest, status, packetqty1, maxval, minval, curqty, total_qty, yqmaxlimit, yqminlimit, week1_qty, week2_qty, week3_qty, week4_qty, cuxiao_1, allocqty, normalprice, assortment, barcode from dhalldata where assortment is not null and status < '5' and suggest > 0 and shelf > '-1' and dhtag='T' and total_qty > 0 and mdcode='"+mdcode+"'"
+    sqlstr = "select mdcode, mdname, prodl_id, prodl, prozl_id, prozl, spcode, spname, suggest, suggest, status, packetqty1, maxval, minval, curqty, total_qty, yqmaxlimit, yqminlimit, week1_qty, week2_qty, week3_qty, week4_qty, cuxiao_1, allocqty, normalprice, assortment, barcode from dhalldata where assortment is not null and status < '5' and suggest > 0 and shelf > '-1' and dhtag='T'  and mdcode='"+mdcode+"'"
     
     
     cur.execute(sqlstr)
