@@ -27,7 +27,7 @@ def import_dhrulesYuzhi(request):
     if request.method=='POST':
         value=request.POST['value']
         rs1=trim_csv(value,itemlenth=10)
-        rs2,rs1=verifyData(rs1,length=10,required=[0,2,4,5,6,7,8])
+        rs2,rs1=verifyData(rs1,length=10,required=[5,6,7,8])
 
         '重复项覆盖'
         temp=[]
@@ -269,7 +269,7 @@ def delete_dhrulesYuzhi(request):
     if request.method=='POST':
         value=request.POST['value']
         rs1=trim_csv(value,itemlenth=12)
-        rs2,rs1=verifyData(rs1,length=12,required=[0,2,4,5,6,7,8,9])
+        rs2,rs1=verifyData(rs1,length=12,required=[5,6,7,8,9])
 
         '是否重复'
         temp=[]

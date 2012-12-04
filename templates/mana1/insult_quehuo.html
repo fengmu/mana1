@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf8">
+<script type="text/javascript" src="/static/mana1/js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="/static/mana1/js/tablesorter_min.js"></script>
+<script type="text/javascript" src="/static/mana1/js/jquery.jeditable.js"></script>
+<script type="text/javascript" src="/static/mana1/js/htmltable2csv.js"></script>
+<link href="/static/mana1/css/tablecloth.css" rel="stylesheet" type="text/css" media="screen"/>
+<script>
+var i=1
+$(document).ready(function(){
+    $("#io").bind("click", function(){
+         $("#edit_area").css("height","200");
+         $("#tips").empty();
+         $("#edit_area").trigger('showedit', [{"Id":'y'}]);
+    });
+
+    $('#edit_area').editable('', {
+             type      : 'textarea',
+             indicator : '...',
+             data      : function(value, setting){
+                return $(value).table2CSV({separator: '\t',delivery:"value"});
+             },
+             cancel    : 'Ok',
+             event     : 'showedit'
+    });
+
+    $("#result").tablesorter();
+});
+</script>
+<style>
+    .chaxun tr td{
+        border: 1px solid #E5F1F4;
+    }
+    .chaxun tr th{
+        border: 1px solid #E5F1F4;
+    }
+</style>
+<title>缺货商品查询</title>
+</head>
+<body><h1>缺货商品查询</h1>
+<input type="button" id="io" value="&nbsp;导&nbsp;出&nbsp;"/>
+<div id="edit_area" style="align=left">
+
+<table width="96%" id='result' class="tablesorter">
+    <thead><tr><th>门店代码</th><th>门店名称</th><th>条形码</th><th>商品代码</th><th>商品名称</th><th>商品大类</th><th>商品中类</th><th>商品小类</th><th>品牌小类</th><th>库存数量</th></tr></thead><tbody>
+{% for rs in result %}
+    <tr><td>{{rs.0}}</td><td>{{rs.1}}</td><td>{{rs.2}}</td><td>{{rs.3}}</td><td>{{rs.4}}</td><td>{{rs.5}}</td><td>{{rs.6}}</td><td>{{rs.7}}</td><td>{{rs.8}}</td><td>{{rs.9}}</td></tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+<p></p>
+</body>
+</html>

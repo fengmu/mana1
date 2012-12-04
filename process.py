@@ -444,7 +444,6 @@ def setDhMaxlimit(conn, cur):
     conn.commit()
     #--**********************
     
-    
     #--***********全部***********
     sqlstr = " update dhrules_today_maxlimit "
     sqlstr += " set yqrule = dhrules.yqrule, yqvalue = dhrules.yqvalue "
@@ -454,7 +453,6 @@ def setDhMaxlimit(conn, cur):
     conn.commit()
     #--***************************
     
-    
     #--***********门店***********
     sqlstr = " update dhrules_today_maxlimit "
     sqlstr += " set yqrule = dhrules.yqrule, yqvalue = dhrules.yqvalue "
@@ -463,7 +461,6 @@ def setDhMaxlimit(conn, cur):
     cur.execute(sqlstr)
     conn.commit()
     #--***************************
-    
     
     #--*********大类*************
     sqlstr = " update dhrules_today_maxlimit "
@@ -476,8 +473,6 @@ def setDhMaxlimit(conn, cur):
     conn.commit()
     #--***************************
     
-    
-    
     #--**********门店大类************
     sqlstr = " update dhrules_today_maxlimit "
     sqlstr += " set yqrule = t.yqrule, yqvalue = t.yqvalue "
@@ -489,7 +484,6 @@ def setDhMaxlimit(conn, cur):
     conn.commit()
     #--***************************
     
-    
     #--**********中类************
     sqlstr = " update dhrules_today_maxlimit "
     sqlstr += " set yqrule = t.yqrule, yqvalue = t.yqvalue "
@@ -500,8 +494,6 @@ def setDhMaxlimit(conn, cur):
     cur.execute(sqlstr)
     conn.commit()
     #--***************************
-    
-    
     
     #--*********门店中类*************
     sqlstr = " update dhrules_today_maxlimit "
@@ -525,8 +517,6 @@ def setDhMaxlimit(conn, cur):
     conn.commit()
     #--***************************
     
-    
-    
     #--***********门店小类***********
     sqlstr = " update dhrules_today_maxlimit "
     sqlstr += " set yqrule = t.yqrule, yqvalue = t.yqvalue "
@@ -549,8 +539,6 @@ def setDhMaxlimit(conn, cur):
     conn.commit()
     #--***************************
     
-    
-    
     #--**************门店单品********
     sqlstr = " update dhrules_today_maxlimit "
     sqlstr += " set yqrule = t.yqrule, yqvalue = t.yqvalue "
@@ -560,6 +548,117 @@ def setDhMaxlimit(conn, cur):
     sqlstr += " where dhrules_today_maxlimit.proid = t.proid and dhrules_today_maxlimit.braid = t.braid "
     cur.execute(sqlstr)
     conn.commit()
+
+    #--*********************************************dhrulesYuzhi阈值比例******************************************************
+
+    today=datetime.date.today().strftime("%Y-%m-%d")
+
+    #--***********全部***********
+    sqlstr = " update dhrules_today_maxlimit "
+    sqlstr += " set yqrule = t2.yqrule, yqvalue = t2.yqvalue "
+    sqlstr += " from dhrulesYuzhi t2 "
+    sqlstr += " where t2.mdcode ='' and t2.xcode ='' and t2.excode ='' and t2.yqkey = 'maxlimit' and t2.startdate<='"+today+"' and t2.enddate>='"+today+"'"
+    cur.execute(sqlstr)
+    conn.commit()
+    #--***************************
+    
+    #--***********门店***********
+    sqlstr = " update dhrules_today_maxlimit "
+    sqlstr += " set yqrule = t2.yqrule, yqvalue = t2.yqvalue "
+    sqlstr += " from dhrulesYuzhi t2 "
+    sqlstr += " where t2.mdcode = dhrules_today_maxlimit.braid and t2.mdcode <>'' and t2.xcode ='' and t2.excode ='' and t2.yqkey = 'maxlimit' and t2.startdate<='"+today+"' and t2.enddate>='"+today+"'"
+    cur.execute(sqlstr)
+    conn.commit()
+    #--***************************
+    
+    #--*********大类*************
+    sqlstr = " update dhrules_today_maxlimit "
+    sqlstr += " set yqrule = t.yqrule, yqvalue = t.yqvalue "
+    sqlstr += " from (select t1.proid, t2.yqrule, t2.yqvalue "
+    sqlstr += "            from product_all t1, dhrulesYuzhi t2 "
+    sqlstr += "              where t1.prodl_id = t2.xcode and t2.excode = 'dl' and t2.mdcode ='' and t2.yqkey = 'maxlimit' and t2.startdate<='"+today+"' and t2.enddate>='"+today+"') t "
+    sqlstr += " where dhrules_today_maxlimit.proid = t.proid "
+    cur.execute(sqlstr)
+    conn.commit()
+    #--***************************
+    
+    #--**********门店大类************
+    sqlstr = " update dhrules_today_maxlimit "
+    sqlstr += " set yqrule = t.yqrule, yqvalue = t.yqvalue "
+    sqlstr += " from (select t2.mdcode as braid, t1.proid, t2.yqrule, t2.yqvalue "
+    sqlstr += "               from product_all t1, dhrulesYuzhi t2 "
+    sqlstr += "               where t1.prodl_id = t2.xcode and t2.excode = 'dl' and t2.mdcode <>'' and t2.yqkey = 'maxlimit' and t2.startdate<='"+today+"' and t2.enddate>='"+today+"') t "
+    sqlstr += " where dhrules_today_maxlimit.proid = t.proid and dhrules_today_maxlimit.braid = t.braid "
+    cur.execute(sqlstr)
+    conn.commit()
+    #--***************************
+    
+    #--**********中类************
+    sqlstr = " update dhrules_today_maxlimit "
+    sqlstr += " set yqrule = t.yqrule, yqvalue = t.yqvalue "
+    sqlstr += " from (select t1.proid, t2.yqrule, t2.yqvalue "
+    sqlstr += "               from product_all t1, dhrulesYuzhi t2 "
+    sqlstr += "              where t1.prozl_id = t2.xcode and t2.excode = 'zl' and t2.mdcode ='' and t2.yqkey = 'maxlimit' and t2.startdate<='"+today+"' and t2.enddate>='"+today+"') t "
+    sqlstr += " where dhrules_today_maxlimit.proid = t.proid "
+    cur.execute(sqlstr)
+    conn.commit()
+    #--***************************
+    
+    #--*********门店中类*************
+    sqlstr = " update dhrules_today_maxlimit "
+    sqlstr += " set yqrule = t.yqrule, yqvalue = t.yqvalue "
+    sqlstr += " from (select t2.mdcode as braid, t1.proid, t2.yqrule, t2.yqvalue "
+    sqlstr += "               from product_all t1, dhrulesYuzhi t2 "
+    sqlstr += "               where t1.prozl_id = t2.xcode and t2.excode = 'zl' and t2.mdcode <>'' and t2.yqkey = 'maxlimit' and t2.startdate<='"+today+"' and t2.enddate>='"+today+"') t "
+    sqlstr += " where dhrules_today_maxlimit.proid = t.proid and dhrules_today_maxlimit.braid = t.braid "
+    cur.execute(sqlstr)
+    conn.commit()
+    #--***************************
+    
+    #--**********小类************
+    sqlstr = " update dhrules_today_maxlimit "
+    sqlstr += " set yqrule = t.yqrule, yqvalue = t.yqvalue "
+    sqlstr += " from (select t1.proid, t2.yqrule, t2.yqvalue "
+    sqlstr += "               from product_all t1, dhrulesYuzhi t2 "
+    sqlstr += "               where t1.proxl_id = t2.xcode and t2.excode = 'xl' and t2.mdcode ='' and t2.yqkey = 'maxlimit' and t2.startdate<='"+today+"' and t2.enddate>='"+today+"') t "
+    sqlstr += " where dhrules_today_maxlimit.proid = t.proid "
+    cur.execute(sqlstr)
+    conn.commit()
+    #--***************************
+    
+    #--***********门店小类***********
+    sqlstr = " update dhrules_today_maxlimit "
+    sqlstr += " set yqrule = t.yqrule, yqvalue = t.yqvalue "
+    sqlstr += " from (select t2.mdcode as braid, t1.proid, t2.yqrule, t2.yqvalue "
+    sqlstr += "               from product_all t1, dhrulesYuzhi t2 "
+    sqlstr += "               where t1.proxl_id = t2.xcode and t2.excode = 'xl' and t2.mdcode <>'' and t2.yqkey = 'maxlimit' and t2.startdate<='"+today+"' and t2.enddate>='"+today+"') t "
+    sqlstr += " where dhrules_today_maxlimit.proid = t.proid and dhrules_today_maxlimit.braid = t.braid "
+    cur.execute(sqlstr)
+    conn.commit()
+    #--***************************
+    
+    #--*************单品*********
+    sqlstr = " update dhrules_today_maxlimit "
+    sqlstr += " set yqrule = t.yqrule, yqvalue = t.yqvalue "
+    sqlstr += " from (select t1.proid, t2.yqrule, t2.yqvalue "
+    sqlstr += "               from product_all t1, dhrulesYuzhi t2 "
+    sqlstr += "               where t1.proid = t2.xcode and t2.excode = 'sp' and t2.mdcode ='' and t2.yqkey = 'maxlimit' and t2.startdate<='"+today+"' and t2.enddate>='"+today+"') t "
+    sqlstr += " where dhrules_today_maxlimit.proid = t.proid "
+    cur.execute(sqlstr)
+    conn.commit()
+    #--***************************
+    
+    #--**************门店单品********
+    sqlstr = " update dhrules_today_maxlimit "
+    sqlstr += " set yqrule = t.yqrule, yqvalue = t.yqvalue "
+    sqlstr += " from (select t2.mdcode as braid, t1.proid, t2.yqrule, t2.yqvalue "
+    sqlstr += "               from product_all t1, dhrulesYuzhi t2 "
+    sqlstr += "               where t1.proid = t2.xcode and t2.excode = 'sp' and t2.mdcode <>'' and t2.yqkey = 'maxlimit' and t2.startdate<='"+today+"' and t2.enddate>='"+today+"') t "
+    sqlstr += " where dhrules_today_maxlimit.proid = t.proid and dhrules_today_maxlimit.braid = t.braid "
+    cur.execute(sqlstr)
+    conn.commit()
+    #--***************************
+    #--************************************************************************************************************************
     
     sqlstr = " update dhrules_today_maxlimit "
     sqlstr += " set yqmaxlimit = to_char(suggest + to_number(yqvalue, '999D999S'),'99999999999') "
@@ -583,7 +682,6 @@ def setDhMinlimit(conn, cur):
     conn.commit()
     #--**********************
     
-    
     #--***********全部***********
     sqlstr = " update dhrules_today_minlimit "
     sqlstr += " set yqrule = dhrules.yqrule, yqvalue = dhrules.yqvalue "
@@ -593,7 +691,6 @@ def setDhMinlimit(conn, cur):
     conn.commit()
     #--***************************
     
-    
     #--***********门店***********
     sqlstr = " update dhrules_today_minlimit "
     sqlstr += " set yqrule = dhrules.yqrule, yqvalue = dhrules.yqvalue "
@@ -602,7 +699,6 @@ def setDhMinlimit(conn, cur):
     cur.execute(sqlstr)
     conn.commit()
     #--***************************
-    
     
     #--*********大类*************
     sqlstr = " update dhrules_today_minlimit "
@@ -615,8 +711,6 @@ def setDhMinlimit(conn, cur):
     conn.commit()
     #--***************************
     
-    
-    
     #--**********门店大类************
     sqlstr = " update dhrules_today_minlimit "
     sqlstr += " set yqrule = t.yqrule, yqvalue = t.yqvalue "
@@ -628,7 +722,6 @@ def setDhMinlimit(conn, cur):
     conn.commit()
     #--***************************
     
-    
     #--**********中类************
     sqlstr = " update dhrules_today_minlimit "
     sqlstr += " set yqrule = t.yqrule, yqvalue = t.yqvalue "
@@ -639,8 +732,6 @@ def setDhMinlimit(conn, cur):
     cur.execute(sqlstr)
     conn.commit()
     #--***************************
-    
-    
     
     #--*********门店中类*************
     sqlstr = " update dhrules_today_minlimit "
@@ -664,8 +755,6 @@ def setDhMinlimit(conn, cur):
     conn.commit()
     #--***************************
     
-    
-    
     #--***********门店小类***********
     sqlstr = " update dhrules_today_minlimit "
     sqlstr += " set yqrule = t.yqrule, yqvalue = t.yqvalue "
@@ -688,8 +777,6 @@ def setDhMinlimit(conn, cur):
     conn.commit()
     #--***************************
     
-    
-    
     #--**************门店单品********
     sqlstr = " update dhrules_today_minlimit "
     sqlstr += " set yqrule = t.yqrule, yqvalue = t.yqvalue "
@@ -700,6 +787,117 @@ def setDhMinlimit(conn, cur):
     cur.execute(sqlstr)
     conn.commit()
     
+    #--*********************************************dhrulesYuzhi阈值比例******************************************************
+
+    today=datetime.date.today().strftime("%Y-%m-%d")
+
+    #--***********全部***********
+    sqlstr = " update dhrules_today_minlimit "
+    sqlstr += " set yqrule = t2.yqrule, yqvalue = t2.yqvalue "
+    sqlstr += " from dhrulesYuzhi t2"
+    sqlstr += " where t2.mdcode ='' and t2.xcode ='' and t2.excode ='' and t2.yqkey = 'minlimit' and t2.startdate<='"+today+"' and t2.enddate>='"+today+"'"
+    cur.execute(sqlstr)
+    conn.commit()
+    #--***************************
+    
+    #--***********门店***********
+    sqlstr = " update dhrules_today_minlimit "
+    sqlstr += " set yqrule = t2.yqrule, yqvalue = t2.yqvalue "
+    sqlstr += " from dhrulesYuzhi t2"
+    sqlstr += " where t2.mdcode = dhrules_today_minlimit.braid and t2.mdcode <>'' and t2.xcode ='' and t2.excode ='' and t2.yqkey = 'minlimit' and t2.startdate<='"+today+"' and t2.enddate>='"+today+"'"
+    cur.execute(sqlstr)
+    conn.commit()
+    #--***************************
+    
+    #--*********大类*************
+    sqlstr = " update dhrules_today_minlimit "
+    sqlstr += " set yqrule = t.yqrule, yqvalue = t.yqvalue "
+    sqlstr += " from (select t1.proid, t2.yqrule, t2.yqvalue "
+    sqlstr += "            from product_all t1, dhrulesYuzhi t2 "
+    sqlstr += "              where t1.prodl_id = t2.xcode and t2.excode = 'dl' and t2.mdcode ='' and t2.yqkey = 'minlimit' and t2.startdate<='"+today+"' and t2.enddate>='"+today+"') t "
+    sqlstr += " where dhrules_today_minlimit.proid = t.proid "
+    cur.execute(sqlstr)
+    conn.commit()
+    #--***************************
+    
+    #--**********门店大类************
+    sqlstr = " update dhrules_today_minlimit "
+    sqlstr += " set yqrule = t.yqrule, yqvalue = t.yqvalue "
+    sqlstr += " from (select t2.mdcode as braid, t1.proid, t2.yqrule, t2.yqvalue "
+    sqlstr += "               from product_all t1, dhrulesYuzhi t2 "
+    sqlstr += "               where t1.prodl_id = t2.xcode and t2.excode = 'dl' and t2.mdcode <>'' and t2.yqkey = 'minlimit' and t2.startdate<='"+today+"' and t2.enddate>='"+today+"') t "
+    sqlstr += " where dhrules_today_minlimit.proid = t.proid and dhrules_today_minlimit.braid = t.braid "
+    cur.execute(sqlstr)
+    conn.commit()
+    #--***************************
+    
+    #--**********中类************
+    sqlstr = " update dhrules_today_minlimit "
+    sqlstr += " set yqrule = t.yqrule, yqvalue = t.yqvalue "
+    sqlstr += " from (select t1.proid, t2.yqrule, t2.yqvalue "
+    sqlstr += "               from product_all t1, dhrulesYuzhi t2 "
+    sqlstr += "              where t1.prozl_id = t2.xcode and t2.excode = 'zl' and t2.mdcode ='' and t2.yqkey = 'minlimit' and t2.startdate<='"+today+"' and t2.enddate>='"+today+"') t "
+    sqlstr += " where dhrules_today_minlimit.proid = t.proid "
+    cur.execute(sqlstr)
+    conn.commit()
+    #--***************************
+    
+    #--*********门店中类*************
+    sqlstr = " update dhrules_today_minlimit "
+    sqlstr += " set yqrule = t.yqrule, yqvalue = t.yqvalue "
+    sqlstr += " from (select t2.mdcode as braid, t1.proid, t2.yqrule, t2.yqvalue "
+    sqlstr += "               from product_all t1, dhrulesYuzhi t2 "
+    sqlstr += "               where t1.prozl_id = t2.xcode and t2.excode = 'zl' and t2.mdcode <>'' and t2.yqkey = 'minlimit' and t2.startdate<='"+today+"' and t2.enddate>='"+today+"') t "
+    sqlstr += " where dhrules_today_minlimit.proid = t.proid and dhrules_today_minlimit.braid = t.braid "
+    cur.execute(sqlstr)
+    conn.commit()
+    #--***************************
+    
+    #--**********小类************
+    sqlstr = " update dhrules_today_minlimit "
+    sqlstr += " set yqrule = t.yqrule, yqvalue = t.yqvalue "
+    sqlstr += " from (select t1.proid, t2.yqrule, t2.yqvalue "
+    sqlstr += "               from product_all t1, dhrulesYuzhi t2 "
+    sqlstr += "               where t1.proxl_id = t2.xcode and t2.excode = 'xl' and t2.mdcode ='' and t2.yqkey = 'minlimit' and t2.startdate<='"+today+"' and t2.enddate>='"+today+"') t "
+    sqlstr += " where dhrules_today_minlimit.proid = t.proid "
+    cur.execute(sqlstr)
+    conn.commit()
+    #--***************************
+    
+    #--***********门店小类***********
+    sqlstr = " update dhrules_today_minlimit "
+    sqlstr += " set yqrule = t.yqrule, yqvalue = t.yqvalue "
+    sqlstr += " from (select t2.mdcode as braid, t1.proid, t2.yqrule, t2.yqvalue "
+    sqlstr += "               from product_all t1, dhrulesYuzhi t2 "
+    sqlstr += "               where t1.proxl_id = t2.xcode and t2.excode = 'xl' and t2.mdcode <>'' and t2.yqkey = 'minlimit' and t2.startdate<='"+today+"' and t2.enddate>='"+today+"') t "
+    sqlstr += " where dhrules_today_minlimit.proid = t.proid and dhrules_today_minlimit.braid = t.braid "
+    cur.execute(sqlstr)
+    conn.commit()
+    #--***************************
+    
+    #--*************单品*********
+    sqlstr = " update dhrules_today_minlimit "
+    sqlstr += " set yqrule = t.yqrule, yqvalue = t.yqvalue "
+    sqlstr += " from (select t1.proid, t2.yqrule, t2.yqvalue "
+    sqlstr += "               from product_all t1, dhrulesYuzhi t2 "
+    sqlstr += "               where t1.proid = t2.xcode and t2.excode = 'sp' and t2.mdcode ='' and t2.yqkey = 'minlimit' and t2.startdate<='"+today+"' and t2.enddate>='"+today+"') t "
+    sqlstr += " where dhrules_today_minlimit.proid = t.proid "
+    cur.execute(sqlstr)
+    conn.commit()
+    #--***************************
+    
+    #--**************门店单品********
+    sqlstr = " update dhrules_today_minlimit "
+    sqlstr += " set yqrule = t.yqrule, yqvalue = t.yqvalue "
+    sqlstr += " from (select t2.mdcode as braid, t1.proid, t2.yqrule, t2.yqvalue "
+    sqlstr += "               from product_all t1, dhrulesYuzhi t2 "
+    sqlstr += "               where t1.proid = t2.xcode and t2.excode = 'sp' and t2.mdcode <>'' and t2.yqkey = 'minlimit' and t2.startdate<='"+today+"' and t2.enddate>='"+today+"') t "
+    sqlstr += " where dhrules_today_minlimit.proid = t.proid and dhrules_today_minlimit.braid = t.braid "
+    cur.execute(sqlstr)
+    conn.commit()
+    #--***************************
+    
+    #--***************************************************************************************************************************
     sqlstr = " update dhrules_today_minlimit "
     sqlstr += " set yqminlimit = to_char(suggest - to_number(yqvalue, '999D999S'),'99999999999') "
     sqlstr += " where yqrule = 'jd' "    

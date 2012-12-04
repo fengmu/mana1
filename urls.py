@@ -88,4 +88,5 @@ urlpatterns = patterns('',
     url(r'^delete_dhrulesYuzhi/','mana1.dhrulesYuzhi.delete_dhrulesYuzhi'), #商品最大最小上下限规则删除界面
     url(r'^deleteData_dhrulesYuzhi/','mana1.dhrulesYuzhi.deleteData_dhrulesYuzhi'), #商品最大最小上下限规则删除
 
+    url(r'^insult_quehuo/','mana1.quehuo.insult_quehuo'), #缺货商品查询
 )

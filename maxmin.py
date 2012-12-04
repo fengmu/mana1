@@ -67,8 +67,9 @@ def insult_maxmin(request):
         result=[] #存放初始表头
         jlist=simplejson.loads(request.POST["jsonlist"])
 
-        if jlist['proid']<>'' or jlist['proname']<>'' or jlist['braid']<>'' or jlist['braname']<>'' or jlist['maxval']<>'' or jlist['minval']<>'' or jlist['banben']<>'': #不全为空
-            sqlstr="select * from (select t1.braid,t2.braname,t1.proid,t3.proname,t1.maxval,t1.minval,t1.banben,t1.startdate,t1.enddate,t1.adddate ,t3.prodl_id||'_'||t3.prodl as dl, t3.prozl_id||'_'||t3.prozl as zl from maxmin t1,branch t2,product_all t3 where t1.braid=t2.braid and t1.proid=t3.proid) t1 where "
+        log(jlist)
+        if jlist['proid']<>'' or jlist['proname']<>'' or jlist['braid']<>'' or jlist['braname']<>'' or jlist['maxval']<>'' or jlist['minval']<>'' or jlist['banben']<>'' or jlist['prodl']<>'' or jlist['prozl']<>'' or jlist['proxl']<>'' or jlist['barcode']<>'': #不全为空,即按单个或多个条件查询
+            sqlstr="select * from (select t1.braid,t2.braname,t3.barcode,t1.proid,t3.proname,t1.maxval,t1.minval,t1.banben,t1.startdate,t1.enddate,t1.adddate ,t3.prodl_id||'_'||t3.prodl as prodl, t3.prozl_id||'_'||t3.prozl as prozl, t3.proxl_id||'_'||t3.proxl as proxl from maxmin t1,branch t2,product_all t3 where t1.braid=t2.braid and t1.proid=t3.proid) t1 where "
             for j in jlist:
                 if jlist[j]<>'':
                     li=jlist[j].split(",")
@@ -87,36 +88,40 @@ def insult_maxmin(request):
                 res={}
                 res['braid']=rs[0]
                 res['braname']=rs[1]
-                res['proid']=rs[2]
-                res['proname']=rs[3]
-                res['maxval']=rs[4]
-                res['minval']=rs[5]
-                res['banben']=rs[6]
-                res['startdate']=rs[7]
-                res['enddate']=rs[8]
-                res['adddate']=rs[9]
-                res['prodl'] = rs[10]
-                res['prozl'] = rs[11]
+                res['barcode']=rs[2]
+                res['proid']=rs[3]
+                res['proname']=rs[4]
+                res['maxval']=rs[5]
+                res['minval']=rs[6]
+                res['banben']=rs[7]
+                res['startdate']=rs[8]
+                res['enddate']=rs[9]
+                res['adddate']=rs[10]
+                res['prodl'] = rs[11]
+                res['prozl'] = rs[12]
+                res['proxl'] = rs[13]
                 result.append(res)
             jsonres=simplejson.dumps(result)
             return  HttpResponse(jsonres)
         else: #全为空，查询所有
-            sqlstr="select t1.braid,t2.braname,t1.proid,t3.proname,t1.maxval,t1.minval,t1.banben,t1.startdate,t1.enddate,t1.adddate,t3.prodl_id||'_'||t3.prodl as prodl, t3.prozl_id||'_'||t3.prozl as prozl from maxmin t1,branch t2,product_all t3 where t1.braid=t2.braid and t1.proid=t3.proid limit 10000"
+            sqlstr="select t1.braid,t2.braname,t3.barcode,t1.proid,t3.proname,t1.maxval,t1.minval,t1.banben,t1.startdate,t1.enddate,t1.adddate,t3.prodl_id||'_'||t3.prodl as prodl, t3.prozl_id||'_'||t3.prozl as prozl, t3.proxl_id||'_'||t3.proxl as proxl from maxmin t1,branch t2,product_all t3 where t1.braid=t2.braid and t1.proid=t3.proid limit 10000"
             lines=confsql.runquery(sqlstr)
             for rs in lines:
                 res={}
                 res['braid']=rs[0]
                 res['braname']=rs[1]
-                res['proid']=rs[2]
-                res['proname']=rs[3]
-                res['maxval']=rs[4]
-                res['minval']=rs[5]
-                res['banben']=rs[6]
-                res['startdate']=rs[7]
-                res['enddate']=rs[8]
-                res['adddate']=rs[9]
-                res['prodl'] = rs[10]
-                res['prozl'] = rs[11]
+                res['barcode']=rs[2]
+                res['proid']=rs[3]
+                res['proname']=rs[4]
+                res['maxval']=rs[5]
+                res['minval']=rs[6]
+                res['banben']=rs[7]
+                res['startdate']=rs[8]
+                res['enddate']=rs[9]
+                res['adddate']=rs[10]
+                res['prodl'] = rs[11]
+                res['prozl'] = rs[12]
+                res['proxl'] = rs[13]
                 result.append(res)
             jsonres=simplejson.dumps(result)
             return  HttpResponse(jsonres)

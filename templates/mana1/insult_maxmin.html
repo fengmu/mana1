@@ -47,6 +47,7 @@
     float: right;
     text-align: right;
     width: 50%;
+    margin-right:50px;
 }
 .dataTables_info {
     float: left;
@@ -125,13 +126,17 @@ $(document).ready(function(){
 function postdata(){                              //提交数据函数
     var myobj=new Object();
     myobj={}
-    myobj["proid"]=$("#text1").val();
-    myobj["proname"]=$("#text2").val();
-    myobj["braid"]=$("#text3").val();
-    myobj["braname"]=$("#text4").val();
-    myobj["maxval"]=$("#text5").val();
-    myobj["minval"]=$("#text6").val();
-    myobj["banben"]=$("select").val();
+    myobj["braid"]=$("#braid").val();
+    myobj["braname"]=$("#braname").val();
+    myobj["barcode"]=$("#barcode").val();
+    myobj["proid"]=$("#proid").val();
+    myobj["proname"]=$("#proname").val();
+    myobj["prodl"]=$("#prodl").val();
+    myobj["prozl"]=$("#prozl").val();
+    myobj["proxl"]=$("#proxl").val();
+    myobj["maxval"]=$("#maxval").val();
+    myobj["minval"]=$("#minval").val();
+    myobj["banben"]=$("#banben").val();
     var jsonlist=JSON.stringify(myobj);
 
     $.ajax({ //调用jquery的ajax方法
@@ -141,28 +146,39 @@ function postdata(){                              //提交数据函数
       success: function(msg){ //提交成功后的回调，msg变量是输出的内容。
         //alert("数据提交成功"); //如果有必要，可以把msg变量的值显示到某个DIV元素中
         json=JSON.parse(msg);
-        str="<thead><tr><th>门店代码</th><th>门店名称</th><th>大类</th><th>中类</th><th>商品代码</th><th>商品名称</th><th>上限</th><th>下限</th><th>版本</th><th>开始日期</th><th>结束日期</th><th>写入日期</th></tr></thead><tbody>"
+        str="<thead><tr><th>门店代码</th><th>门店名称</th><th>条形码</th><th>商品代码</th><th>商品名称</th><th>商品大类</th><th>商品中类</th><th>商品小类</th><th>上限</th><th>下限</th><th>版本</th><th>开始日期</th><th>结束日期</th><th>写入日期</th></tr></thead><tbody>"
         for(var i=0;i<json.length;i++)
         {
-           str+="<tr><td>"+json[i].braid+"</td><td>"+json[i].braname+"</td><td>"+json[i].prodl + "</td><td>"+json[i].prozl +"</td><td>"+json[i].proid+"</td><td>"+json[i].proname+"</td><td>"+json[i].maxval+"</td><td>"+json[i].minval+"</td><td>"+json[i].banben+"</td><td>"+json[i].startdate+"</td><td>"+json[i].enddate+"</td><td>"+json[i].adddate+"</td></tr>";
+           str+="<tr><td>"+json[i].braid+"</td><td>"+json[i].braname+"</td><td>"+json[i].barcode+"</td><td>"+json[i].proid+"</td><td>"+json[i].proname+"</td><td>"+json[i].prodl+"</td><td>"+json[i].prozl+"</td><td>"+json[i].proxl+"</td><td>"+json[i].maxval+"</td><td>"+json[i].minval+"</td><td>"+json[i].banben+"</td><td>"+json[i].startdate+"</td><td>"+json[i].enddate+"</td><td>"+json[i].adddate+"</td></tr>";
         }
         str+="</tbody>"
         $("#result").html(str)
         var oTable = $('#result').dataTable({
+            "bDestroy":true,
             "fnDrawCallback": function( oSettings ) {
               },
             "oLanguage": {
-                "sSearch": "搜索:",
-                "sLengthMenu": '显示 <select>'+
-                  '<option value="10">10</option>'+
-                  '<option value="20">20</option>'+                  
-                  '<option value="50">50</option>'+
-                  '<option value="-1">All</option>'+
-                  '</select> 条记录',
-                "sInfo": "当前显示的是从第 _START_ 到第 _END_ 条记录 (共 _TOTAL_ 条)",
-                "sInfoFiltered": " 　来源记录共 _MAX_ 条"
-              }
-            });
+                    "sSearch": "搜索:",
+                    "sZeroRecords": "没有检索到数据",
+                    "sLengthMenu": '显示 <select>'+
+                      '<option value="10">10</option>'+
+                      '<option value="20">20</option>'+
+                      '<option value="50">50</option>'+
+                      '<option value="-1">All</option>'+
+                      '</select> 条记录',
+                    "sInfo": "当前显示的是从第 _START_ 到第 _END_ 条记录 (共 _TOTAL_ 条)",
+                    "sInfoFiltered": " 　来源记录共 _MAX_ 条",
+                    "sInfoEmtpy": "没有数据",
+                    "sProcessing": "正在加载数据...",
+                    "oPaginate":
+                    {
+                        "sFirst": "首页",
+                        "sPrevious": "上一页",
+                        "sNext": "下一页",
+                        "sLast": "尾页"
+                    }
+            }
+        });
       }
     });
 }
@@ -206,23 +222,24 @@ function init() {
 <body>
 <h1>查询商品上下限</h1>
 
-<table class='chaxun'>
-        <tr><th colspan="8">请输入查询条件:</th></tr>
+<table class='chaxun' width="96%">
+        <tr><th colspan="5">请输入查询条件:</th></tr>
         <tr>
-            <td>商品代码</td><td><input type='text' id='text1'/></td><td>商品名称</td><td><input type='text' id='text2'/></td><td>门店代码</td><td><input type='text' id='text3'/></td><td>门店名称</td><td><input type='text' id='text4'/></td>
+            <td>门店代码:<input type='text' id="braid"/></td><td>门店名称:<input type='text' id="braname"/></td><td>&nbsp;&nbsp;条形码:<input type='text' id='barcode'/></td><td>商品代码:<input type='text' id='proid'/></td><td>商品名称:<input type='text' id='proname'/></td>
         </tr>
-
         <tr>
-            <td >上&nbsp;&nbsp;&nbsp;&nbsp;限</td><td><input type='text' id='text5'/></td><td>下&nbsp;&nbsp;&nbsp;&nbsp;限</td><td><input type='text' id='text6'/></td><td>版&nbsp;&nbsp;&nbsp;&nbsp;本</td><td style="text-align:left"><select ><option value="">请选择版本...</option><option value="A">&nbsp;&nbsp;A&nbsp;&nbsp;</option><option value="B">&nbsp;&nbsp;B&nbsp;&nbsp;</option></select></td><td colspan=2><input type="button" id="sub" value="查询"/>&nbsp;<input type="button" id="io" value="复制"/></td>
+            <td>商品大类:<input type='text' id='prodl'/></td><td>商品中类:<input type='text' id='prozl'/></td><td>商品小类:<input type='text' id='proxl'/></td><td>上&nbsp;&nbsp;&nbsp;&nbsp;限:<input type='text' id='maxval'/></td><td>下&nbsp;&nbsp;&nbsp;&nbsp;限:<input type='text' id='minval'/></td>
         </tr>
-
-        <tr><td colspan="8"></td></tr>
+        <tr>
+            <td>版本:<select id="banben"><option value="">请选择版本...</option><option value="A">&nbsp;&nbsp;A&nbsp;&nbsp;</option><option value="B">&nbsp;&nbsp;B&nbsp;&nbsp;</option></select></td><td colspan=4><input type="button" id="sub" value="查询"/>&nbsp;<input type="button" id="io" value="复制"/></td>
+        </tr>
+        <tr><td colspan="5"></td></tr>
 </table>
-<div id="edit_area" style="align=left;width:1200px">
-<table width="1200" id='result' class="tablesorter">
+<div id="edit_area" style="align=left;">
+<table width="96%" id='result' class="tablesorter">
 </table>
 </div>
-<table width="1200" id="tips">
+<table width="96%" id="tips">
 <tr><td><p align="left">提示：</p><p align="left">&nbsp;&nbsp;为空则显示所有结果(最多10000条记录）。门店代码商品代码支持多重查询，如要查询时代花园店和棠景店可在门店代码输：02001,02002 格式以英文逗号分隔。</p><p></p></td></tr>
 </table>
 </body>
