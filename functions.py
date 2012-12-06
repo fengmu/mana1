@@ -33,7 +33,28 @@ def getspaceinfo(xcode, excode):
         if len(res) > 0:
             return res
         else:
-            sqlstr = "select proxl_id from product_all where proid='"+xcode+"'"
+            sqlstr = "select braxl_id from product_all where proid='"+xcode+"'"
+            result=confsql.runquery(sqlstr)
+            if len(result) == 0:
+                return []
+            else:
+                xcode = result[0][0]
+                excode = 'pbxl'
+                return getspaceinfo(xcode, excode)
+    if excode == 'pbxl':
+        sqlstr="select spaceid,spacename,assortment from dhalldata where braxl_id='"+xcode+"' and spaceid is not null group by spaceid,spacename,assortment"
+        result=confsql.runquery(sqlstr)
+        res=[]
+        for rs in result:
+            items={}
+            items['spaceid']=rs[0]
+            items['spacename']=rs[1]
+            items['assortment']=rs[2]
+            res.append(items)
+        if len(res) > 0:
+            return res
+        else:
+            sqlstr = "select proxl_id from product_all where braxl_id='"+xcode+"'"
             result=confsql.runquery(sqlstr)
             if len(result) == 0:
                 return []
