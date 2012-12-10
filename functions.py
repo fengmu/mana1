@@ -236,6 +236,24 @@ def verifyData(rs1,length=0,required=[],**special):
         if sp=='maxmin': #字符类型检查
             temp=[]
             for rs in rs1:
+                if len(rs[0])<>5:
+                    rs.append(u"门店代码长度应为5位!")
+                    temp.append(rs)
+                    rs2.append(rs)
+            if len(temp)>0:
+                for rs in temp:
+                    rs1.remove(rs)
+            temp=[]
+            for rs in rs1:
+                if len(rs[2])<>8:
+                    rs.append(u"商品代码长度应为8位!")
+                    temp.append(rs)
+                    rs2.append(rs)
+            if len(temp)>0:
+                for rs in temp:
+                    rs1.remove(rs)
+            temp=[]
+            for rs in rs1:
                 if rs[4].isdigit()==False or rs[5].isdigit()==False:
                     rs.append(u"上下限数据必须是整数!")
                     temp.append(rs)

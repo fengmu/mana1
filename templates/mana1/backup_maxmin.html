@@ -8,6 +8,8 @@
 <script type="text/javascript" src="http://cl.gialen.com:20800/site_lib/htmltable2csv/htmltable2csv2.js"></script>
 <script type="text/javascript" src="http://cl.gialen.com:20800/site_lib/zeroclipboard/ZeroClipboard.js"></script>
 <link href="/static/mana1/css/tablecloth.css" rel="stylesheet" type="text/css" media="screen"/>
+<script type="text/javascript" src="/static/mana1/js/turn_off_light.js"></script>
+<link href="/static/mana1/css/turn_off_light.css" rel="stylesheet" type="text/css" media="screen"/>
 <style type="text/css">
 .dataTables_length {
     width: 200px;
@@ -136,6 +138,7 @@ $(document).ready(function(){
 });
 
 function postdata(){                              //提交数据函数
+
     var myobj=new Object();
     myobj={}
     myobj["proid"]=$("#text1").val();
@@ -152,9 +155,13 @@ function postdata(){                              //提交数据函数
       url: "/mana1/backup_maxmin/", //把数据提交到
       data: "jsonlist="+jsonlist, //输入框中的值作为提交的数据
       success: function(msg){ //提交成功后的回调，msg变量是输出的内容。
+        $("#shadowDiv").attr("class", "hidDiv");
+        $("#tishi").attr("class", "hidDiv");
         alert("备份成功！共"+msg+"条记录")
       },
       error:function(){
+        $("#shadowDiv").attr("class", "hidDiv");
+        $("#tishi").attr("class", "hidDiv");
         alert("备份失败！");
       }
     });
@@ -169,10 +176,12 @@ function postdata(){                              //提交数据函数
         padding:10px 30px;
     }
 </style>
-<title>备份商品上下限</title>
+<title>上下限备份</title>
 </head>
 <body>
-<h1>备份商品上下限</h1>
+<h1>上下限备份</h1>
+<div id="shadowDiv" class="hidDiv"></div>
+<div id="tishi" class="hidDiv"><p align="center"><img src="/static/mana1/images/loading.gif"></img></p>正在加载数据!请稍后...</div>
 <table class='chaxun'>
         <tr><th colspan="8">请输入备份条件:</th></tr>
         <tr>

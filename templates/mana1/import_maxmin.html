@@ -65,10 +65,10 @@ $(function() {
             data:"myjson="+myjson,
             success: function(msg){
                 json=JSON.parse(msg);
-                str="<table width='800'><tr><th>商品代码</th><th>商品名称</th><th>门店代码</th><th>门店名称</th><th>上限</th><th>下限</th><th>导入情况</th></tr>"
+                str="<table width='80%'><tr><th>门店代码</th><th>门店名称</th><th>商品代码</th><th>商品名称</th><th>上限</th><th>下限</th><th>导入情况</th></tr>"
                 for(var i=0;i<json.length;i++)
                 {
-                    str+="<tr><td>"+json[i].proid+"</td><td>"+json[i].proname+"</td><td>"+json[i].braid+"</td><td>"+json[i].braname+"</td><td>"+json[i].maxval+"</td><td>"+json[i].minval+"</td>"
+                    str+="<tr><td>"+json[i].braid+"</td><td>"+json[i].braname+"</td><td>"+json[i].proid+"</td><td>"+json[i].proname+"</td><td>"+json[i].maxval+"</td><td>"+json[i].minval+"</td>"
                     if (json[i].info=="插入成功!")
                     str+="<td>"+json[i].info+"</td></tr>";
                     else
@@ -86,10 +86,10 @@ $(function() {
     });
 });
 </script>
-<title>设置商品上下限</title>
+<title>上下限设置</title>
 </head>
 <body>
-<h1>设置商品上下限</h1>
+<h1>上下限设置</h1>
 <div id="shadowDiv" class="hidDiv"></div>
 <div id="tishi" class="hidDiv"><p align="center"><img src="/static/mana1/images/loading.gif"></img></p>正在加载数据!请稍后...</div>
 <button id="sub">保存</button>
@@ -110,8 +110,8 @@ $(function() {
 </p>
 </span>
 <div id="edit_area" style="height:400;width:850;align=left">
-<table width="800">
-    <tr><th>商品代码</th><th>商品名称</th><th>门店代码</th><th>门店名称</th><th>上限</th><th>下限</th></tr>
+<table width="80%">
+    <tr><th>门店代码</th><th>门店名称</th><th>商品代码</th><th>商品名称</th><th>上限</th><th>下限</th></tr>
 </table>
 </div>
 </table>
