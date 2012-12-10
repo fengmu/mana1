@@ -17,8 +17,6 @@ def import_dhPauserules(request):
         rs1=trim_csv(value,itemlenth=7)
         rs2,rs1=verifyData(rs1,length=7,required=[5, 6],dhpauserules=1)
         
-
-        
         '重复项覆盖'
         temp=[]
         for rs in rs1:
@@ -31,7 +29,7 @@ def import_dhPauserules(request):
                 excode='zl'
             if rs[4]==u'大类代码':
                 excode='dl'
-            
+
             sqlstr=u"select * from dhpauserules where mdcode='"+rs[0]+"' and xcode = '"+ rs[2] +"' and excode='"+excode+"' and startdate='"+rs[5]+"' and enddate = '" + rs[6] + "'"
             if confsql.checkExist(sqlstr)==1: #检查mdcode,excode,yqkey数据库是否已存在
                 rs.append(u'数据库已存在!')
@@ -150,16 +148,28 @@ def save_dhPauserules(request):
 
 def insult_dhPauserules(request):
     '查询暂停补货范围规则'
-    t=get_template('mana1/insult_dhPauserules.html')
-    sqlstr=" select t1.mdcode,case when t3.braname is null then '' else t3.braname end,t1.xcode,t2.proname as xname,'商品代码' as excode,  t1.startdate, t1.enddate from dhpauserules as t1 left outer join branch as t3 on (t1.mdcode=t3.braid), product_all t2 where t1.xcode=t2.proid and t1.excode='sp'  union all "
-    sqlstr+=" select t1.mdcode,case when t3.braname is null then '' else t3.braname end,t1.xcode,t2.proxl as xname,'小类代码' as excode,   t1.startdate, t1.enddate from dhpauserules as t1 left outer join branch as t3 on (t1.mdcode=t3.braid) ,(select proxl_id, proxl from product_all group by proxl_id, proxl) t2 where t1.xcode=t2.proxl_id and t1.excode='xl'  union all "
-    sqlstr+=" select t1.mdcode,case when t3.braname is null then '' else t3.braname end,t1.xcode,t2.prozl as xname,'中类代码' as excode,   t1.startdate, t1.enddate from dhpauserules as t1 left outer join branch as t3 on (t1.mdcode=t3.braid) ,(select prozl_id, prozl from product_all group by prozl_id, prozl) t2 where t1.xcode=t2.prozl_id and t1.excode='zl' union all "
-    sqlstr+=" select t1.mdcode,case when t3.braname is null then '' else t3.braname end,t1.xcode,t2.prodl as xname,'大类代码' as excode,   t1.startdate, t1.enddate from dhpauserules as t1 left outer join branch as t3 on (t1.mdcode=t3.braid) ,(select prodl_id, prodl from product_all group by prodl_id, prodl) t2 where t1.xcode=t2.prodl_id and t1.excode='dl'  union all"
-    sqlstr+=" select t1.mdcode, case when t3.braname is null then '' else t3.braname end, t1.xcode, '' as xname, '' as excode ,  t1.startdate, t1.enddate from dhpauserules as t1 left outer join branch as t3 on (t1.mdcode=t3.braid) where t1.xcode =''" 
+    result=[]
+    sqlstr=u""" select t1.mdcode,case when t3.braname is null then '' else t3.braname end,t1.xcode,t2.proname as xname,'商品代码' as excode,  t1.startdate, t1.enddate from (select * from dhpauserules where excode='sp') t1 left outer join branch as t3 on (t1.mdcode=t3.braid) left outer join  product_all t2 on t1.xcode=t2.proid  union all 
+    select t1.mdcode,case when t3.braname is null then '' else t3.braname end,t1.xcode,t2.proxl as xname,'小类代码' as excode,   t1.startdate, t1.enddate from( select * from dhpauserules where excode='xl') t1 left outer join branch as t3 on (t1.mdcode=t3.braid) left outer join (select proxl_id, proxl from product_all group by proxl_id, proxl) t2 on t1.xcode=t2.proxl_id union all 
+    select t1.mdcode,case when t3.braname is null then '' else t3.braname end,t1.xcode,t2.prozl as xname,'中类代码' as excode,   t1.startdate, t1.enddate from (select * from dhpauserules where excode='zl') t1 left outer join branch as t3 on (t1.mdcode=t3.braid) left outer join (select prozl_id, prozl from product_all group by prozl_id, prozl) t2 on t1.xcode=t2.prozl_id union all 
+    select t1.mdcode,case when t3.braname is null then '' else t3.braname end,t1.xcode,t2.prodl as xname,'大类代码' as excode,   t1.startdate, t1.enddate from (select * from dhpauserules where excode='dl') t1 left outer join branch as t3 on (t1.mdcode=t3.braid) left outer join (select prodl_id, prodl from product_all group by prodl_id, prodl) t2 on t1.xcode=t2.prodl_id union all
+    select t1.mdcode, case when t3.braname is null then '' else t3.braname end, t1.xcode, '' as xname, '' as excode ,  t1.startdate, t1.enddate from (select * from dhpauserules where xcode ='') t1 left outer join branch as t3 on (t1.mdcode=t3.braid) """
+    log(sqlstr)
     result=confsql.runquery(sqlstr)
-    html=t.render(Context({'result':result}))
+    rec=[]
+    for rs in result:
+        res={}
+        res['braid']=rs[0]
+        res['braname']=rs[1]
+        res['xcode']=rs[2]
+        res['xname']=rs[3]
+        res['excode']=rs[4]
+        res['startdate']=rs[5]
+        res['enddate']=rs[6]
+        rec.append(res)
+    t=get_template('mana1/insult_dhPauserules.html')
+    html=t.render(Context({"rec":rec}))
     return HttpResponse(html)
-    
 
 def delete_dhPauserules(request):
     '删除暂停订货范围规则'
@@ -167,8 +177,6 @@ def delete_dhPauserules(request):
         value=request.POST['value']
         rs1=trim_csv(value,itemlenth=7)
         rs2,rs1=verifyData(rs1,length=7,required=[5,6],dhpauserules=1)
-
-        
 
         html=u"<table width='1000'><tr><th>门店代码</th><th>门店名称</th><th>代码</th><th>代码名称</th><th>代码说明</th><th>规则开始时间</th><th>规则结束时间</th></tr>"
             

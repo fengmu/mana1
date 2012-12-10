@@ -1,0 +1,22 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+fm2csv	.\dh.html	/^    function fm2csv(Tabledata){$/;"	f	language:HTML
+fm2csv	.\insult_dhPauserules.html	/^function fm2csv(Tabledata){$/;"	f	language:HTML
+init	.\dh.html	/^    function init() {$/;"	f	language:HTML
+init	.\insult_checkAdvMaxMin.html	/^function init() {$/;"	f	language:HTML
+init	.\insult_dhPauserules.html	/^function init() {$/;"	f	language:HTML
+init	.\insult_maxmin.html	/^function init() {$/;"	f	language:HTML
+init2	.\dh.html	/^    function init2() {$/;"	f	language:HTML
+post_ajax	.\cleanmc.html	/^                    function post_ajax(myjson){$/;"	f	language:HTML
+post_ajax	.\rewrite.html	/^                    function post_ajax(myjson,urlstr){$/;"	f	language:HTML
+postdata	.\backup_maxmin.html	/^function postdata(){                              \/\/提交数据函数$/;"	f	language:HTML
+postdata	.\insult_checkAdvMaxMin.html	/^function postdata(){                              \/\/提交数据函数$/;"	f	language:HTML
+postdata	.\insult_delivery.html	/^function postdata(){                              \/\/提交数据函数$/;"	f	language:HTML
+postdata	.\insult_dhPauserules.html	/^function postdata(){$/;"	f	language:HTML
+postdata	.\insult_maxmin.html	/^function postdata(){                              \/\/提交数据函数$/;"	f	language:HTML
+postdata	.\insult_shangxiaxian.html	/^    function postdata(){$/;"	f	language:HTML
+postdata	.\insult_sugvalue.html	/^function postdata(ty){                              \/\/提交数据函数$/;"	f	language:HTML

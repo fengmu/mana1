@@ -10,6 +10,8 @@
 <script src="/static/mana1/js/jquery-ui-1.8.22.custom/development-bundle/ui/jquery.ui.datepicker.js"></script>
 <script src="/static/mana1/js/jquery-ui-1.8.22.custom/development-bundle/ui/i18n/jquery.ui.datepicker-zh-CN.js"></script>
 <link href="/static/mana1/js/jquery-ui-1.8.22.custom/development-bundle/themes/base/jquery.ui.all.css" rel="stylesheet" />
+<script type="text/javascript" src="/static/mana1/js/turn_off_light.js"></script>
+<link href="/static/mana1/css/turn_off_light.css" rel="stylesheet" type="text/css" media="screen"/>
 <link href="/static/mana1/css/tablecloth.css" rel="stylesheet" type="text/css" media="screen"/>
 <script>
 $(function() {
@@ -44,7 +46,7 @@ $(function() {
              submit    : 'OK'
         });
 
-    $("#save").bind('click',function(){
+    $("#sub").bind('click',function(){
         //var myobj=new Object();
         var myobj={}
         myobj["table"]=$("#edit_area").table2CSV({separator: '\t',delivery:"table"})
@@ -73,6 +75,8 @@ $(function() {
                     str+="<td style='background-color:#FFFF00;'>"+json[i].info+"</td></tr>";
                 }
                 str+="</table>"
+                $("#shadowDiv").attr("class", "hidDiv");
+                $("#tishi").attr("class", "hidDiv");
                 $("#edit_area").html(str)
             },
             error:function(){
@@ -86,7 +90,9 @@ $(function() {
 </head>
 <body>
 <h1>设置商品上下限</h1>
-<button id="save">保存</button>
+<div id="shadowDiv" class="hidDiv"></div>
+<div id="tishi" class="hidDiv"><p align="center"><img src="/static/mana1/images/loading.gif"></img></p>正在加载数据!请稍后...</div>
+<button id="sub">保存</button>
 <button id="import">导入</button>
 <p>
 版本设置:

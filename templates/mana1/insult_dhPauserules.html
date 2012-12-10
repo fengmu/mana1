@@ -6,28 +6,173 @@
 <script type="text/javascript" src="/static/mana1/js/tablesorter_min.js"></script>
 <script type="text/javascript" src="/static/mana1/js/jquery.jeditable.js"></script>
 <script type="text/javascript" src="/static/mana1/js/htmltable2csv.js"></script>
+<script type="text/javascript" src="http://cl.gialen.com:20800/site_lib/DataTables-1.9.4/DataTables.min.js"></script>
+<script type="text/javascript" src="http://cl.gialen.com:20800/site_lib/zeroclipboard/ZeroClipboard.js"></script>
+<script type="text/javascript" src="/static/mana1/js/turn_off_light.js"></script>
+<link href="/static/mana1/css/turn_off_light.css" rel="stylesheet" type="text/css" media="screen"/>
 <link href="/static/mana1/css/tablecloth.css" rel="stylesheet" type="text/css" media="screen"/>
+<style type="text/css">
+.dataTables_length {
+    width: 200px;
+}
+.dataTables_filter {
+    text-align: right;
+    left: 700px
+    width: 300px;
+}
+/************************************/
+.dataTables_wrapper {
+    clear: both;
+    position: relative;
+}
+.dataTables_processing {
+    background-color: white;
+    border: 1px solid #DDDDDD;
+    color: #999999;
+    font-size: 14px;
+    height: 30px;
+    left: 50%;
+    margin-left: -125px;
+    margin-top: -15px;
+    padding: 14px 0 2px;
+    position: absolute;
+    text-align: center;
+    top: 50%;
+    width: 250px;
+}
+.dataTables_length {
+    float: left;
+    width: 40%;
+}
+.dataTables_filter {
+    float: right;
+    text-align: right;
+    width: 50%;
+}
+.dataTables_info {
+    float: left;
+    width: 60%;
+}
+.dataTables_paginate {
+    float: right;
+    text-align: right;
+}
+.paginate_disabled_previous, .paginate_enabled_previous, .paginate_disabled_next, .paginate_enabled_next {
+    color: #111111 !important;
+    cursor: pointer;
+    float: left;
+    height: 19px;
+}
+.paginate_disabled_previous:hover, .paginate_enabled_previous:hover, .paginate_disabled_next:hover, .paginate_enabled_next:hover {
+    text-decoration: none !important;
+}
+.paginate_disabled_previous:active, .paginate_enabled_previous:active, .paginate_disabled_next:active, .paginate_enabled_next:active {
+    outline: medium none;
+}
+.paginate_disabled_previous, .paginate_disabled_next {
+    color: #666666 !important;
+}
+.paginate_disabled_previous, .paginate_enabled_previous {
+    padding-left: 23px;
+}
+.paginate_disabled_next, .paginate_enabled_next {
+    margin-left: 10px;
+    padding-right: 23px;
+}
+.paginate_disabled_previous {
+    background: url("../images/back_disabled.png") no-repeat scroll left top transparent;
+}
+.paginate_enabled_previous {
+    background: url("../images/back_enabled.png") no-repeat scroll left top transparent;
+}
+.paginate_enabled_previous:hover {
+    background: url("../images/back_enabled_hover.png") no-repeat scroll left top transparent;
+}
+.paginate_disabled_next {
+    background: url("../images/forward_disabled.png") no-repeat scroll right top transparent;
+}
+.paginate_enabled_next {
+    background: url("../images/forward_enabled.png") no-repeat scroll right top transparent;
+}
+.paginate_enabled_next:hover {
+    background: url("../images/forward_enabled_hover.png") no-repeat scroll right top transparent;
+}
+
+.paginate_disabled_previous {
+    background-image: url("http://cl.gialen.com:20800/site_lib/DataTables-1.9.4/media/images/back_disabled.png");
+}
+.paginate_enabled_previous {
+    background-image: url("http://cl.gialen.com:20800/site_lib/DataTables-1.9.4/media/images/back_enabled.png");
+}
+.paginate_disabled_next {
+    background-image: url("http://cl.gialen.com:20800/site_lib/DataTables-1.9.4/media/images/forward_disabled.png");
+}
+.paginate_enabled_next {
+    background-image: url("http://cl.gialen.com:20800/site_lib/DataTables-1.9.4/media/images/forward_enabled.png");
+}
+
+/******************************************/
+
+</style>
 <script>
 var i=1
 $(document).ready(function(){
-    $("#io").bind("click", function(){
-         $("#edit_area").css("height","200");
-         $("#tips").empty();
-         $("#edit_area").trigger('showedit', [{"Id":'y'}]);
+    $("#sub").bind('click',function(){
+        postdata();
+        $("#tips").empty();
     });
-    
-    $('#edit_area').editable('', {
-             type      : 'textarea',
-             indicator : '...',
-             data      : function(value, setting){
-                return $(value).table2CSV({separator: '\t',delivery:"value"});
-             },
-             cancel    : 'Ok',
-             event     : 'showedit'             
+    oTable = $('#result').dataTable({
+        "fnDrawCallback": function( oSettings ) {
+          },
+        "oLanguage": {
+            "sSearch": "搜索:",
+            "sLengthMenu": '显示 <select>'+
+              '<option value="10">10</option>'+
+              '<option value="20">20</option>'+                  
+              '<option value="50">50</option>'+
+              '<option value="-1">All</option>'+
+              '</select> 条记录',
+            "sInfo": "当前显示的是从第 _START_ 到第 _END_ 条记录 (共 _TOTAL_ 条)",
+            "sInfoFiltered": " 　来源记录共 _MAX_ 条"
+          }
     });
-
-    $("#result").tablesorter();
+    init();
 });
+
+$("#result").tablesorter();
+
+var clip;
+function init() {
+    clip = new ZeroClipboard.Client();
+    clip.setHandCursor( true );
+    clip.addEventListener('load', function (client) {
+    });
+    clip.addEventListener('mousedown', function (client) {
+            //console.log(oTable.fnGetData());
+            clip.setText(fm2csv(oTable.fnGetData()).join('\r\n'));
+    });
+    clip.addEventListener('complete', function (client, text) {
+            $("#shadowDiv").attr("class", "hidDiv");
+            $("#tishi").attr("class", "hidDiv");
+            if (text.length>0){
+                alert("复制成功");
+            } else{
+                alert("复制失败");
+            }
+    });
+    clip.glue('io');
+}
+
+function fm2csv(Tabledata){
+    result = []
+    if (Tabledata.length > 0){
+        for (i in Tabledata) {
+            y = [Tabledata[i].join('\t')]
+            result.push(y)
+        }
+    }
+    return result
+}
 </script>
 <style>
     .chaxun tr td{
@@ -37,19 +182,21 @@ $(document).ready(function(){
         border: 1px solid #E5F1F4;
     }
 </style>
-<title>商品暂停订货范围规则</title>
+<title>商品暂停订货范围规则查询</title>
 </head>
-<body><h1>商品暂停订货范围规则</h1>
-<input type="button" id="io" value="&nbsp;导&nbsp;出&nbsp;"/>
-<div id="edit_area" style="align=left">
-
-<table width="1000" id='result' class="tablesorter">
-    <thead><tr><th>门店代码</th><th>门店名称</th><th>代码</th><th>代码名称</th><th>代码说明</th><th>规则开始时间</th><th>规则结束时间</th></tr></thead>
-    <tbody>
-{% for rs in result %}
-    <tr><td>{{rs.0}}</td><td>{{rs.1}}</td><td>{{rs.2}}</td><td>{{rs.3}}</td><td>{{rs.4}}</td><td>{{rs.5}}</td><td>{{rs.6}}</td><td>{{rs.7}}</td></tr>
-{% endfor %}
-</tbody>
+<body><h1>商品暂停订货范围规则查询</h1>
+<!-- 加载提示 -->
+<div id="shadowDiv" class="hidDiv"></div>
+<div id="tishi" class="hidDiv"><p align="center"><img src="/static/mana1/images/loading.gif"></img></p>正在加载数据!请稍后...</div>
+<!-- 加载提示 -->
+<input type="button" id="io" value="&nbsp;复制&nbsp;"/>
+<div id="main" style="align=left" width="100%">
+<table id='result' class="tablesorter" width="100%">
+        <thead><tr><th>门店代码</th><th>门店名称</th><th>代码</th><th>代码名称</th><th>代码说明</th><th>规则开始日期</th><th>规则结束日期</th></tr></thead><tbody>
+        {% for rs in rec %}
+        <tr><td>{{ rs.braid }}</td><td>{{ rs.braname }}</td><td>{{ rs.xcode }}</td><td>{{ rs.xname }}</td><td>{{ rs.excode }}</td><td>{{ rs.startdate }}</td><td>{{ rs.enddate }}</td></tr>
+        {% endfor %}
+        </tbody>
 </table>
 </div>
 <p></p>

@@ -565,6 +565,17 @@ CREATE TABLE dhrules
   yqvalue character varying(16)  --规则值
 );
 
+--商品暂停订货范围
+CREATE TABLE dhpauserules
+(
+  mdcode character varying(16),
+  xcode character varying(16),
+  excode character varying(16),
+  startdate character varying(20),
+  enddate character varying(20),
+  adddate character varying(20)
+);
+
 -- Table: product_all
 
 -- DROP TABLE product_all;
