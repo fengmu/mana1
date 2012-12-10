@@ -14,6 +14,115 @@
 
 from mylog import log
 import time
+import confsql
+
+confsql=confsql.Confsql()
+
+def getspaceinfo(xcode, excode):
+    "根据各类代码,取得对应的货架信息"
+    if excode == 'sp':
+        sqlstr="select spaceid,spacename,assortment from dhalldata where spcode='"+xcode+"' and spaceid is not null group by spaceid,spacename,assortment"
+        result=confsql.runquery(sqlstr)
+        res=[]
+        for rs in result:
+            items={}
+            items['spaceid']=rs[0]
+            items['spacename']=rs[1]
+            items['assortment']=rs[2]
+            res.append(items)
+        if len(res) > 0:
+            return res
+        else:
+            sqlstr = "select braxl_id from product_all where proid='"+xcode+"'"
+            result=confsql.runquery(sqlstr)
+            if len(result) == 0:
+                return []
+            else:
+                xcode = result[0][0]
+                excode = 'pbxl'
+                return getspaceinfo(xcode, excode)
+    if excode == 'pbxl':
+        sqlstr="select spaceid,spacename,assortment from dhalldata where braxl_id='"+xcode+"' and spaceid is not null group by spaceid,spacename,assortment"
+        result=confsql.runquery(sqlstr)
+        res=[]
+        for rs in result:
+            items={}
+            items['spaceid']=rs[0]
+            items['spacename']=rs[1]
+            items['assortment']=rs[2]
+            res.append(items)
+        if len(res) > 0:
+            return res
+        else:
+            sqlstr = "select proxl_id from product_all where braxl_id='"+xcode+"'"
+            result=confsql.runquery(sqlstr)
+            if len(result) == 0:
+                return []
+            else:
+                xcode = result[0][0]
+                excode = 'xl'
+                return getspaceinfo(xcode, excode)
+    if excode == 'xl':
+        sqlstr="select spaceid,spacename,assortment from dhalldata where proxl_id='"+xcode+"' and spaceid is not null group by spaceid,spacename,assortment"
+        result=confsql.runquery(sqlstr)
+        res=[]
+        for rs in result:
+            items={}
+            items['spaceid']=rs[0]
+            items['spacename']=rs[1]
+            items['assortment']=rs[2]
+            res.append(items)
+        if len(res) > 0:
+            return res
+        else:
+            sqlstr = "select prozl_id from product_all where proxl_id='"+xcode+"'"
+            result=confsql.runquery(sqlstr)
+            if len(result) == 0:
+                return []
+            else:
+                xcode = result[0][0]
+                excode = 'zl'
+                return getspaceinfo(xcode, excode)
+    if excode == 'zl':
+        sqlstr="select spaceid,spacename,assortment from dhalldata where prozl_id='"+xcode+"' and spaceid is not null group by spaceid,spacename,assortment"
+        result=confsql.runquery(sqlstr)
+        res=[]
+        for rs in result:
+            items={}
+            items['spaceid']=rs[0]
+            items['spacename']=rs[1]
+            items['assortment']=rs[2]
+            res.append(items)
+        if len(res) > 0:
+            return res
+        else:
+            sqlstr = "select prodl_id from product_all where prozl_id='"+xcode+"'"
+            result=confsql.runquery(sqlstr)
+            if len(result) == 0:
+                return []
+            else:
+                xcode = result[0][0]
+                excode = 'dl'
+                return getspaceinfo(xcode, excode)
+    if excode == 'dl':
+        sqlstr="select spaceid,spacename,assortment from dhalldata where prodl_id='"+xcode+"' and spaceid is not null group by spaceid,spacename,assortment"
+        result=confsql.runquery(sqlstr)
+        res=[]
+        for rs in result:
+            items={}
+            items['spaceid']=rs[0]
+            items['spacename']=rs[1]
+            items['assortment']=rs[2]
+            res.append(items)
+        if len(res) > 0:
+            return res
+        else:
+            return []
+                
+    
+    
+
+
 
 def fmwConvertList(str, split):
     strlist = []
@@ -297,17 +406,6 @@ def verifyData(rs1,length=0,required=[],**special):
     return (rs2,rs1) #返回不符合规则的和符合规则的
 
 if __name__=='__main__':
-    csvstr="00579896\t高丝干湿粉\t02058\t小武基\t24\n 00009966\t高丝莱菲保湿液体粉底405# 象牙白\t02058\t朝阳门\t6\t4a\n 00009959\t高丝莱菲干湿两用粉底盒\t02058\t朝阳门\t11\t13\n";
-    csvstr=u"代码\t代码说明\t配货单位\n00009966\t小类代码\t23\n 00009959\t高丝莱菲干湿两用粉底盒\t8\n";
-    rs1=trim_csv(csvstr,itemlenth=3)
-    #rs2,rs1=verifyData(rs1,length=6,required=[4],banben='A',startdate='',enddate='2012-10-21',maxmin=1)
-    '''
-    rs2,rs1=verifyData(rs1,length=3,required=[0,1,2],psrules=1)
-    for rs in rs1:
-        for r in rs:
-            print r
-    for rs in rs2:
-        for r in rs:
-            print r
-    '''
+    x = getspaceinfo('test', 'sp')
+    print str(x)
 
