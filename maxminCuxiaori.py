@@ -11,7 +11,7 @@ import re
 confsql=confsql.Confsql()
 
 def import_maxminCuxiaori(request):
-    '暂停补货范围规则导入'
+    '促销日上下限导入'
     if request.method=='POST':
         value=request.POST['value']
         rs1=trim_csv(value,itemlenth=10)
@@ -25,11 +25,11 @@ def import_maxminCuxiaori(request):
                 excode='sp'
             if rs[4]==u'品牌小类代码':
                 excode='braxl'
-            if rs[4]==u'商品大类':
+            if rs[4]==u'大类代码':
                 excode='prodl'
-            if rs[4]==u'商品中类':
+            if rs[4]==u'中类代码':
                 excode='prozl'
-            if rs[4]==u'商品小类':
+            if rs[4]==u'小类代码':
                 excode='proxl'
             sqlstr=u"select * from maxminCuxiaori where mdcode='"+rs[0]+"' and xcode = '"+ rs[2] +"' and excode='"+excode+"' and startdate='"+rs[7]+"' and enddate = '" + rs[8] + "'"
             if confsql.checkExist(sqlstr)==1: #检查mdcode,excode,yqkey数据库是否已存在
@@ -54,7 +54,7 @@ def import_maxminCuxiaori(request):
         '代码说明 检查'
         temp=[]
         for rs in rs1:
-            if rs[4] <>u"商品代码" and rs[4]<>u"品牌小类代码" and rs[4]<>u"商品大类" and rs[4]<>u"商品中类" and rs[4]<>u"商品小类":
+            if rs[4] <>u"商品代码" and rs[4]<>u"品牌小类代码" and rs[4]<>u"大类代码" and rs[4]<>u"中类代码" and rs[4]<>u"小类代码":
                 rs.append(u'代码说明不符要求')
                 temp.append(rs)
                 rs2.append(rs)
@@ -62,16 +62,16 @@ def import_maxminCuxiaori(request):
             for rs in temp:
                 rs1.remove(rs)
 
-        '代码 检查'
-        temp=[]
-        for rs in rs1:
-            if len(rs[2])<>8: #商品代码或品牌小类代码 8位
-                rs.append(u'商品代码或品牌小类代码长度必须为8位')
-                temp.append(rs)
-                rs2.append(rs)
-        if len(temp)>0:
-            for rs in temp:
-                rs1.remove(rs)
+        #'代码 检查' 未考虑大中小类
+        #temp=[]
+        #for rs in rs1:
+            #if len(rs[2])<>8: #商品代码或品牌小类代码 8位
+                #rs.append(u'商品代码或品牌小类代码长度必须为8位')
+                #temp.append(rs)
+                #rs2.append(rs)
+        #if len(temp)>0:
+            #for rs in temp:
+                #rs1.remove(rs)
 
         '上下限倍数必须是数值'
         temp=[]
@@ -168,11 +168,11 @@ def save_maxminCuxiaori(request):
             excode='sp'
         if rs[4]==u'品牌小类代码':
             excode='braxl'
-        if rs[4]==u'商品大类':
+        if rs[4]==u'大类代码':
             excode='prodl'
-        if rs[4]==u'商品中类':
+        if rs[4]==u'中类代码':
             excode='prozl'
-        if rs[4]==u'商品小类':
+        if rs[4]==u'小类代码':
             excode='proxl'
 
         adddate = time.strftime("%Y-%m-%d", time.localtime())
@@ -255,7 +255,7 @@ def insult_maxminCuxiaori(request):
     return HttpResponse(html)
 
 def delete_maxminCuxiaori(request):
-    '删除暂停订货范围规则'
+    '删除促销日上下限规则'
     if request.method=='POST':
         value=request.POST['value']
         rs1=trim_csv(value,itemlenth=10)
@@ -269,11 +269,11 @@ def delete_maxminCuxiaori(request):
                 excode='sp'
             if rs[4]==u'品牌小类代码':
                 excode='braxl'
-            if rs[4]==u'商品大类':
+            if rs[4]==u'大类代码':
                 excode='prodl'
-            if rs[4]==u'商品中类':
+            if rs[4]==u'中类代码':
                 excode='prozl'
-            if rs[4]==u'商品小类':
+            if rs[4]==u'小类代码':
                 excode='proxl'
             sqlstr=u"select * from maxminCuxiaori where mdcode='"+rs[0]+"' and xcode = '"+ rs[2] +"' and excode='"+excode+"' and startdate='"+rs[7]+"' and enddate = '" + rs[8] + "'"
             if confsql.checkExist(sqlstr)<>1: #检查mdcode,excode,yqkey数据库是否已存在
@@ -298,7 +298,7 @@ def delete_maxminCuxiaori(request):
         '代码说明 检查'
         temp=[]
         for rs in rs1:
-            if rs[4] <>u"商品代码" and rs[4]<>u"品牌小类代码" and rs[4]<>u"商品大类" and rs[4]<>u"商品中类" and rs[4]<>u"商品小类":
+            if rs[4] <>u"商品代码" and rs[4]<>u"品牌小类代码" and rs[4]<>u"大类代码" and rs[4]<>u"中类代码" and rs[4]<>u"小类代码":
                 rs.append(u'代码说明不符要求')
                 temp.append(rs)
                 rs2.append(rs)
@@ -306,8 +306,8 @@ def delete_maxminCuxiaori(request):
             for rs in temp:
                 rs1.remove(rs)
 
-        '代码 检查'
-        temp=[]
+        '代码 检查 未考虑大,中类,小类'
+        """temp=[]
         for rs in rs1:
             if len(rs[2])<>8: #商品代码或品牌小类代码 8位
                 rs.append(u'商品代码或品牌小类代码长度必须为8位')
@@ -315,7 +315,7 @@ def delete_maxminCuxiaori(request):
                 rs2.append(rs)
         if len(temp)>0:
             for rs in temp:
-                rs1.remove(rs)
+                rs1.remove(rs)"""
 
         '上下限倍数必须是数值'
         temp=[]
@@ -429,11 +429,11 @@ def deleteData_maxminCuxiaori(request):
                         excode='sp'
                     if rs[4]==u'品牌小类代码':
                         excode='braxl'
-                    if rs[4]==u'商品大类':
+                    if rs[4]==u'大类代码':
                         excode='prodl'
-                    if rs[4]==u'商品中类':
+                    if rs[4]==u'中类代码':
                         excode='prozl'
-                    if rs[4]==u'商品小类':
+                    if rs[4]==u'小类代码':
                         excode='proxl'
                     confsql.runSql("delete from maxminCuxiaori where mdcode='"+rs[0]+"' and xcode='" +rs[2]+ "' and excode='"+excode+"' and startdate='"+rs[7]+"' and enddate = '" + rs[8] + "'")
                     res={}

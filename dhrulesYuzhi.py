@@ -37,11 +37,11 @@ def import_dhrulesYuzhi(request):
                 excode='sp'
             if rs[4]==u'品牌小类代码':
                 excode='braxl'
-            if rs[4]==u'商品大类':
+            if rs[4]==u'大类代码':
                 excode='prodl'
-            if rs[4]==u'商品中类':
+            if rs[4]==u'中类代码':
                 excode='prozl'
-            if rs[4]==u'商品小类':
+            if rs[4]==u'小类代码':
                 excode='proxl'
             sqlstr=u"select * from dhrulesYuzhi where mdcode='"+rs[0]+"' and xcode = '"+ rs[2] +"' and excode='"+excode+"' and startdate='"+rs[7]+"' and enddate = '" + rs[8] + "'"
             if confsql.checkExist(sqlstr)==1: #检查mdcode,excode,yqkey数据库是否已存在
@@ -66,7 +66,7 @@ def import_dhrulesYuzhi(request):
         '代码说明 检查'
         temp=[]
         for rs in rs1:
-            if rs[4] <>u"商品代码" and rs[4]<>u"品牌小类代码" and rs[4]<>u"商品大类" and rs[4]<>u"商品中类" and rs[4]<>u"商品小类":
+            if rs[4] <>u"商品代码" and rs[4]<>u"品牌小类代码" and rs[4]<>u"大类代码" and rs[4]<>u"中类代码" and rs[4]<>u"小类代码":
                 rs.append(u'代码说明不符要求！')
                 temp.append(rs)
                 rs2.append(rs)
@@ -77,17 +77,17 @@ def import_dhrulesYuzhi(request):
         '代码 检查'
         temp=[]
         for rs in rs1:
-            if rs[4]==u"商品代码" or rs[4]==u"品牌小类代码" or rs[4]==u"商品小类":
+            if rs[4]==u"商品代码" or rs[4]==u"品牌小类代码" or rs[4]==u"小类代码":
                 if len(rs[2])<>8: #商品代码或品牌小类代码 8位
                     rs.append(u'代码长度不符！')
                     temp.append(rs)
                     rs2.append(rs)
-            if rs[4]==u"商品中类":
+            if rs[4]==u"中类代码":
                 if len(rs[2])<>5:
                     rs.append(u'代码长度不符！')
                     temp.append(rs)
                     rs2.append(rs)
-            if rs[4]==u"商品大类":
+            if rs[4]==u"大类代码":
                 if len(rs[2])<>2:
                     rs.append(u'代码长度不符！')
                     temp.append(rs)
@@ -193,11 +193,11 @@ def save_dhrulesYuzhi(request):
             excode='sp'
         if rs[4]==u'品牌小类代码':
             excode='braxl'
-        if rs[4]==u'商品大类':
+        if rs[4]==u'大类代码':
             excode='prodl'
-        if rs[4]==u'商品中类':
+        if rs[4]==u'中类代码':
             excode='prozl'
-        if rs[4]==u'商品小类':
+        if rs[4]==u'小类代码':
             excode='proxl'
         adddate = time.strftime("%Y-%m-%d", time.localtime())
 
@@ -254,11 +254,11 @@ def insult_dhrulesYuzhi(request):
     union all
     select t1.mdcode,case when t3.braname is null then '' else t3.braname end,t1.xcode,t2.braxl as xname,'品牌小类代码' as excode,t1.yqkey,t1.yqrule,t1.yqvalue,t1.startdate, t1.enddate,t1.remark,t1.adddate from dhrulesYuzhi as t1 left outer join branch as t3 on (t1.mdcode=t3.braid) ,(select braxl_id, braxl from product_all group by braxl_id, braxl) t2 where t1.xcode=t2.braxl_id and t1.excode='braxl'
     union all
-    select t1.mdcode,case when t3.braname is null then '' else t3.braname end,t1.xcode,t2.proxl as xname,'商品小类' as excode,t1.yqkey,t1.yqrule,t1.yqvalue,t1.startdate, t1.enddate,t1.remark,t1.adddate from dhrulesYuzhi as t1 left outer join branch as t3 on (t1.mdcode=t3.braid) ,(select proxl_id, proxl from product_all group by proxl_id, proxl) t2 where t1.xcode=t2.proxl_id and t1.excode='proxl'
+    select t1.mdcode,case when t3.braname is null then '' else t3.braname end,t1.xcode,t2.proxl as xname,'小类代码' as excode,t1.yqkey,t1.yqrule,t1.yqvalue,t1.startdate, t1.enddate,t1.remark,t1.adddate from dhrulesYuzhi as t1 left outer join branch as t3 on (t1.mdcode=t3.braid) ,(select proxl_id, proxl from product_all group by proxl_id, proxl) t2 where t1.xcode=t2.proxl_id and t1.excode='proxl'
     union all
-    select t1.mdcode,case when t3.braname is null then '' else t3.braname end,t1.xcode,t2.prozl as xname,'商品中类' as excode,t1.yqkey,t1.yqrule,t1.yqvalue,t1.startdate, t1.enddate,t1.remark,t1.adddate from dhrulesYuzhi as t1 left outer join branch as t3 on (t1.mdcode=t3.braid) ,(select prozl_id, prozl from product_all group by prozl_id, prozl) t2 where t1.xcode=t2.prozl_id and t1.excode='prozl'
+    select t1.mdcode,case when t3.braname is null then '' else t3.braname end,t1.xcode,t2.prozl as xname,'中类代码' as excode,t1.yqkey,t1.yqrule,t1.yqvalue,t1.startdate, t1.enddate,t1.remark,t1.adddate from dhrulesYuzhi as t1 left outer join branch as t3 on (t1.mdcode=t3.braid) ,(select prozl_id, prozl from product_all group by prozl_id, prozl) t2 where t1.xcode=t2.prozl_id and t1.excode='prozl'
     union all
-    select t1.mdcode,case when t3.braname is null then '' else t3.braname end,t1.xcode,t2.prodl as xname,'商品大类' as excode,t1.yqkey,t1.yqrule,t1.yqvalue,t1.startdate, t1.enddate,t1.remark,t1.adddate from dhrulesYuzhi as t1 left outer join branch as t3 on (t1.mdcode=t3.braid) ,(select prodl_id, prodl from product_all group by prodl_id, prodl) t2 where t1.xcode=t2.prodl_id and t1.excode='prodl'
+    select t1.mdcode,case when t3.braname is null then '' else t3.braname end,t1.xcode,t2.prodl as xname,'大类代码' as excode,t1.yqkey,t1.yqrule,t1.yqvalue,t1.startdate, t1.enddate,t1.remark,t1.adddate from dhrulesYuzhi as t1 left outer join branch as t3 on (t1.mdcode=t3.braid) ,(select prodl_id, prodl from product_all group by prodl_id, prodl) t2 where t1.xcode=t2.prodl_id and t1.excode='prodl'
     """
     result=confsql.runquery(sqlstr)
     html=t.render(Context({'result':result}))
@@ -279,11 +279,11 @@ def delete_dhrulesYuzhi(request):
                 excode='sp'
             if rs[4]==u'品牌小类代码':
                 excode='braxl'
-            if rs[4]==u'商品大类':
+            if rs[4]==u'大类代码':
                 excode='prodl'
-            if rs[4]==u'商品中类':
+            if rs[4]==u'中类代码':
                 excode='prozl'
-            if rs[4]==u'商品小类':
+            if rs[4]==u'小类代码':
                 excode='proxl'
             sqlstr=u"select * from dhrulesYuzhi where mdcode='"+rs[0]+"' and xcode = '"+ rs[2] +"' and excode='"+excode+"' and startdate='"+rs[8]+"' and enddate = '" + rs[9] + "'"
             if confsql.checkExist(sqlstr)<>1: #检查mdcode,excode,yqkey数据库是否已存在
@@ -308,7 +308,7 @@ def delete_dhrulesYuzhi(request):
         '代码说明 检查'
         temp=[]
         for rs in rs1:
-            if rs[4] <>u"商品代码" and rs[4]<>u"品牌小类代码" and rs[4]<>u"商品大类" and rs[4]<>u"商品中类" and rs[4]<>u"商品小类":
+            if rs[4] <>u"商品代码" and rs[4]<>u"品牌小类代码" and rs[4]<>u"大类代码" and rs[4]<>u"中类代码" and rs[4]<>u"小类代码":
                 rs.append(u'代码说明不符要求！')
                 temp.append(rs)
                 rs2.append(rs)
@@ -319,17 +319,17 @@ def delete_dhrulesYuzhi(request):
         '代码 检查'
         temp=[]
         for rs in rs1:
-            if rs[4]==u"商品代码" or rs[4]==u"品牌小类代码" or rs[4]==u"商品小类":
+            if rs[4]==u"商品代码" or rs[4]==u"品牌小类代码" or rs[4]==u"小类代码":
                 if len(rs[2])<>8: #商品代码或品牌小类代码 8位
                     rs.append(u'代码长度不符！')
                     temp.append(rs)
                     rs2.append(rs)
-            if rs[4]==u"商品中类":
+            if rs[4]==u"中类代码":
                 if len(rs[2])<>5:
                     rs.append(u'代码长度不符！')
                     temp.append(rs)
                     rs2.append(rs)
-            if rs[4]==u"商品大类":
+            if rs[4]==u"大类代码":
                 if len(rs[2])<>2:
                     rs.append(u'代码长度不符！')
                     temp.append(rs)
@@ -457,11 +457,11 @@ def deleteData_dhrulesYuzhi(request):
                         excode='sp'
                     if rs[4]==u'品牌小类代码':
                         excode='braxl'
-                    if rs[4]==u'商品大类':
+                    if rs[4]==u'大类代码':
                         excode='prodl'
-                    if rs[4]==u'商品中类':
+                    if rs[4]==u'中类代码':
                         excode='prozl'
-                    if rs[4]==u'商品小类':
+                    if rs[4]==u'小类代码':
                         excode='proxl'
                     confsql.runSql("delete from dhrulesYuzhi where mdcode='"+rs[0]+"' and xcode='" +rs[2]+ "' and excode='"+excode+"' and startdate='"+rs[8]+"' and enddate = '" + rs[9] + "'")
                     res={}

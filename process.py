@@ -667,7 +667,7 @@ def setDhMaxlimit(conn, cur):
     conn.commit()
     
     sqlstr = " update dhrules_today_maxlimit "
-    sqlstr += " set yqmaxlimit = to_char(suggest *(1 + to_number(yqvalue, '999D999S')),'99999999999')"
+    sqlstr += " set yqmaxlimit = to_char(suggest *(0 + to_number(yqvalue, '999D999S')),'99999999999')"
     sqlstr += " where yqrule = 'xd' "    
     cur.execute(sqlstr)
     conn.commit()

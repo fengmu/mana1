@@ -22,7 +22,7 @@ confsql=confsql.Confsql()
 def insult_quehuo(request):
     """ 缺货查询 """
     t=get_template('mana1/insult_quehuo.html')
-    sqlstr="select mdcode,mdname,barcode,spcode,spname,prodl_id||'_'||prodl prodl,prozl_id||'_'||prozl prozl,proxl_id||'_'||proxl proxl,braxl_id||'_'||braxl braxl,curqty from dhalldata where assortment='youtu' and curqty<0"
+    sqlstr="select mdcode,mdname,barcode,spcode,spname,prodl_id||'_'||prodl as prodl,prozl_id||'_'||prozl as prozl,proxl_id||'_'||proxl as proxl,braxl_id||'_'||braxl as braxl,curqty from dhalldata where assortment='youtu' and curqty<0"
     result=confsql.runquery(sqlstr)
     log(result)
     html=t.render(Context({'result':result}))

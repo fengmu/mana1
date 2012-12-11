@@ -168,7 +168,7 @@ def sp(conn,cur):
                 bradl_id = t.bradl_id,
                 bradl    = t.bradl,
                 normalprice = t.normalprice,
-                status   = t.status,
+                status   = '5',
                 barcode  = t.barcode,
                 packetqty1 = t.packetqty1
             from product_all as t
