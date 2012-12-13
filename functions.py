@@ -221,12 +221,15 @@ def verifyData(rs1,length=0,required=[],**special):
     #必填项检查
     temp=[]
     if len(required)>0:
-        for re in required:
-            for rs in rs1:
+        for rs in rs1:
+            flag=False
+            for re in required:
                 if rs[re]=='':
-                    rs.append(u"必填项不能为空！")
-                    temp.append(rs)
-                    rs2.append(rs)
+                    flag=True
+            if flag==True:
+                rs.append(u"必填项不能为空！")
+                temp.append(rs)
+                rs2.append(rs)
         if len(temp)>0:
             for rs in temp:
                 rs1.remove(rs)

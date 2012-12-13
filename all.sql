@@ -313,7 +313,7 @@ CREATE TABLE v_sale_daily_14
   integralpayamt numeric(14,2),
   updatedate timestamp without time zone,
   pmtsale character varying(1) NOT NULL
-)
+);
 
 --销售表 供写入内存14天销售
 CREATE TABLE xiaoshou 
@@ -348,7 +348,7 @@ CREATE TABLE xiaoshou
   "t12" numeric(12,2),
   "t13" numeric(12,2),
   "t14" numeric(12,2)
-)
+);
 
 
 --在途数据
@@ -356,7 +356,7 @@ create table alloc(
 braid character varying(5) NOT NULL,
 proid character varying(13) NOT NULL,
 AllocQty numeric(12,3)
-)
+);
 
 --促销商品
 create table pmt(
@@ -365,7 +365,7 @@ proid character varying(13) NOT NULL,
 pmtdescription character varying(255),
 startdate timestamp without time zone NOT NULL,
 enddate timestamp without time zone NOT NULL
-)
+);
 
 
 --原始销售数据
@@ -410,7 +410,7 @@ create table v_sale_daily(
   integralpayamt numeric(14,2),
   updatedate timestamp without time zone,
   pmtsale character varying(1) NOT NULL
-)
+);
 
 
 --只存放28天销售数据
@@ -456,7 +456,7 @@ CREATE TABLE xiaoshou28
   integralpayamt numeric(14,2),
   updatedate timestamp without time zone,
   pmtsale character varying(1)
-)
+);
 
 
 --28天销售加工结果临时表
@@ -654,8 +654,6 @@ ALTER TABLE product_all OWNER TO postgres;
 create table quantou
 (
   proid character varying(100),
-  maxval numeric(13,2),
-  minval numeric(13,2),
   adddate character varying(100)
 );
 
@@ -684,8 +682,8 @@ CREATE TABLE maxmincuxiaori
   mdcode character varying(100),
   xcode character varying(100),
   excode character varying(100),
-  max_multiple numeric(18,0),
-  min_multiple numeric(18,0),
+  max_multiple numeric(18,3),
+  min_multiple numeric(18,3),
   startdate character varying(100),
   enddate character varying(100),
   remark character varying(100),
@@ -707,6 +705,21 @@ CREATE TABLE dhrulesYuzhi
   adddate character varying(16)
 );
 
+
+drop table if exists dhrulesYuzhiVal;
+CREATE TABLE dhrulesYuzhiVal
+(
+  mdcode character varying(16),
+  xcode character varying(16),
+  excode character varying(16),
+  yqkey character varying(16),
+  yqrule character varying(16),
+  yqvalue character varying(16),
+  startdate character varying(16),
+  enddate character varying(16),
+  remark character varying(256),
+  adddate character varying(16)
+);
 
 '''
 --测试数据

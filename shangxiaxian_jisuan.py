@@ -168,7 +168,8 @@ def quantou(conn,cur):
         sqlstr="""update xiaoshou28_maxmin
         set minval=40,maxval=60
         where price<20 and proid in(
-        '00098571',	'00098588',	'00110280',	'00316248',	'00316262',	'00583602',	'00583619',	'00583626',	'00600651',	'00604352',	'00606646')
+          select proid from quantou
+        )
         """
         cur.execute(sqlstr)
         conn.commit()
@@ -176,7 +177,8 @@ def quantou(conn,cur):
         sqlstr="""update xiaoshou28_maxmin
         set minval=4,maxval=5
         where price>=20 and proid in(
-        '00098571',	'00098588',	'00110280',	'00316248',	'00316262',	'00583602',	'00583619',	'00583626',	'00600651',	'00604352',	'00606646')
+          select proid from quantou
+        )
         """
         cur.execute(sqlstr)
         conn.commit()

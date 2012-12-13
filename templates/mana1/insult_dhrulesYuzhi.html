@@ -44,7 +44,7 @@ $(document).ready(function(){
 <div id="edit_area" style="align=left">
 
 <table width="1200" id='result' class="tablesorter">
-<thead><tr><th>门店代码</th><th>门店名称</th><th>代码</th><th>代码名称</th><th>代码说明</th><th>规则对象</th><th>规则说明</th><th>规则值(百分比)</th><th>开始日期</th><th>结束日期</th><th>备注</th><th>添加日期</th></tr></thead><tbody>
+<thead><tr><th>门店代码</th><th>门店名称</th><th>代码</th><th>代码名称</th><th>代码说明</th><th>规则对象</th><th>规则说明</th><th>倍数</th><th>开始日期</th><th>结束日期</th><th>备注</th><th>添加日期</th></tr></thead><tbody>
 {% for rs in result %}
 <tr><td>{{rs.0}}</td><td>{{rs.1}}</td><td>{{rs.2}}</td><td>{{rs.3}}</td><td>{{rs.4}}</td><td>{{rs.5}}</td><td>{{rs.6}}</td><td>{{rs.7}}</td><td>{{rs.8}}</td><td>{{rs.9}}</td><td>{{rs.10}}</td><td>{{rs.11}}</td></tr>
 {% endfor %}

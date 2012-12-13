@@ -1,5 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 <head>
 <meta http-equiv="content-type" content="text/html;charset=utf8">
 <script type="text/javascript" src="/static/mana1/js/jquery-1.7.2.js"></script>
@@ -9,7 +8,6 @@
 <script>
 $(function() {
     $("#import").bind('click',function(){
-         $("#edit_area").css("height","200");
          $("#edit_area").trigger('showedit', [{"Id":'y'}])
     });
 
@@ -55,16 +53,16 @@ $(function() {
     });
 });
 </script>
-<title>拳头商品设置</title>
+<title>拳头商品导入</title>
 </head>
 <body>
-<h1>拳头商品设置</h1>
+<h1>拳头商品导入</h1>
 <button id="save">保存</button>
 <button id="import">导入</button>
+</body>
 <div id="edit_area" style="height:400px;width:850;align=left">
 <table width="400">
     <tr><th>商品代码</th><th>商品名称</th></tr>
 </table>
 </div>
-</body>
-</html>
+</table>

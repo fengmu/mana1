@@ -27,7 +27,7 @@ class Confsql:
         self.mc=memcache.Client([self.mchost],debug=0)        
         self.today=datetime.datetime.now().strftime('%Y-%m-%d')
         self.conn = psycopg2.connect(host='localhost',port=5432,user='fengmu',password='zj',database='yq3')
-        self.cur = self.conn.cursor(cursor_factory=LoggingCursor)
+        self.cur = self.conn.cursor()
 
     def checkExist(self,sqlstr): #数据库表中是否能查出sqlstr语句
         self.cur.execute(sqlstr)
@@ -39,6 +39,7 @@ class Confsql:
             return 0
 
     def runquery(self,sqlstr):
+        log(sqlstr)
         self.cur.execute(sqlstr)
         result=self.cur.fetchall()
         self.conn.commit()
@@ -247,18 +248,6 @@ class Confsql:
             self.cur.execute("insert into maxmin(proid,braid,maxval,minval,banben, adddate) values(%s,%s,%s,%s,%s,%s);",(proid,braid,float(newmax),float(newmin),"A", adddate))
             self.conn.commit()
         
-
-class LoggingCursor(psycopg2.extensions.cursor):
-    def execute(self, sql, args=None):
-        #logger = logging.getLogger('sql_debug')
-        #logger.info(self.mogrify(sql, args))
-
-        try:
-            psycopg2.extensions.cursor.execute(self, sql, args)
-        except Exception, exc:
-            #logger.error("%s: %s" % (exc.__class__.__name__, exc))
-            raise
-
 
 if __name__=='__main__':
     con=Confsql()

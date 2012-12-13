@@ -437,7 +437,7 @@ def setPacketqty(conn, cur):
     conn.commit()
 
 def setDhMaxlimit(conn, cur):
-    """***********上y阈值************"""
+    """***********上阈值************"""
     sqlstr = " delete from dhrules_today_maxlimit; "
     sqlstr += " insert into dhrules_today_maxlimit select braid, proid, suggest from sugvalue "
     cur.execute(sqlstr)
@@ -552,11 +552,25 @@ def setDhMaxlimit(conn, cur):
     #--*********************************************dhrulesYuzhi阈值比例******************************************************
 
     today=datetime.date.today().strftime("%Y-%m-%d")
+    sqlstr="""
+    TRUNCATE table dhrulesYuzhiVal
+    """
+    cur.execute(sqlstr)
+    conn.commit()
+
+    sqlstr="""
+    insert into dhrulesYuzhiVal
+    select mdcode,xcode,excode,yqkey,yqrule,max(yqvalue),max(startdate),max(enddate) from dhrulesYuzhi
+    where startdate<='"+today+"' and enddate>='"+today+"'
+    group by mdcode,xcode,excode,yqkey,yqrule
+    """
+    cur.execute(sqlstr)
+    conn.commit()
 
     #--***********全部***********
     sqlstr = " update dhrules_today_maxlimit "
     sqlstr += " set yqrule = t2.yqrule, yqvalue = t2.yqvalue "
-    sqlstr += " from dhrulesYuzhi t2 "
+    sqlstr += " from dhrulesYuzhiVal t2 "
     sqlstr += " where t2.mdcode ='' and t2.xcode ='' and t2.excode ='' and t2.yqkey = 'maxlimit' and t2.startdate<='"+today+"' and t2.enddate>='"+today+"'"
     cur.execute(sqlstr)
     conn.commit()
@@ -565,7 +579,7 @@ def setDhMaxlimit(conn, cur):
     #--***********门店***********
     sqlstr = " update dhrules_today_maxlimit "
     sqlstr += " set yqrule = t2.yqrule, yqvalue = t2.yqvalue "
-    sqlstr += " from dhrulesYuzhi t2 "
+    sqlstr += " from dhrulesYuzhiVal t2 "
     sqlstr += " where t2.mdcode = dhrules_today_maxlimit.braid and t2.mdcode <>'' and t2.xcode ='' and t2.excode ='' and t2.yqkey = 'maxlimit' and t2.startdate<='"+today+"' and t2.enddate>='"+today+"'"
     cur.execute(sqlstr)
     conn.commit()
@@ -575,7 +589,7 @@ def setDhMaxlimit(conn, cur):
     sqlstr = " update dhrules_today_maxlimit "
     sqlstr += " set yqrule = t.yqrule, yqvalue = t.yqvalue "
     sqlstr += " from (select t1.proid, t2.yqrule, t2.yqvalue "
-    sqlstr += "            from product_all t1, dhrulesYuzhi t2 "
+    sqlstr += "            from product_all t1, dhrulesYuzhiVal t2 "
     sqlstr += "              where t1.prodl_id = t2.xcode and t2.excode = 'dl' and t2.mdcode ='' and t2.yqkey = 'maxlimit' and t2.startdate<='"+today+"' and t2.enddate>='"+today+"') t "
     sqlstr += " where dhrules_today_maxlimit.proid = t.proid "
     cur.execute(sqlstr)
@@ -586,7 +600,7 @@ def setDhMaxlimit(conn, cur):
     sqlstr = " update dhrules_today_maxlimit "
     sqlstr += " set yqrule = t.yqrule, yqvalue = t.yqvalue "
     sqlstr += " from (select t2.mdcode as braid, t1.proid, t2.yqrule, t2.yqvalue "
-    sqlstr += "               from product_all t1, dhrulesYuzhi t2 "
+    sqlstr += "               from product_all t1, dhrulesYuzhiVal t2 "
     sqlstr += "               where t1.prodl_id = t2.xcode and t2.excode = 'dl' and t2.mdcode <>'' and t2.yqkey = 'maxlimit' and t2.startdate<='"+today+"' and t2.enddate>='"+today+"') t "
     sqlstr += " where dhrules_today_maxlimit.proid = t.proid and dhrules_today_maxlimit.braid = t.braid "
     cur.execute(sqlstr)
@@ -597,7 +611,7 @@ def setDhMaxlimit(conn, cur):
     sqlstr = " update dhrules_today_maxlimit "
     sqlstr += " set yqrule = t.yqrule, yqvalue = t.yqvalue "
     sqlstr += " from (select t1.proid, t2.yqrule, t2.yqvalue "
-    sqlstr += "               from product_all t1, dhrulesYuzhi t2 "
+    sqlstr += "               from product_all t1, dhrulesYuzhiVal t2 "
     sqlstr += "              where t1.prozl_id = t2.xcode and t2.excode = 'zl' and t2.mdcode ='' and t2.yqkey = 'maxlimit' and t2.startdate<='"+today+"' and t2.enddate>='"+today+"') t "
     sqlstr += " where dhrules_today_maxlimit.proid = t.proid "
     cur.execute(sqlstr)
@@ -608,7 +622,7 @@ def setDhMaxlimit(conn, cur):
     sqlstr = " update dhrules_today_maxlimit "
     sqlstr += " set yqrule = t.yqrule, yqvalue = t.yqvalue "
     sqlstr += " from (select t2.mdcode as braid, t1.proid, t2.yqrule, t2.yqvalue "
-    sqlstr += "               from product_all t1, dhrulesYuzhi t2 "
+    sqlstr += "               from product_all t1, dhrulesYuzhiVal t2 "
     sqlstr += "               where t1.prozl_id = t2.xcode and t2.excode = 'zl' and t2.mdcode <>'' and t2.yqkey = 'maxlimit' and t2.startdate<='"+today+"' and t2.enddate>='"+today+"') t "
     sqlstr += " where dhrules_today_maxlimit.proid = t.proid and dhrules_today_maxlimit.braid = t.braid "
     cur.execute(sqlstr)
@@ -619,7 +633,7 @@ def setDhMaxlimit(conn, cur):
     sqlstr = " update dhrules_today_maxlimit "
     sqlstr += " set yqrule = t.yqrule, yqvalue = t.yqvalue "
     sqlstr += " from (select t1.proid, t2.yqrule, t2.yqvalue "
-    sqlstr += "               from product_all t1, dhrulesYuzhi t2 "
+    sqlstr += "               from product_all t1, dhrulesYuzhiVal t2 "
     sqlstr += "               where t1.proxl_id = t2.xcode and t2.excode = 'xl' and t2.mdcode ='' and t2.yqkey = 'maxlimit' and t2.startdate<='"+today+"' and t2.enddate>='"+today+"') t "
     sqlstr += " where dhrules_today_maxlimit.proid = t.proid "
     cur.execute(sqlstr)
@@ -630,7 +644,7 @@ def setDhMaxlimit(conn, cur):
     sqlstr = " update dhrules_today_maxlimit "
     sqlstr += " set yqrule = t.yqrule, yqvalue = t.yqvalue "
     sqlstr += " from (select t2.mdcode as braid, t1.proid, t2.yqrule, t2.yqvalue "
-    sqlstr += "               from product_all t1, dhrulesYuzhi t2 "
+    sqlstr += "               from product_all t1, dhrulesYuzhiVal t2 "
     sqlstr += "               where t1.proxl_id = t2.xcode and t2.excode = 'xl' and t2.mdcode <>'' and t2.yqkey = 'maxlimit' and t2.startdate<='"+today+"' and t2.enddate>='"+today+"') t "
     sqlstr += " where dhrules_today_maxlimit.proid = t.proid and dhrules_today_maxlimit.braid = t.braid "
     cur.execute(sqlstr)
@@ -641,7 +655,7 @@ def setDhMaxlimit(conn, cur):
     sqlstr = " update dhrules_today_maxlimit "
     sqlstr += " set yqrule = t.yqrule, yqvalue = t.yqvalue "
     sqlstr += " from (select t1.proid, t2.yqrule, t2.yqvalue "
-    sqlstr += "               from product_all t1, dhrulesYuzhi t2 "
+    sqlstr += "               from product_all t1, dhrulesYuzhiVal t2 "
     sqlstr += "               where t1.proid = t2.xcode and t2.excode = 'sp' and t2.mdcode ='' and t2.yqkey = 'maxlimit' and t2.startdate<='"+today+"' and t2.enddate>='"+today+"') t "
     sqlstr += " where dhrules_today_maxlimit.proid = t.proid "
     cur.execute(sqlstr)
@@ -652,7 +666,7 @@ def setDhMaxlimit(conn, cur):
     sqlstr = " update dhrules_today_maxlimit "
     sqlstr += " set yqrule = t.yqrule, yqvalue = t.yqvalue "
     sqlstr += " from (select t2.mdcode as braid, t1.proid, t2.yqrule, t2.yqvalue "
-    sqlstr += "               from product_all t1, dhrulesYuzhi t2 "
+    sqlstr += "               from product_all t1, dhrulesYuzhiVal t2 "
     sqlstr += "               where t1.proid = t2.xcode and t2.excode = 'sp' and t2.mdcode <>'' and t2.yqkey = 'maxlimit' and t2.startdate<='"+today+"' and t2.enddate>='"+today+"') t "
     sqlstr += " where dhrules_today_maxlimit.proid = t.proid and dhrules_today_maxlimit.braid = t.braid "
     cur.execute(sqlstr)
@@ -790,6 +804,21 @@ def setDhMinlimit(conn, cur):
     #--*********************************************dhrulesYuzhi阈值比例******************************************************
 
     today=datetime.date.today().strftime("%Y-%m-%d")
+
+    sqlstr="""
+    TRUNCATE table dhrulesYuzhiVal
+    """
+    cur.execute(sqlstr)
+    conn.commit()
+
+    sqlstr="""
+    insert into dhrulesYuzhiVal
+    select mdcode,xcode,excode,yqkey,yqrule,max(yqvalue),max(startdate),max(enddate) from dhrulesYuzhi
+    where startdate<='"+today+"' and enddate>='"+today+"'
+    group by mdcode,xcode,excode,yqkey,yqrule
+    """
+    cur.execute(sqlstr)
+    conn.commit()
 
     #--***********全部***********
     sqlstr = " update dhrules_today_minlimit "
@@ -968,70 +997,75 @@ def setMaxminCuxiaori(conn, cur):
     "每月促销日上下限翻倍处理"
     #--*********商品大类*************
     "把所有A版本中符合条件的翻倍 插入B版本"
-    sqlstr=""" insert into maxmin
-      select t1.braid,t1.proid,t1.maxval*t3.max_multiple,t1.minval*t3.min_multiple,'B' banben,t3.startdate,t3.enddate,t3.adddate
+    sqlstr=""" insert into maxminval
+      select t1.braid,t1.proid,t1.maxval*t3.max_multiple,t1.minval*t3.min_multiple,'B' banben,max(t3.startdate),max(t3.enddate),t3.adddate
       from maxmin t1,product_all t2,maxmincuxiaori t3
       where t1.banben='A'
         and t1.proid=t2.proid
         and t3.mdcode=t1.braid
         and t3.excode='prodl'
         and t3.xcode=t2.prodl_id
+      group by t1.braid,t1.proid,t1.maxval*t3.max_multiple,t1.minval*t3.min_multiple,t3.adddate 
     """
     cur.execute(sqlstr)
     conn.commit()
 
     #--*********商品中类*************
     "把所有A版本中符合条件的翻倍 插入B版本"
-    sqlstr=""" insert into maxmin
-      select t1.braid,t1.proid,t1.maxval*t3.max_multiple,t1.minval*t3.min_multiple,'B' banben,t3.startdate,t3.enddate,t3.adddate
+    sqlstr=""" insert into maxminval
+      select t1.braid,t1.proid,t1.maxval*t3.max_multiple,t1.minval*t3.min_multiple,'B' banben,max(t3.startdate),max(t3.enddate),t3.adddate
       from maxmin t1,product_all t2,maxmincuxiaori t3
       where t1.banben='A'
         and t1.proid=t2.proid
         and t3.mdcode=t1.braid
         and t3.excode='prozl'
         and t3.xcode=t2.prozl_id
+      group by t1.braid,t1.proid,t1.maxval*t3.max_multiple,t1.minval*t3.min_multiple,t3.adddate 
     """
     cur.execute(sqlstr)
     conn.commit()
 
     #--*********商品小类*************
     "把所有A版本中符合条件的翻倍 插入B版本"
-    sqlstr=""" insert into maxmin
-      select t1.braid,t1.proid,t1.maxval*t3.max_multiple,t1.minval*t3.min_multiple,'B' banben,t3.startdate,t3.enddate,t3.adddate
+    sqlstr=""" insert into maxminval
+      select t1.braid,t1.proid,t1.maxval*t3.max_multiple,t1.minval*t3.min_multiple,'B' banben,max(t3.startdate),max(t3.enddate),t3.adddate
       from maxmin t1,product_all t2,maxmincuxiaori t3
       where t1.banben='A'
         and t1.proid=t2.proid
         and t3.mdcode=t1.braid
         and t3.excode='proxl'
         and t3.xcode=t2.proxl_id
+      group by t1.braid,t1.proid,t1.maxval*t3.max_multiple,t1.minval*t3.min_multiple,t3.adddate 
     """
     cur.execute(sqlstr)
     conn.commit()
 
     #--*********品牌小类*************
     "把所有A版本中符合条件的翻倍 插入B版本"
-    sqlstr=""" insert into maxmin
-      select t1.braid,t1.proid,t1.maxval*t3.max_multiple,t1.minval*t3.min_multiple,'B' banben,t3.startdate,t3.enddate,t3.adddate
+    sqlstr=""" insert into maxminval
+      select t1.braid,t1.proid,t1.maxval*t3.max_multiple,t1.minval*t3.min_multiple,'B' banben,max(t3.startdate),max(t3.enddate),t3.adddate
       from maxmin t1,product_all t2,maxmincuxiaori t3
       where t1.banben='A'
         and t1.proid=t2.proid
         and t3.mdcode=t1.braid
         and t3.excode='braxl'
         and t3.xcode=t2.braxl_id
+      group by t1.braid,t1.proid,t1.maxval*t3.max_multiple,t1.minval*t3.min_multiple,t3.adddate 
     """
     cur.execute(sqlstr)
     conn.commit()
 
     #--**********单品*************
     "把所有A版本中符合条件的翻倍 插入B版本"
-    sqlstr=""" insert into maxmin
-      select t1.braid,t1.proid,t1.maxval*t3.max_multiple,t1.minval*t3.min_multiple,'B' banben,t3.startdate,t3.enddate,t3.adddate
+    sqlstr=""" insert into maxminval
+      select t1.braid,t1.proid,t1.maxval*t3.max_multiple,t1.minval*t3.min_multiple,'B' banben,max(t3.startdate),max(t3.enddate),t3.adddate
       from maxmin t1,product_all t2,maxmincuxiaori t3
       where t1.banben='A'
         and t1.proid=t2.proid
         and t3.mdcode=t1.braid
         and t3.excode='sp'
         and t3.xcode=t1.proid
+      group by t1.braid,t1.proid,t1.maxval*t3.max_multiple,t1.minval*t3.min_multiple,t3.adddate 
     """
     cur.execute(sqlstr)
     conn.commit()

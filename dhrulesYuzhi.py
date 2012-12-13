@@ -143,7 +143,7 @@ def import_dhrulesYuzhi(request):
             for rs in temp:
                 rs1.remove(rs)
 
-        html=u"<table width='1200'><tr><th>门店代码</th><th>门店名称</th><th>代码</th><th>名称</th><th>代码说明</th><th>规则对象</th><th>规则值(百分比)</th><th>开始日期</th><th>结束日期</th><th>备注</th></tr>"
+        html=u"<table width='1200'><tr><th>门店代码</th><th>门店名称</th><th>代码</th><th>名称</th><th>代码说明</th><th>规则对象</th><th>倍数</th><th>开始日期</th><th>结束日期</th><th>备注</th></tr>"
         if len(rs2)>0:
             for rs in rs2:
                 html+="<tr>"
@@ -203,12 +203,10 @@ def save_dhrulesYuzhi(request):
 
         if rs[10]<>'':
             if rs[10]==u'数据库已存在!':
-                try:
-                    confsql.runSql(u"delete from dhrulesYuzhi where mdcode='"+rs[0]+"' and xcode='" +rs[2]+ "' and excode='"+excode+"' and startdate='"+rs[7]+"' and enddate = '" + rs[8] + "'")
-                    confsql.runSql(u"insert into dhrulesYuzhi (mdcode,xcode,excode,yqkey,yqrule,yqvalue,startdate,enddate,remark,adddate) values('"+rs[0]+"','"+rs[2]+"','"+excode+"','"+rs[5]+"','相对值','"+rs[6]+"','"+rs[7]+"','"+rs[8]+"','"+adddate+"')")
+                    sqlstr=u"delete from dhrulesYuzhi where mdcode='"+rs[0]+"' and xcode='" +rs[2]+ "' and excode='"+excode+"' and startdate='"+rs[7]+"' and enddate = '" + rs[8] + "';"
+                    sqlstr+="insert into dhrulesYuzhi (mdcode,xcode,excode,yqkey,yqrule,yqvalue,startdate,enddate,remark,adddate) values('"+rs[0]+"','"+rs[2]+"','"+excode+"','"+rs[5]+"','"+u"相对值"+"','"+rs[6]+"','"+rs[7]+"','"+rs[8]+"','"+rs[9]+"','"+adddate+"');"
+                    confsql.runSql(sqlstr)
                     rs[10]=u'插入成功!'
-                except:
-                    rs[10]=u'插入失败!'
             res={}
             res['mdcode']=rs[0]
             res['mdname']=rs[1]
@@ -216,7 +214,6 @@ def save_dhrulesYuzhi(request):
             res['name']=rs[3]
             res['excode']=rs[4]
             res['yqkey']=rs[5]
-            res['yqrule']=u"相对值"
             res['yqvalue']=rs[6]
             res['startdate']=rs[7]
             res['enddate']=rs[8]
@@ -237,7 +234,6 @@ def save_dhrulesYuzhi(request):
             res['name']=rs[3]
             res['excode']=rs[4]
             res['yqkey']=rs[5]
-            res['yqrule']=u"相对值"
             res['yqvalue']=rs[6]
             res['startdate']=rs[7]
             res['enddate']=rs[8]
