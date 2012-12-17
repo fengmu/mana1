@@ -28,7 +28,7 @@ def import_delivery(request):
         value=request.POST['value']
         rs1=trim_csv(value, itemlenth=3) #去除行尾多余换行符 rs1存放初始值
         rs2,rs1=verifyData(rs1,length=3,required=[0,2],delivery=1)
-        
+
         #数据库已存在给予提示
         temp=[]
         for rs in rs1:

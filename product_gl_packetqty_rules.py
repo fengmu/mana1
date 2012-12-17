@@ -14,6 +14,51 @@ def import_product_gl_packetqty_rules(request):
         rs1=trim_csv(value,itemlenth=4)
         rs2,rs1=verifyData(rs1,length=4,required=[0,2,3],psrules=1)
 
+        '代码长度检查'
+        temp=[]
+        for rs in rs1:
+            if rs[2]==u"商品代码" or rs[2]==u"小类代码":
+                if len(rs[2])<>8:
+                    rs.append(u'代码长度不符！')
+                    temp.append(rs)
+                    rs2.append(rs)
+            if rs[2]==u"中类代码":
+                if len(rs[2])<>5:
+                    rs.append(u'代码长度不符！')
+                    temp.append(rs)
+                    rs2.append(rs)
+            if rs[2]==u"大类代码":
+                if len(rs[2])<>2:
+                    rs.append(u'代码长度不符！')
+                    temp.append(rs)
+                    rs2.append(rs)
+        if len(temp)>0:
+            for rs in temp:
+                rs1.remove(rs)
+
+        temp=[]
+        for rs in rs1:
+            excode=rs[2]
+            if rs[2]==u'商品代码':
+                excode='sp'
+                sqlstr="select * from product_all where proid='"+rs[0]+"'"
+            if rs[2]==u'小类代码':
+                excode='xl'
+                sqlstr="select * from product_all where proxl_id='"+rs[0]+"'"
+            if rs[2]==u'中类代码':
+                excode='zl'
+            if rs[2]==u'大类代码':
+                sqlstr="select * from product_all where prozl_id='"+rs[0]+"'"
+                excode='dl'
+            '无匹配的代码名称'
+            if confsql.checkExist(sqlstr)==0:
+                rs.append(u'无匹配的代码名称!')
+                temp.append(rs)
+                rs2.append(rs)
+        if len(temp)>0:
+            for rs in temp:
+                rs1.remove(rs)
+
         temp=[]
         for rs in rs1:
             excode=rs[2]

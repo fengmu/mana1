@@ -245,11 +245,6 @@ def deleteData_dhPauserules(request):
                         excode='zl'
                     if rs[4]==u'大类代码':
                         excode='dl'
-                        
-                    
-                        
-                        
-                        
                     confsql.runSql("delete from dhpauserules where mdcode='"+rs[0]+"' and xcode='" +rs[2]+ "' and excode='"+excode+"' and startdate='"+rs[5]+"' and enddate = '" + rs[6] + "'")
                     res={}
                     res['mdcode']=rs[0]
@@ -274,6 +269,4 @@ def deleteData_dhPauserules(request):
 
     jsonres=simplejson.dumps(result)
     return HttpResponse(jsonres)
-
-
 

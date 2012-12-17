@@ -519,31 +519,45 @@ minval numeric(13,2)
 );
 
 --28天上下限程序生成结果
-create table xiaoshou28_maxmin(
-braid character varying(5),
-proid character varying(13),
-week1_qty numeric(13,3),
-week1_amt numeric(12,2),
-week2_qty numeric(13,3),
-week2_amt numeric(12,2),
-week3_qty numeric(13,3),
-week3_amt numeric(12,2),
-week4_qty numeric(13,3),
-week4_amt numeric(12,2),
-total_qty numeric(13,3),
-total_amt numeric(12,2),
-prodl character varying(255), --商品大类
-prozl character varying(255),
-proxl character varying(255),
-bradl character varying(255),
-brazl character varying(255),
-braxl character varying(255),
-price numeric(13,2), --单价
-status character varying(255),
-basedisplay numeric(13,2),
-maxval numeric(13,2),
-minval numeric(13,2)
-);
+DROP TABLE if exists xiaoshou28_maxmin;
+
+CREATE TABLE xiaoshou28_maxmin
+(
+  braid character varying(13),
+  proid character varying(13),
+  mdname character varying(255),
+  spname character varying(255),
+  week1_qty numeric(13,3),
+  week1_amt numeric(12,2),
+  week2_qty numeric(13,3),
+  week2_amt numeric(12,2),
+  week3_qty numeric(13,3),
+  week3_amt numeric(12,2),
+  week4_qty numeric(13,3),
+  week4_amt numeric(12,2),
+  total_qty numeric(13,3),
+  total_amt numeric(12,2),
+  prodl_id character varying(255),
+  prodl character varying(255),
+  prozl_id character varying(255),
+  prozl character varying(255),
+  proxl_id character varying(255),
+  proxl character varying(255),
+  bradl_id character varying(255),
+  bradl character varying(255),
+  brazl_id character varying(255),
+  brazl character varying(255),
+  braxl_id character varying(255),
+  braxl character varying(255),
+  price numeric(13,2),
+  cuxiao_1 character varying(32),
+  status character varying(255),
+  basedisplay numeric(13,2),
+  maxval numeric(13,2),
+  minval numeric(13,2),
+  oldmaxval numeric(13,2),
+  oldminval numeric(13,2)
+)
 
 
 --商品配送单位

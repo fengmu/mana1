@@ -7,25 +7,14 @@
 <script type="text/javascript" src="/static/mana1/js/jquery.jeditable.js"></script>
 <script type="text/javascript" src="/static/mana1/js/htmltable2csv.js"></script>
 <link href="/static/mana1/css/tablecloth.css" rel="stylesheet" type="text/css" media="screen"/>
+<script type="text/javascript" src="/static/mana1/js/turn_off_light.js"></script>
+<link href="/static/mana1/css/turn_off_light.css" rel="stylesheet" type="text/css" media="screen"/>
+<script type="text/javascript" src="http://cl.gialen.com:20800/site_lib/zeroclipboard/ZeroClipboard.js"></script>
+<script type="text/javascript" src="/static/mana1/js/clip.js"></script>
 <script>
 var i=1
 $(document).ready(function(){
-    $("#io").bind("click", function(){
-         $("#edit_area").css("height","200");
-         $("#tips").empty();
-         $("#edit_area").trigger('showedit', [{"Id":'y'}]);
-    });
-
-    $('#edit_area').editable('', {
-             type      : 'textarea',
-             indicator : '...',
-             data      : function(value, setting){
-                return $(value).table2CSV({separator: '\t',delivery:"value"});
-             },
-             cancel    : 'Ok',
-             event     : 'showedit'
-    });
-
+    clip2();
     $("#result").tablesorter();
 });
 </script>
@@ -37,10 +26,12 @@ $(document).ready(function(){
         border: 1px solid #E5F1F4;
     }
 </style>
-<title>查询订货量修改规则</title>
+<title>订货量修改规则查询</title>
 </head>
-<body><h1>查询订货量修改规则</h1>
-<input type="button" id="io" value="&nbsp;导&nbsp;出&nbsp;"/>
+<body><h1>订货量修改规则查询</h1>
+<div id="shadowDiv" class="hidDiv"></div>
+<div id="tishi" class="hidDiv"><p align="center"><img src="/static/mana1/images/loading.gif"></img></p>正在加载数据!请稍后...</div>
+<input type="button" id="io" value="&nbsp;复制&nbsp;"/>
 <div id="edit_area" style="align=left">
 
 <table width="1000" id='result' class="tablesorter">

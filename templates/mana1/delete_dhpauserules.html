@@ -6,6 +6,8 @@
 <script type="text/javascript" src="/static/mana1/js/jquery.jeditable.js"></script>
 <script type="text/javascript" src="/static/mana1/js/htmltable2csv.js"></script>
 <link href="/static/mana1/css/tablecloth.css" rel="stylesheet" type="text/css" media="screen"/>
+<script type="text/javascript" src="/static/mana1/js/turn_off_light.js"></script>
+<link href="/static/mana1/css/turn_off_light.css" rel="stylesheet" type="text/css" media="screen"/>
 <script>
 $(function() {
     $("#import").bind('click',function(){
@@ -25,7 +27,7 @@ $(function() {
              submit    : 'OK'
     });
 
-    $("#save").bind('click',function(){
+    $("#sub").bind('click',function(){
         //var myobj=new Object();
         var myobj={}
         myobj["table"]=$("#edit_area").table2CSV({separator: '\t',delivery:"table"})
@@ -41,13 +43,15 @@ $(function() {
                 for(var i=0;i<json.length;i++)
                 {
                     str+="<tr><td>"+json[i].mdcode+"</td><td>"+json[i].mdname+"</td><td>"+json[i].xcode+"</td><td>"+json[i].name+"</td><td>"+json[i].excode+"</td><td>"+json[i].startdate+"</td><td>"+json[i].enddate+"</td>"
-                    if (json[i].info=="删除成功！")
+                    if (json[i].info=="删除成功!")
                     str+="<td>"+json[i].info+"</td></tr>";
                     else
                     str+="<td style='background-color:#FFFF00;'>"+json[i].info+"</td></tr>";
                 }
                 str+="</table>"
                 $("#edit_area").html(str)
+                $("#shadowDiv").attr("class", "hidDiv");
+                $("#tishi").attr("class", "hidDiv");
             },
             error:function(){
                 alert("错误，数据无法保存！")
@@ -56,11 +60,13 @@ $(function() {
     });
 });
 </script>
-<title>删除暂停自动配货范围规则</title>
+<title>暂停自动配货范围规则删除</title>
 </head>
 <body>
-<h1>删除暂停自动配货范围规则</h1>
-<button id="save">提交</button>
+<h1>暂停自动配货范围规则删除</h1>
+<div id="shadowDiv" class="hidDiv"></div>
+<div id="tishi" class="hidDiv"><p align="center"><img src="/static/mana1/images/loading.gif"></img></p>正在加载数据!请稍后...</div>
+<button id="sub">提交</button>
 <button id="import">导入</button>
 <div id="edit_area" style="height:400;width:850;align=left">
 <table width="1000">

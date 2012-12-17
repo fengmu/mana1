@@ -5,18 +5,16 @@
 <script type="text/javascript" src="/static/mana1/js/jquery-1.7.2.js"></script>
 <script type="text/javascript" src="/static/mana1/js/jquery.jeditable.js"></script>
 <script type="text/javascript" src="/static/mana1/js/htmltable2csv.js"></script>
-<script src="/static/mana1/js/jquery-ui-1.8.22.custom/development-bundle/ui/jquery.ui.core.js"></script>
-<script src="/static/mana1/js/jquery-ui-1.8.22.custom/development-bundle/ui/jquery.ui.widget.js"></script>
-<script src="/static/mana1/js/jquery-ui-1.8.22.custom/development-bundle/ui/jquery.ui.datepicker.js"></script>
-<link rel="stylesheet" href="/static/mana1/js/jquery-ui-1.8.22.custom/development-bundle/themes/base/jquery.ui.all.css">
 <link href="/static/mana1/css/tablecloth.css" rel="stylesheet" type="text/css" media="screen"/>
+<script type="text/javascript" src="/static/mana1/js/turn_off_light.js"></script>
+<link href="/static/mana1/css/turn_off_light.css" rel="stylesheet" type="text/css" media="screen"/>
 <script>
 $(function() {
     $("#import").bind('click',function(){
         $("#edit_area").css("height","200");
         $("#edit_area").trigger('showedit', [{"Id":'y'}])
     });
-    
+
     $('#edit_area').editable('/mana1/import_delivery/', {
         type      : 'textarea',
         indicator : 'Saving...',
@@ -27,8 +25,8 @@ $(function() {
         event     : 'showedit',
         submit    : 'OK'
     });
-    
-    $("#save").bind('click',function(){
+
+    $("#sub").bind('click',function(){
         var myobj=new Object();
         myobj={}
         myobj["table"]=$("#edit_area").table2CSV({separator: '\t',delivery:"table"})
@@ -47,10 +45,11 @@ $(function() {
                     str+="<td>"+json[i].info+"</td></tr>";
                     else
                     str+="<td style='background-color:yellow;'>"+json[i].info+"</td></tr>";
-
                 }
                 str+="</table>"
                 $("#edit_area").html(str)
+                $("#shadowDiv").attr("class", "hidDiv");
+                $("#tishi").attr("class", "hidDiv");
             }
         });
     });
@@ -60,13 +59,17 @@ $(function() {
 </head>
 <body>
 <h1>配置门店订货日期</h1>
-<button id="save">保存</button>
+<div id="shadowDiv" class="hidDiv"></div>
+<div id="tishi" class="hidDiv"><p align="center"><img src="/static/mana1/images/loading.gif"></img></p>正在加载数据!请稍后...</div>
+<button id="sub">保存</button>
 <button id="import">导入</button>
-<div id="edit_area" style="height:200;align=left">
+<div id="edit_area" style="height:200px;align=left">
 <table width="800">
     <tr><th>门店代码</th><th>门店名称</th><th>配送日</th></tr>
 </table>
 </div>
+<table width="1200" id="tips">
+    <tr><td><p align="left">说明：</p><p align="left">配送日格式为星期X。</p><p></p></td></tr>
 </table>
 </body>
 </html>

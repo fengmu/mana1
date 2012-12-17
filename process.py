@@ -1003,7 +1003,7 @@ def setMaxminCuxiaori(conn, cur):
       where t1.banben='A'
         and t1.proid=t2.proid
         and t3.mdcode=t1.braid
-        and t3.excode='prodl'
+        and t3.excode='dl'
         and t3.xcode=t2.prodl_id
       group by t1.braid,t1.proid,t1.maxval*t3.max_multiple,t1.minval*t3.min_multiple,t3.adddate 
     """
@@ -1018,7 +1018,7 @@ def setMaxminCuxiaori(conn, cur):
       where t1.banben='A'
         and t1.proid=t2.proid
         and t3.mdcode=t1.braid
-        and t3.excode='prozl'
+        and t3.excode='zl'
         and t3.xcode=t2.prozl_id
       group by t1.braid,t1.proid,t1.maxval*t3.max_multiple,t1.minval*t3.min_multiple,t3.adddate 
     """
@@ -1033,7 +1033,7 @@ def setMaxminCuxiaori(conn, cur):
       where t1.banben='A'
         and t1.proid=t2.proid
         and t3.mdcode=t1.braid
-        and t3.excode='proxl'
+        and t3.excode='xl'
         and t3.xcode=t2.proxl_id
       group by t1.braid,t1.proid,t1.maxval*t3.max_multiple,t1.minval*t3.min_multiple,t3.adddate 
     """

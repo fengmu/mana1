@@ -322,14 +322,46 @@ def verifyData(rs1,length=0,required=[],**special):
                 for rs in temp:
                     rs1.remove(rs)
 
+            temp=[]
+            for rs in rs1:
+                if len(rs[0])<>5:
+                    temp.append(rs)
+                    rs.append(u'门店代码应为5位！')
+                    rs2.append(rs)
+            if len(temp)>0:
+                for rs in temp:
+                    rs1.remove(rs)
+
         if sp=='dhrules':
-            '门店代码:mdcode 五位代码或""'
+            '门店代码:mdcode 5位代码或""'
             temp=[]
             for rs in rs1:
                 if len(rs[0])<>5 and rs[0]<>"":
-                    rs.append(u'门店代码应为五位')
+                    rs.append(u'门店代码应为5位')
                     temp.append(rs)
                     rs2.append(rs)
+            if len(temp)>0:
+                for rs in temp:
+                    rs1.remove(rs)
+
+            '代码长度检查'
+            temp=[]
+            for rs in rs1:
+                if rs[4]==u"商品代码" or rs[4]==u"小类代码":
+                    if len(rs[2])<>8: #商品代码或品牌小类代码 8位
+                        rs.append(u'代码长度不符！')
+                        temp.append(rs)
+                        rs2.append(rs)
+                if rs[4]==u"中类代码":
+                    if len(rs[2])<>5:
+                        rs.append(u'代码长度不符！')
+                        temp.append(rs)
+                        rs2.append(rs)
+                if rs[4]==u"大类代码":
+                    if len(rs[2])<>2:
+                        rs.append(u'代码长度不符！')
+                        temp.append(rs)
+                        rs2.append(rs)
             if len(temp)>0:
                 for rs in temp:
                     rs1.remove(rs)
@@ -372,6 +404,32 @@ def verifyData(rs1,length=0,required=[],**special):
             for rs in rs1:
                 if (type(eval(rs[7]))<>type(1.00)) and (type(eval(rs[7]))<>type(1)):
                     rs.append(u'规则值应为数值!')
+                    temp.append(rs)
+                    rs2.append(rs)
+            if len(temp)>0:
+                for rs in temp:
+                    rs1.remove(rs)
+
+            '重复项覆盖'
+            temp=[]
+            for rs in rs1:
+                excode=rs[4]
+                if rs[4]==u'商品代码':
+                    excode='sp'
+                if rs[4]==u'小类代码':
+                    excode='xl'
+                if rs[4]==u'中类代码':
+                    excode='zl'
+                if rs[4]==u'大类代码':
+                    excode='dl'
+                yqkey = rs[5]
+                if rs[5]==u'上阈值':
+                    yqkey='maxlimit'
+                if rs[5]==u'下阈值':
+                    yqkey='minlimit'
+                sqlstr=u"select * from dhrules where mdcode='"+rs[0]+"' and xcode = '"+ rs[2] +"' and excode='"+excode+"' and yqkey='"+yqkey+"'"
+                if confsql.checkExist(sqlstr)==1: #检查mdcode,excode,yqkey数据库是否已存在
+                    rs.append(u'数据库已存在!')
                     temp.append(rs)
                     rs2.append(rs)
             if len(temp)>0:

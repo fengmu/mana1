@@ -15,36 +15,6 @@ def import_dhrules(request):
         rs1=trim_csv(value,itemlenth=8)
         rs2,rs1=verifyData(rs1,length=8,required=[5,6,7],dhrules=1)
 
-        '重复项覆盖'
-        temp=[]
-        for rs in rs1:
-            excode=rs[4]
-            if rs[4]==u'商品代码':
-                excode='sp'
-            if rs[4]==u'小类代码':
-                excode='xl'
-            if rs[4]==u'中类代码':
-                excode='zl'
-            if rs[4]==u'大类代码':
-                excode='dl'
-                
-            yqkey = rs[5]
-            if rs[5]==u'上阈值':
-                yqkey='maxlimit'
-            if rs[5]==u'下阈值':
-                yqkey='minlimit'
-            
-            
-            
-            sqlstr=u"select * from dhrules where mdcode='"+rs[0]+"' and xcode = '"+ rs[2] +"' and excode='"+excode+"' and yqkey='"+yqkey+"'"
-            if confsql.checkExist(sqlstr)==1: #检查mdcode,excode,yqkey数据库是否已存在
-                rs.append(u'数据库已存在!')
-                temp.append(rs)
-                rs2.append(rs)
-        if len(temp)>0:
-            for rs in temp:
-                rs1.remove(rs)
-
         html=u"<table width='1000'><tr><th>门店代码</th><th>门店名称</th><th>代码</th><th>名称</th><th>代码说明</th><th>规则对象</th><th>规则说明</th><th>规则值</th></tr>"
         if len(rs2)>0:
             for rs in rs2:

@@ -7,28 +7,18 @@
 <script type="text/javascript" src="/static/mana1/js/tablesorter_min.js"></script>
 <script type="text/javascript" src="/static/mana1/js/jquery.jeditable.js"></script>
 <script type="text/javascript" src="/static/mana1/js/htmltable2csv.js"></script>
+<script type="text/javascript" src="/static/mana1/js/turn_off_light.js"></script>
+<link href="/static/mana1/css/turn_off_light.css" rel="stylesheet" type="text/css" media="screen"/>
+<script type="text/javascript" src="http://cl.gialen.com:20800/site_lib/zeroclipboard/ZeroClipboard.js"></script>
+<script type="text/javascript" src="/static/mana1/js/clip.js"></script>
 <script type="text/javascript">
 var i=1
 $(document).ready(function(){
     $("#sub").bind('click',function(){
         postdata();
     });
-    $("#io").bind("click", function(){
-         $("#edit_area").css("height","200");
-         $("#tips").empty();
-         $("#edit_area").trigger('showedit', [{"Id":'y'}])
-    });
-    
-    $('#edit_area').editable('', {
-             type      : 'textarea',
-             indicator : '...',
-             data      : function(value, setting){
-                return $(value).table2CSV({separator: '\t',delivery:"value"});
-             },
-             cancel    : 'Cancel',
-             event     : 'showedit',
-             submit    : 'OK'
-    });
+    clip2();
+    $("#result").tablesorter();
 });
 
 function postdata(){                              //提交数据函数
@@ -55,8 +45,13 @@ function postdata(){                              //提交数据函数
         str+="</tbody>"
         $("#result").html(str)
         $("#result").tablesorter();
-      }
-    });
+        $("#shadowDiv").attr("class", "hidDiv");
+        $("#tishi").attr("class", "hidDiv");
+    },
+    error:function(){
+        alert("错误，数据无法保存！")
+    }
+  });
 }
 
 </script>
@@ -72,6 +67,8 @@ function postdata(){                              //提交数据函数
 </head>
 <body>
 <h1>查询门店订货日期</h1>
+<div id="shadowDiv" class="hidDiv"></div>
+<div id="tishi" class="hidDiv"><p align="center"><img src="/static/mana1/images/loading.gif"></img></p>正在加载数据!请稍后...</div>
 <table width="1000" id='chaxun'>
         <tr><th colspan="7">请输入查询条件:</th></tr>
         <tr>
@@ -91,7 +88,7 @@ function postdata(){                              //提交数据函数
                 </select>
         　　</td>
         
-            <td><input type="button" id="sub" value="&nbsp;查&nbsp;询&nbsp;"/>&nbsp;<input type="button" id="io" value="&nbsp;导&nbsp;出&nbsp;"/></td>
+            <td><input type="button" id="sub" value="&nbsp;查&nbsp;询&nbsp;"/>&nbsp;<input type="button" id="io" value="&nbsp;复制&nbsp;"/></td>
         </tr>
 </table>
 <div id="edit_area" style="align=left">

@@ -27,11 +27,11 @@ def import_maxminCuxiaori(request):
             if rs[4]==u'品牌小类代码':
                 excode='braxl'
             if rs[4]==u'大类代码':
-                excode='prodl'
+                excode='dl'
             if rs[4]==u'中类代码':
-                excode='prozl'
+                excode='zl'
             if rs[4]==u'小类代码':
-                excode='proxl'
+                excode='xl'
             sqlstr=u"select * from maxminCuxiaori where mdcode='"+rs[0]+"' and xcode = '"+ rs[2] +"' and excode='"+excode+"' and startdate='"+rs[7]+"' and enddate = '" + rs[8] + "'"
             if confsql.checkExist(sqlstr)==1: #检查mdcode,excode,yqkey数据库是否已存在
                 rs.append(u'数据库已存在!')
@@ -181,11 +181,11 @@ def save_maxminCuxiaori(request):
         if rs[4]==u'品牌小类代码':
             excode='braxl'
         if rs[4]==u'大类代码':
-            excode='prodl'
+            excode='dl'
         if rs[4]==u'中类代码':
-            excode='prozl'
+            excode='zl'
         if rs[4]==u'小类代码':
-            excode='proxl'
+            excode='xl'
 
         adddate = time.strftime("%Y-%m-%d", time.localtime())
 
@@ -252,17 +252,17 @@ def insult_maxminCuxiaori(request):
     union all
         select t1.mdcode,case when t3.braname is null then '' else t3.braname end,t1.xcode,t2.proxl as xname,'小类代码' as excode,max_multiple,min_multiple,t1.startdate, t1.enddate,remark 
         from maxminCuxiaori t1,product_all t2,branch as t3 
-        where t1.mdcode=t3.braid and t1.xcode=t2.proxl_id and t1.excode='proxl'
+        where t1.mdcode=t3.braid and t1.xcode=t2.proxl_id and t1.excode='xl'
         group by mdcode,braname,xcode,xname,excode,max_multiple,min_multiple,startdate,enddate,remark
     union all
         select t1.mdcode,case when t3.braname is null then '' else t3.braname end,t1.xcode,t2.prozl as xname,'中类代码' as excode,max_multiple,min_multiple,t1.startdate, t1.enddate,remark 
         from maxminCuxiaori t1,product_all t2,branch as t3 
-        where t1.mdcode=t3.braid and t1.xcode=t2.prozl_id and t1.excode='prozl'
+        where t1.mdcode=t3.braid and t1.xcode=t2.prozl_id and t1.excode='zl'
         group by mdcode,braname,xcode,xname,excode,max_multiple,min_multiple,startdate,enddate,remark
     union all
         select t1.mdcode,case when t3.braname is null then '' else t3.braname end,t1.xcode,t2.prodl as xname,'大类代码' as excode,max_multiple,min_multiple,t1.startdate, t1.enddate,remark 
         from maxminCuxiaori t1,product_all t2,branch as t3 
-        where t1.mdcode=t3.braid and t1.xcode=t2.prodl_id and t1.excode='prodl'
+        where t1.mdcode=t3.braid and t1.xcode=t2.prodl_id and t1.excode='dl'
         group by mdcode,braname,xcode,xname,excode,max_multiple,min_multiple,startdate,enddate,remark
     """
     result=""
@@ -286,11 +286,11 @@ def delete_maxminCuxiaori(request):
             if rs[4]==u'品牌小类代码':
                 excode='braxl'
             if rs[4]==u'大类代码':
-                excode='prodl'
+                excode='dl'
             if rs[4]==u'中类代码':
-                excode='prozl'
+                excode='zl'
             if rs[4]==u'小类代码':
-                excode='proxl'
+                excode='xl'
             sqlstr=u"select * from maxminCuxiaori where mdcode='"+rs[0]+"' and xcode = '"+ rs[2] +"' and excode='"+excode+"' and startdate='"+rs[7]+"' and enddate = '" + rs[8] + "'"
             if confsql.checkExist(sqlstr)<>1: #检查mdcode,excode,yqkey数据库是否已存在
                 rs.append(u'数据库中不存在!')
@@ -446,11 +446,11 @@ def deleteData_maxminCuxiaori(request):
                     if rs[4]==u'品牌小类代码':
                         excode='braxl'
                     if rs[4]==u'大类代码':
-                        excode='prodl'
+                        excode='dl'
                     if rs[4]==u'中类代码':
-                        excode='prozl'
+                        excode='zl'
                     if rs[4]==u'小类代码':
-                        excode='proxl'
+                        excode='xl'
                     confsql.runSql("delete from maxminCuxiaori where mdcode='"+rs[0]+"' and xcode='" +rs[2]+ "' and excode='"+excode+"' and startdate='"+rs[7]+"' and enddate = '" + rs[8] + "'")
                     res={}
                     res['mdcode']=rs[0]

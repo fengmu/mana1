@@ -6,6 +6,8 @@
 <script type="text/javascript" src="/static/mana1/js/jquery.jeditable.js"></script>
 <script type="text/javascript" src="/static/mana1/js/htmltable2csv.js"></script>
 <link href="/static/mana1/css/tablecloth.css" rel="stylesheet" type="text/css" media="screen"/>
+<script type="text/javascript" src="/static/mana1/js/turn_off_light.js"></script>
+<link href="/static/mana1/css/turn_off_light.css" rel="stylesheet" type="text/css" media="screen"/>
 <script>
 $(function() {
     $("#import").bind('click',function(){
@@ -25,7 +27,7 @@ $(function() {
              submit    : 'OK'
     });
 
-    $("#save").bind('click',function(){
+    $("#sub").bind('click',function(){
         //var myobj=new Object();
         var myobj={}
         myobj["table"]=$("#edit_area").table2CSV({separator: '\t',delivery:"table"})
@@ -48,6 +50,8 @@ $(function() {
                 }
                 str+="</table>"
                 $("#edit_area").html(str)
+                $("#shadowDiv").attr("class", "hidDiv");
+                $("#tishi").attr("class", "hidDiv");
             },
             error:function(){
                 alert("错误，数据无法保存！")
@@ -56,18 +60,20 @@ $(function() {
     });
 });
 </script>
-<title>订货量修改规则导入</title>
+<title>订货量修改规则配置</title>
 </head>
 <body>
-<h1>订货量修改规则导入</h1>
-<button id="save">保存</button>
+<h1>订货量修改规则配置</h1>
+<div id="shadowDiv" class="hidDiv"></div>
+<div id="tishi" class="hidDiv"><p align="center"><img src="/static/mana1/images/loading.gif"></img></p>正在加载数据!请稍后...</div>
+<button id="sub">保存</button>
 <button id="import">导入</button>
-<div id="edit_area" style="height:400px;width:850;align=left">
-<table width="1200">
+<div id="edit_area" style="height:400px;width:850px;align=left">
+<table width="1200px">
     <tr><th>门店代码</th><th>门店名称</th><th>代码</th><th>名称</th><th>代码说明</th><th>规则对象</th><th>规则说明</th><th>规则值</th></tr>
 </table>
 </div>
-<table width="1200" id="tips">
+<table width="1200px" id="tips">
     <tr><td><p align="left">说明：</p><p align="left">代码说明只能填写“商品代码”,“小类代码”,“中类代码”,“大类代码”或为空；规则对象只能填写“上阈值”,“下阈值”；规则说明只能填写“绝对值”,“相对值”；规则值应为数值。</p><p></p></td></tr>
 </table>
 </body>

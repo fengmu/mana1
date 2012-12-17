@@ -8,13 +8,14 @@
 <script type="text/javascript" src="/static/mana1/js/tablesorter_min.js"></script>
 <script type="text/javascript" src="http://cl.gialen.com:20800/site_lib/htmltable2csv/htmltable2csv2.js"></script>
 <script type="text/javascript" src="http://cl.gialen.com:20800/site_lib/zeroclipboard/ZeroClipboard.js"></script>
+<script type="text/javascript" src="/static/mana1/js/clip.js"></script>
 <script type="text/javascript" src="/static/mana1/js/turn_off_light.js"></script>
 <link href="/static/mana1/css/turn_off_light.css" rel="stylesheet" type="text/css" media="screen"/>
 <link href="/static/mana1/css/tablecloth.css" rel="stylesheet" type="text/css" media="screen"/>
 <script>
 var i=1
 $(document).ready(function(){
-    init()
+    clip2();
     $("#sub").bind('click',function(){
         postdata();
     });
@@ -50,30 +51,11 @@ function postdata(){                              //提交数据函数
         $("#shadowDiv").attr("class", "hidDiv");
         $("#tishi").attr("class", "hidDiv");
         $("#result").html(str)
+        $("#result").tablesorter();
       }
     });
 }
 
-var clip
-function init() {
-        clip = new ZeroClipboard.Client();
-        clip.setHandCursor( true );
-        clip.addEventListener('load', function (client) {
-        });
-        clip.addEventListener('mousedown', function (client) {
-                clip.setText2($("#result").table2CSV({separator: '\t',delivery:"value"}));
-        });
-        clip.addEventListener('complete', function (client, text) {
-                $("#shadowDiv").attr("class", "hidDiv");
-                $("#tishi").attr("class", "hidDiv");
-                if (text.length>0){
-                    alert("复制成功")
-                } else{
-                    alert("复制失败")
-                }
-        });
-        clip.glue( 'io' );
-}
 </script>
 <style>
     .chaxun tr td{
