@@ -6,198 +6,44 @@
 <script type="text/javascript" src="/static/mana1/js/jquery.jeditable.js"></script>
 <script type="text/javascript" src="/static/mana1/js/htmltable2csv.js"></script>
 <script type="text/javascript" src="http://cl.gialen.com:20800/site_lib/DataTables-1.9.4/DataTables.min.js"></script>
+<link href="/static/mana1/css/datatable.css" rel="stylesheet" type="text/css" media="screen"/>
 <script type="text/javascript" src="http://cl.gialen.com:20800/site_lib/htmltable2csv/htmltable2csv2.js"></script>
 <script type="text/javascript" src="http://cl.gialen.com:20800/site_lib/zeroclipboard/ZeroClipboard.js"></script>
+<script type="text/javascript" src="/static/mana1/js/clip.js"></script>
+<script type="text/javascript" src="/static/mana1/js/turn_off_light.js"></script>
+<link href="/static/mana1/css/turn_off_light.css" rel="stylesheet" type="text/css" media="screen"/>
 <link href="/static/mana1/css/tablecloth.css" rel="stylesheet" type="text/css" media="screen"/>
-<style type="text/css">
-#sub{
-    padding:10px 30px;
-}
-.dataTables_length {
-    width: 200px;
-}
-.dataTables_filter {
-    text-align: right;
-    left: 700px
-    width: 300px;
-}
-/************************************/
-.dataTables_wrapper {
-    clear: both;
-    position: relative;
-}
-.dataTables_processing {
-    background-color: white;
-    border: 1px solid #DDDDDD;
-    color: #999999;
-    font-size: 14px;
-    height: 30px;
-    left: 50%;
-    margin-left: -125px;
-    margin-top: -15px;
-    padding: 14px 0 2px;
-    position: absolute;
-    text-align: center;
-    top: 50%;
-    width: 250px;
-}
-.dataTables_length {
-    float: left;
-    width: 40%;
-}
-.dataTables_filter {
-    float: right;
-    text-align: right;
-    width: 50%;
-}
-.dataTables_info {
-    float: left;
-    width: 60%;
-}
-.dataTables_paginate {
-    float: right;
-    text-align: right;
-}
-.paginate_disabled_previous, .paginate_enabled_previous, .paginate_disabled_next, .paginate_enabled_next {
-    color: #111111 !important;
-    cursor: pointer;
-    float: left;
-    height: 19px;
-}
-.paginate_disabled_previous:hover, .paginate_enabled_previous:hover, .paginate_disabled_next:hover, .paginate_enabled_next:hover {
-    text-decoration: none !important;
-}
-.paginate_disabled_previous:active, .paginate_enabled_previous:active, .paginate_disabled_next:active, .paginate_enabled_next:active {
-    outline: medium none;
-}
-.paginate_disabled_previous, .paginate_disabled_next {
-    color: #666666 !important;
-}
-.paginate_disabled_previous, .paginate_enabled_previous {
-    padding-left: 23px;
-}
-.paginate_disabled_next, .paginate_enabled_next {
-    margin-left: 10px;
-    padding-right: 23px;
-}
-.paginate_disabled_previous {
-    background: url("../images/back_disabled.png") no-repeat scroll left top transparent;
-}
-.paginate_enabled_previous {
-    background: url("../images/back_enabled.png") no-repeat scroll left top transparent;
-}
-.paginate_enabled_previous:hover {
-    background: url("../images/back_enabled_hover.png") no-repeat scroll left top transparent;
-}
-.paginate_disabled_next {
-    background: url("../images/forward_disabled.png") no-repeat scroll right top transparent;
-}
-.paginate_enabled_next {
-    background: url("../images/forward_enabled.png") no-repeat scroll right top transparent;
-}
-.paginate_enabled_next:hover {
-    background: url("../images/forward_enabled_hover.png") no-repeat scroll right top transparent;
-}
-
-.paginate_disabled_previous {
-    background-image: url("http://cl.gialen.com:20800/site_lib/DataTables-1.9.4/media/images/back_disabled.png");
-}
-.paginate_enabled_previous {
-    background-image: url("http://cl.gialen.com:20800/site_lib/DataTables-1.9.4/media/images/back_enabled.png");
-}
-.paginate_disabled_next {
-    background-image: url("http://cl.gialen.com:20800/site_lib/DataTables-1.9.4/media/images/forward_disabled.png");
-}
-.paginate_enabled_next {
-    background-image: url("http://cl.gialen.com:20800/site_lib/DataTables-1.9.4/media/images/forward_enabled.png");
-}
-
-/******************************************/
-
-</style>
 <script>
 var i=1
 $(document).ready(function(){
-    $("#sub").bind('click',function(){
-        postdata();
-    });
-    init()
-});
-
-function postdata(){                              //提交数据函数
-    var myobj=new Object();
-    myobj={}
-    myobj["spcode"]=$("#text1").val();
-    myobj["proname"]=$("#text2").val();
-    myobj["mdcode"]=$("#text3").val();
-    myobj["braname"]=$("#text4").val();
-    myobj["applyfordate"]=$("#text5").val();
-    myobj["verifydate"]=$("#text6").val();
-    var jsonlist=JSON.stringify(myobj);
-    $(".fuzhi").html('<input type="button" id="io" value="复制"/>');
-    $.ajax({ //调用jquery的ajax方法
-      type: "POST", //设置ajax方法提交数据的形式
-      url: "/mana1/insult_checkAdvMaxMin/", //把数据提交到
-      data: "jsonlist="+jsonlist, //输入框中的值作为提交的数据
-      success: function(msg){ //提交成功后的回调，msg变量是输出的内容。
-        //alert("数据提交成功"); //如果有必要，可以把msg变量的值显示到某个DIV元素中
-        msg=msg.replace("'","%27");
-        json=JSON.parse(msg);
-        str="<thead><tr><th>门店代码</th><th>门店名称</th><th>大类</th><th>中类</th><th>小类</th><th>商品代码</th><th>商品名称</th><th>原上限</th><th>原下限</th><th>新上限</th><th>新下限</th><th>申请日期</th><th>审核日期</th><th>状态</th></tr></thead><tbody>"
-        for(var i=0;i<json.length;i++)
-        {
-           str+="<tr><td>"+json[i].mdcode+"</td><td>"+json[i].braname+"</td><td>"+json[i].prodl + "</td><td>"+json[i].prozl +"</td><td>"+json[i].proxl +"</td><td>"+json[i].spcode+"</td><td>"+unescape(json[i].proname)+"</td><td>"+json[i].oldmaxval+"</td><td>"+json[i].oldminval+"</td><td>"+json[i].newmaxval+"</td><td>"+json[i].newminval+"</td><td>"+json[i].applyfordate+"</td><td>"+json[i].verifyDate+"</td><td>"+json[i].remarks+"</td></tr>";
-        }
-        str+="</tbody>"
-        $("#result").html(str)
-        var oTable = $('#result').dataTable({
+    clip();
+    var oTable = $('#result').dataTable({
+            "bDestroy":true,
             "fnDrawCallback": function( oSettings ) {
-              },
+            },
             "oLanguage": {
                 "sSearch": "搜索:",
+                "sZeroRecords": "没有检索到数据",
                 "sLengthMenu": '显示 <select>'+
                   '<option value="10">10</option>'+
                   '<option value="20">20</option>'+
                   '<option value="50">50</option>'+
                   '<option value="-1">All</option>'+
                   '</select> 条记录',
-                "sInfo": "当前显示的是从第 _START_ 到第 _END_ 条记录 (共 _TOTAL_ 条)",
-                "sInfoFiltered": " 　来源记录共 _MAX_ 条"
-              }
-            });
-      }
-    });
-}
-
-var clip
-function init() {
-                clip = new ZeroClipboard.Client();
-                clip.setHandCursor( true );
-
-                clip.addEventListener('load', function (client) {
-                        //alert("y")
-                });
-
-                clip.addEventListener('mouseDown', function (client) {
-                        //alert("x")
-                        //alert(getnewcsv())
-                        //clip.setText(getnewcsv());
-                        clip.setText2($("#result").table2CSV({separator: '\t',delivery:"value"}));
-                        //alert($("#fmtable").table2CSV({separator: '\t',delivery:"value"}))
-                        //clip.setText("x");
-                });
-
-                clip.addEventListener('complete', function (client, text) {
-                        if (text.length>0){
-                            alert("复制成功")
-                        } else{
-                            alert("复制失败")
-                        }
-                });
-
-                clip.glue('io');
+                "sInfo": "当前显示的是从第 START 到第 END 条记录 (共 TOTAL 条)",
+                "sInfoFiltered": " 　来源记录共 MAX 条",
+                "sInfoEmtpy": "没有数据",
+                "sProcessing": "正在加载数据...",
+                "oPaginate":
+                {
+                    "sFirst": "首页",
+                    "sPrevious": "上一页",
+                    "sNext": "下一页",
+                    "sLast": "尾页"
+                }
             }
-
+    });
+});
 </script>
 <style>
     .chaxun tr td{
@@ -211,25 +57,15 @@ function init() {
 </head>
 <body>
 <h1>查询门店上下限申请</h1>
-
-<table class='chaxun'>
-        <tr><th colspan="8">请输入查询条件:</th></tr>
-        <tr>
-            <td>商品代码</td><td><input type='text' id='text1'/></td><td>商品名称</td><td><input type='text' id='text2'/></td><td>门店代码</td><td><input type='text' id='text3'/></td><td>门店名称</td><td><input type='text' id='text4'/></td>
-        </tr>
-        <tr>
-            <td>添加日期</td><td><input type='text' id='text5'/></td>
-            <td>修改日期</td><td><input type='text' id='text6'/></td>
-            <td colspan=4><input type="button" id="sub" value="查询"/>&nbsp;</td>
-        </tr>
-</table>
-<div id="fuzhi"></div>
-<div id="edit_area" style="align=left;width:1200px">
-<table width="1200" id='result' class="tablesorter">
+<input type="button" id="io" value="复制"/>
+<div id="edit_area" style="align=left;width:100%">
+<table width="100%" id='result' class="tablesorter">
+<thead><tr><th>门店代码</th><th>门店名称</th><th>商品代码</th><th>商品名称</th><th>大类</th><th>中类</th><th>小类</th><th>原上限</th><th>原下限</th><th>新上限</th><th>新下限</th><th>申请日期</th><th>审核日期</th><th>状态</th></tr></thead><tbody>
+{% for rs in result %}
+<tr><td>{{ rs.mdcode }}</td><td>{{ rs.braname}}</td><td>{{ rs.spcode}}</td><td>{{ rs.proname}}</td><td>{{ rs.prodl}}</td><td>{{ rs.prozl}}</td><td>{{ rs.proxl}}</td><td>{{ rs.oldmaxval}}</td><td>{{ rs.oldminval}}</td><td>{{ rs.newmaxval}}</td><td>{{ rs.newminval}}</td><td>{{ rs.applyfordate}}</td><td>{{ rs.verifydate}}</td><td>{{ rs.remarks}}</td></tr>
+{% endfor %}
+</tbody>
 </table>
 </div>
-<table width="1200" id="tips">
-<tr><td><p align="left">提示：</p><p align="left">&nbsp;&nbsp;为空则显示所有结果(最多10000条记录）。门店代码商品代码支持多重查询，如要查询时代花园店和棠景店可在门店代码输：02001,02002 格式以英文逗号分隔。</p><p></p></td></tr>
-</table>
 </body>
 </html>

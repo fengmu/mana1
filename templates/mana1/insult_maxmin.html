@@ -22,6 +22,7 @@ $(document).ready(function(){
 });
 
 function postdata(){                              //提交数据函数
+    turn_off_light()
     var myobj=new Object();
     myobj={}
     myobj["braid"]=$("#braid").val();
@@ -48,9 +49,8 @@ function postdata(){                              //提交数据函数
            str+="<tr><td>"+json[i].braid+"</td><td>"+json[i].braname+"</td><td>"+json[i].barcode+"</td><td>"+json[i].proid+"</td><td>"+json[i].proname+"</td><td>"+json[i].prodl+"</td><td>"+json[i].prozl+"</td><td>"+json[i].proxl+"</td><td>"+json[i].maxval+"</td><td>"+json[i].minval+"</td><td>"+json[i].banben+"</td><td>"+json[i].startdate+"</td><td>"+json[i].enddate+"</td><td>"+json[i].adddate+"</td></tr>";
         }
         str+="</tbody>"
-        $("#shadowDiv").attr("class", "hidDiv");
-        $("#tishi").attr("class", "hidDiv");
         $("#result").html(str)
+        turn_on_light();
         $("#result").tablesorter();
       }
     });
@@ -69,8 +69,6 @@ function postdata(){                              //提交数据函数
 </head>
 <body>
 <h1>上下限查询</h1>
-<div id="shadowDiv" class="hidDiv"></div>
-<div id="tishi" class="hidDiv"><p align="center"><img src="/static/mana1/images/loading.gif"></img></p>正在加载数据!请稍后...</div>
 <table class='chaxun' width="96%">
         <tr><th colspan="5">请输入查询条件:</th></tr>
         <tr>

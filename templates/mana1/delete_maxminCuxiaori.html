@@ -6,6 +6,8 @@
 <script type="text/javascript" src="/static/mana1/js/jquery.jeditable.js"></script>
 <script type="text/javascript" src="/static/mana1/js/htmltable2csv.js"></script>
 <link href="/static/mana1/css/tablecloth.css" rel="stylesheet" type="text/css" media="screen"/>
+<script type="text/javascript" src="/static/mana1/js/turn_off_light.js"></script>
+<link href="/static/mana1/css/turn_off_light.css" rel="stylesheet" type="text/css" media="screen"/>
 <script>
 $(function() {
     $("#import").bind('click',function(){
@@ -26,6 +28,7 @@ $(function() {
     });
 
     $("#save").bind('click',function(){
+        turn_off_light()
         //var myobj=new Object();
         var myobj={}
         myobj["table"]=$("#edit_area").table2CSV({separator: '\t',delivery:"table"})
@@ -48,6 +51,7 @@ $(function() {
                 }
                 str+="</tbody></table>"
                 $("#edit_area").html(str)
+                turn_on_light()
             },
             error:function(){
                 alert("错误，数据无法保存！")

@@ -17,88 +17,33 @@
 <script>
 var i=1
 $(document).ready(function(){
-    $("#chaxun").bind("click", function(){
-        postdata();
-    });
-
-    $("#result").tablesorter();
-    var oTable = $('#result').dataTable({
-            "bDestroy":true,
-            "fnDrawCallback": function( oSettings ) {
-            },
-            "oLanguage": {
-                "sSearch": "搜索:",
-                "sZeroRecords": "没有检索到数据",
-                "sLengthMenu": '显示 <select>'+
-                  '<option value="10">10</option>'+
-                  '<option value="20">20</option>'+
-                  '<option value="50">50</option>'+
-                  '<option value="-1">All</option>'+
-                  '</select> 条记录',
-                "sInfo": "当前显示的是从第 _START_ 到第 _END_ 条记录 (共 _TOTAL_ 条)",
-                "sInfoFiltered": " 　来源记录共 _MAX_ 条",
-                "sInfoEmtpy": "没有数据",
-                "sProcessing": "正在加载数据...",
-                "oPaginate":
-                {
-                    "sFirst": "首页",
-                    "sPrevious": "上一页",
-                    "sNext": "下一页",
-                    "sLast": "尾页"
-                }
-            }
-    });
-
-    function postdata(){
-        var mendian=$("#mendian").val();
-        $.ajax({ //调用jquery的ajax方法
-          type: "POST", //设置ajax方法提交数据的形式
-          url: "/mana1/insult_shangxiaxian/", //把数据提交到
-          data: "mendian="+mendian, //输入框中的值作为提交的数据
-          success: function(msg){ //提交成功后的回调，msg变量是输出的内容。
-            //alert("数据提交成功"); //如果有必要，可以把msg变量的值显示到某个DIV元素中
-            msg1=msg.replace("'","%27");
-            json=JSON.parse(msg1);
-            str="<thead><tr><th>门店代码</th><th>门店名称</th><th>大类</th><th>中类</th><th>小类</th><th>商品代码</th><th>商品名称</th><th>LW1</th><th>LW2</th><th>LW3</th><th>LW4</th><th>上限</th><th>下限</th><th>原上限</th><th>原下限</th></tr></thead><tbody>"
-            for(var i=0;i<json.length;i++)
-            {
-               str+="<tr><td>"+json[i].braid+"</td><td>"+json[i].braname+"</td><td>"+json[i].prodl + "</td><td>"+json[i].prozl +"</td><td>"+json[i].proxl+"</td><td>"+json[i].proid+"</td><td>"+unescape(json[i].proname)+"</td><td>"+json[i].week1_qty+"</td><td>"+json[i].week2_qty+"</td><td>"+json[i].week3_qty+"</td><td>"+json[i].week4_qty+"</td><td style='color:red'>"+json[i].maxval+"</td><td style='color:red'>"+json[i].minval+"</td><td>"+json[i].oldmaxval+"</td><td>"+json[i].oldminval+"</td></tr>";
-            }
-            str+="</tbody>"
-            $("#result").html(str)
-            var oTable = $('#result').dataTable({
-                "bDestroy":true,
-                "fnDrawCallback": function( oSettings ) {
-                  },
-                "oLanguage": {
-                    "sSearch": "搜索:",
-                    "sZeroRecords": "没有检索到数据",
-                    "sLengthMenu": '显示 <select>'+
-                      '<option value="10">10</option>'+
-                      '<option value="20">20</option>'+
-                      '<option value="50">50</option>'+
-                      '<option value="-1">All</option>'+
-                      '</select> 条记录',
-                    "sInfo": "当前显示的是从第 _START_ 到第 _END_ 条记录 (共 _TOTAL_ 条)",
-                    "sInfoFiltered": " 　来源记录共 _MAX_ 条",
-                    "sInfoEmtpy": "没有数据",
-                    "sProcessing": "正在加载数据...",
-                    "oPaginate":
-                    {
-                        "sFirst": "首页",
-                        "sPrevious": "上一页",
-                        "sNext": "下一页",
-                        "sLast": "尾页"
-                    }
-                }
-          });
-        $("#shadowDiv").attr("class", "hidDiv");
-        $("#tishi").attr("class", "hidDiv");
-        }
-      });
-    }
-
     clip();
+    oTable = $('#result').dataTable({
+        "bDestroy":true,
+        "fnDrawCallback": function( oSettings ) {
+          },
+        "oLanguage": {
+            "sSearch": "搜索:",
+            "sZeroRecords": "没有检索到数据",
+            "sLengthMenu": '显示 <select>'+
+              '<option value="10">10</option>'+
+              '<option value="20">20</option>'+
+              '<option value="50">50</option>'+
+              '<option value="-1">All</option>'+
+              '</select> 条记录',
+            "sInfo": "当前显示的是从第 _START_ 到第 _END_ 条记录 (共 _TOTAL_ 条)",
+            "sInfoFiltered": " 　来源记录共 _MAX_ 条",
+            "sInfoEmtpy": "没有数据",
+            "sProcessing": "正在加载数据...",
+            "oPaginate":
+            {
+                "sFirst": "首页",
+                "sPrevious": "上一页",
+                "sNext": "下一页",
+                "sLast": "尾页"
+            }
+          }
+    });
 });
 </script>
 <style>
@@ -112,19 +57,22 @@ $(document).ready(function(){
 <title>查询按销售估算的上下限</title>
 </head>
 <body><h1>查询按销售估算的上下限</h1>
-<div id="shadowDiv" class="hidDiv"></div>
-<div id="tishi" class="hidDiv"><p align="center"><img src="/static/mana1/images/loading.gif"></img></p>正在加载数据!请稍后...</div>
-请输入要查询的门店：<input type="text" id="mendian"/>&nbsp;<input type="submit" id="chaxun"  value="&nbsp;查询&nbsp;"/>&nbsp; <input type="button" id="io" value="&nbsp;复制&nbsp;"/>
+<form method="post" action="/mana1/insult_shangxiaxian/">
+请输入要查询的门店：<input type="text" id="mendian" name="mendian"/>&nbsp;<input type="submit" id="chaxun"  value="&nbsp;查询&nbsp;"/>&nbsp; <input type="button" id="io" value="&nbsp;复制&nbsp;"/>
 <br /><br />
 <div id="edit_area" style="align=left">
-<table width="95%" id='result' class="tablesorter">
-    <thead><tr><th>门店代码</th><th>门店名称</th><th>大类</th><th>中类</th><th>小类</th><th>商品代码</th><th>商品名称</th><th>LW1</th><th>LW2</th><th>LW3</th><th>LW4</th><th>上限</th><th>下限</th><th>原上限</th><th>原下限</th></tr></thead><tbody>
+<table width="100%" id='result' class="tablesorter">
+    <thead><tr><th>门店代码</th><th>门店名称</th><th>商品代码</th><th>商品名称</th><th>大类</th><th>中类</th><th>小类</th><th>LW1</th><th>LW2</th><th>LW3</th><th>LW4</th><th>上限</th><th>下限</th><th>原上限</th><th>原下限</th></tr></thead><tbody>
+    {% for rs in result %}
+    <tr><td>{{ rs.braid }}</td><td>{{ rs.braname}}</td><td>{{ rs.proid}}</td><td>{{ rs.proname}}</td><td>{{ rs.prodl}}</td><td>{{ rs.prozl}}</td><td>{{ rs.proxl}}</td><td>{{ rs.week1_qty}}</td><td>{{ rs.week2_qty}}</td><td>{{ rs.week3_qty}}</td><td>{{ rs.week4_qty}}</td><td>{{ rs.maxval}}</td><td>{{ rs.minval }}</td><td>{{ rs.oldmaxval}}</td><td>{{ rs.oldminval}}</td></tr>
+    {% endfor %}
 </tbody>
 </table>
 </div>
+</form>
 <p></p>
-<table width="1200" id="tips">
-<tr><td><p align="left">提示：</p><p align="left">&nbsp;&nbsp;为空则显示所有结果(最多2万条记录）。门店代码商品代码支持多重查询，如要查询时代花园店和棠景店可在门店代码输：02001,02002 格式以英文逗号分隔。</p><p></p></td></tr>
+<table width="100%" id="tips">
+<tr><td><p align="left">提示：</p><p align="left">&nbsp;&nbsp;为空则显示所有结果(最多2万条记录）。门店代码商品代码支持多重查询，如要查询时代花园店和棠景店可在门店代码输：02001,02002 格式以英文逗号分隔。LW1指上周销售数量,LW2倒推两周销售数量,LW3倒推三周销售数量,LW4倒推四周销售数量。</p><p></p></td></tr>
 </table>
 </body>
 </html>

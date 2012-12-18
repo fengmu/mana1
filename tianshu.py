@@ -32,13 +32,15 @@ def save_tianshu(request):
         if rs[4]==u'数据库已存在!':
             try:
                 confsql.runSql("delete from tianshu where braid='"+rs[0]+"'")
+                rs[4]=u'插入成功!'
             except:
                 rs[4]=u'删除失败!'
-        try:
-            confsql.runSql("insert into tianshu values('"+rs[0]+"','"+rs[2]+"','"+rs[3]+"','"+datetime.date.today().strftime("%Y-%m-%d")+"')")
-            rs[4]=u'插入成功!'
-        except:
-            rs[4]=u'插入失败!'
+        if rs[4]==u'':
+            try:
+                confsql.runSql("insert into tianshu values('"+rs[0]+"','"+rs[2]+"','"+rs[3]+"','"+datetime.date.today().strftime("%Y-%m-%d")+"')")
+                rs[4]=u'插入成功!'
+            except:
+                rs[4]=u'插入失败!'
         res={}
         res['braid']=rs[0]
         res['braname']=rs[1]
@@ -64,6 +66,25 @@ def import_tianshu(request):
         rs1=trim_csv(value,itemlenth=4)
         rs2,rs1=verifyData(rs1,length=4,required=[0,2,3])
 
+        temp=[]
+        for rs in rs1:
+            if len(rs[0])<>5:
+                rs.append(u"门店代码长度应为5位!")
+                temp.append(rs)
+                rs2.append(rs)
+        if len(temp)>0:
+            for rs in temp:
+                rs1.remove(rs)
+        temp=[]
+        for rs in rs1:
+            if rs[2].isdigit()==False or rs[3].isdigit()==False:
+                rs.append(u"天数必须是整数!")
+                temp.append(rs)
+                rs2.append(rs)
+        if len(temp)>0:
+            for rs in temp:
+                rs1.remove(rs)
+
         '重复项覆盖'
         temp=[]
         if len(rs1)>0:
@@ -76,7 +97,7 @@ def import_tianshu(request):
             for rs in temp:
                 rs1.remove(rs)
 
-        html=u"<table width='800'><tr><th>门店代码</th><th>门店名称</th><th>安全库存天数</th><th>送货周期天数</th></tr>"
+        html=u"<table width='100%'><tr><th>门店代码</th><th>门店名称</th><th>安全库存天数</th><th>送货周期天数</th></tr>"
         if len(rs2)>0:
             for rs in rs2:
                 html+="<tr>"
@@ -110,7 +131,7 @@ def delete_tianshu(request):
         rs1=trim_csv(value,itemlenth=4)
         rs2,rs1=verifyData(rs1,length=4,required=[0,2,3])
 
-        html=u"<table width='800'><tr><th>门店代码</th><th>门店名称</th><th>安全库存天数</th><th>配送周期天数</th></tr>"
+        html=u"<table width='100%'><tr><th>门店代码</th><th>门店名称</th><th>安全库存天数</th><th>配送周期天数</th></tr>"
         if len(rs2)>0:
             for rs in rs2:
                 html+="<tr>"

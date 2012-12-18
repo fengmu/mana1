@@ -160,68 +160,27 @@ def cachedAdvMaxMin(mdcode, spcode, oldmax, oldmin, newmax, newmin):
         
         
 def insult_checkAdvMaxMin(request):
-    if request.method=='POST':
-        result=[] #存放初始表头
-        jlist=simplejson.loads(request.POST["jsonlist"])
-        if jlist['spcode']<>'' or jlist['proname']<>'' or jlist['mdcode']<>'' or jlist['braname']<>'' or jlist['applyfordate']<>'' or jlist['verifydate']<>'': #不全为空
-            sqlstr="select t1.* from (select t1.mdcode,t2.braname,t1.spcode,t3.proname,t3.prodl_id||'_'||t3.prodl,t3.prozl_id||'_'||t3.prozl,t3.proxl_id||'_'||t3.proxl,t1.oldmaxval,t1.oldminval,t1.newmaxval,t1.newminval,t1.applyfordate,t1.verifydate,  case when t1.remarks = 'save' then '同意' when t1.remarks = 'del' then '不同意' else '未审核' end as remarks  from advmaxmin t1,branch t2,product_all t3 where t1.mdcode=t2.braid and t1.spcode=t3.proid) as  t1 where "
-            
-            for j in jlist:
-                if jlist[j]<>'':
-                    li=jlist[j].split(",")
-                    if len(li)==1: #一个条件
-                        sqlstr+= "t1." + j.encode('utf-8') + " like '%%"+jlist[j].encode('utf-8').strip()+"%%' and "
-                    else: #逗号分隔的多条件
-                        sqlstr+="("
-                        for l in li:
-                            sqlstr+= "t1."+j.encode('utf-8')+" like '%%"+l.encode('utf-8').strip() +"%%' or  "
-                        sqlstr=sqlstr[0:-4]+") and "
-            sqlstr=sqlstr[0:-4]
-            
-            lines=confsql.runquery(sqlstr)
-            for rs in lines:
-                res={}
-                res['mdcode']=rs[0]
-                res['braname']=rs[1]
-                res['spcode']=rs[2]
-                res['proname']=rs[3]
-                res['prodl']=rs[4]
-                res['prozl']=rs[5]
-                res['proxl']=rs[6]
-                res['oldmaxval']=rs[7]
-                res['oldminval']=rs[8]
-                res['newmaxval']=rs[9]
-                res['newminval']=rs[10]
-                res['applyfordate']=rs[11]
-                res['verifyDate']=rs[12]
-                res['remarks'] = rs[13]
-                result.append(res)
-            jsonres=simplejson.dumps(result)
-            return  HttpResponse(jsonres)
-        else: #全为空，查询所有
-            sqlstr="select t1.mdcode,t2.braname,t1.spcode,t3.proname,t3.prodl_id||'_'||t3.prodl,t3.prozl_id||'_'||t3.prozl,t3.proxl_id||'_'||t3.proxl,t1.oldmaxval,t1.oldminval,t1.newmaxval,t1.newminval,t1.applyfordate,t1.verifyDate, case when t1.remarks = 'save' then '同意' when t1.remarks = 'del' then '不同意' else '未审核' end  as remarks from advmaxmin t1,branch t2,product_all t3 where t1.mdcode=t2.braid and t1.spcode=t3.proid limit 10000"
-            lines=confsql.runquery(sqlstr)
-            for rs in lines:
-                res={}
-                res['mdcode']=rs[0]
-                res['braname']=rs[1]
-                res['spcode']=rs[2]
-                res['proname']=rs[3]
-                res['prodl']=rs[4]
-                res['prozl']=rs[5]
-                res['proxl']=rs[6]
-                res['oldmaxval']=rs[7]
-                res['oldminval']=rs[8]
-                res['newmaxval']=rs[9]
-                res['newminval']=rs[10]
-                res['applyfordate']=rs[11]
-                res['verifyDate']=rs[12]
-                res['remarks'] = rs[13]
-                result.append(res)
-            jsonres=simplejson.dumps(result)
-            return  HttpResponse(jsonres)
-    else:
-        t=get_template('mana1/insult_checkadvmaxmin.html')
-        html=t.render(Context())
-        return HttpResponse(html)
+    result=[] #存放初始表头
+    sqlstr="select t1.mdcode,t2.braname,t1.spcode,t3.proname,t3.prodl_id||'_'||t3.prodl,t3.prozl_id||'_'||t3.prozl,t3.proxl_id||'_'||t3.proxl,t1.oldmaxval,t1.oldminval,t1.newmaxval,t1.newminval,t1.applyfordate,t1.verifyDate, case when t1.remarks = 'save' then '同意' when t1.remarks = 'del' then '不同意' else '未审核' end  as remarks from advmaxmin t1,branch t2,product_all t3 where t1.mdcode=t2.braid and t1.spcode=t3.proid limit 20000"
+    lines=confsql.runquery(sqlstr)
+    for rs in lines:
+        res={}
+        res['mdcode']=rs[0]
+        res['braname']=rs[1]
+        res['spcode']=rs[2]
+        res['proname']=rs[3]
+        res['prodl']=rs[4]
+        res['prozl']=rs[5]
+        res['proxl']=rs[6]
+        res['oldmaxval']=rs[7]
+        res['oldminval']=rs[8]
+        res['newmaxval']=rs[9]
+        res['newminval']=rs[10]
+        res['applyfordate']=rs[11]
+        res['verifyDate']=rs[12]
+        res['remarks'] = rs[13]
+        result.append(res)
+    t=get_template('mana1/insult_checkadvmaxmin.html')
+    html=t.render(Context({"result":result}))
+    return HttpResponse(html)
 

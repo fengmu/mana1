@@ -735,6 +735,91 @@ CREATE TABLE dhrulesYuzhiVal
   adddate character varying(16)
 );
 
+
+-- Table: advmaxmin
+
+DROP TABLE if exists advmaxmin;
+
+CREATE TABLE advmaxmin
+(
+  mdcode character varying(100),
+  spcode character varying(100),
+  oldmaxval numeric(12,3),
+  oldminval numeric(12,3),
+  newmaxval numeric(12,3),
+  newminval numeric(12,3),
+  applyfordate character varying(20),
+  verifydate character varying(20),
+  remarks character varying(100)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE advmaxmin OWNER TO postgres;
+
+
+DROP TABLE if exists dhalldata;
+
+CREATE TABLE dhalldata
+(
+  mdcode character varying(5),
+  spcode character varying(100),
+  mdname character varying(100),
+  spname character varying(100),
+  proxl_id character varying(10),
+  proxl character varying(100),
+  prozl_id character varying(10),
+  prozl character varying(100),
+  prodl_id character varying(10),
+  prodl character varying(100),
+  braxl_id character varying(10),
+  braxl character varying(100),
+  brazl_id character varying(10),
+  brazl character varying(100),
+  bradl_id character varying(10),
+  bradl character varying(100),
+  barcode character varying(13),
+  suggest numeric(12,3),
+  suggestcost numeric(12,3),
+  indhamount numeric(12,3),
+  status character varying(32),
+  packetqty1 numeric(12,3),
+  maxval numeric(12,3),
+  minval numeric(12,3),
+  yqmaxlimit character varying(16),
+  yqminlimit character varying(16),
+  curqty numeric(12,3),
+  allocqty numeric(12,3),
+  total_qty numeric(13,3),
+  week1_qty numeric(13,3),
+  week2_qty numeric(13,3),
+  week3_qty numeric(13,3),
+  week4_qty numeric(13,3),
+  total_amt numeric(12,2),
+  week1_amt numeric(12,2),
+  week2_amt numeric(12,2),
+  week3_amt numeric(12,2),
+  week4_amt numeric(12,2),
+  cuxiao_1 character varying(32),
+  cuxiao_2 character varying(32),
+  cuxiao_3 character varying(32),
+  xinpin character varying(32),
+  delivery character varying(32),
+  dhtag character varying(32),
+  normalprice numeric(10,2),
+  assortment character varying(16),
+  spaceid character varying(64),
+  spacename character varying(64),
+  hjcode character varying(64),
+  shelf character varying(16),
+  drawer character varying(16),
+  box character varying(16)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE dhalldata OWNER TO postgres;
+
 '''
 --测试数据
 insert into allstock values('00000017','02001',23);
@@ -755,9 +840,8 @@ insert into delivery values('02003','星期三');
 insert into delivery values('02004','星期三');
 insert into delivery values('02005','星期三');
 insert into delivery values('02006','星期三');
-'''
 
-'''
+
 --存储过程
 
 CREATE FUNCTION sugvalue_temp() RETURNS void AS $$

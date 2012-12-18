@@ -8,9 +8,7 @@
 <script type="text/javascript" src="/static/mana1/js/htmltable2csv.js"></script>
 <script type="text/javascript" src="http://cl.gialen.com:20800/site_lib/DataTables-1.9.4/DataTables.min.js"></script>
 <script type="text/javascript" src="http://cl.gialen.com:20800/site_lib/zeroclipboard/ZeroClipboard.js"></script>
-<script type="text/javascript" src="/static/mana1/js/turn_off_light.js"></script>
 <script type="text/javascript" src="/static/mana1/js/clip.js"></script>
-<link href="/static/mana1/css/turn_off_light.css" rel="stylesheet" type="text/css" media="screen"/>
 <link href="/static/mana1/css/tablecloth.css" rel="stylesheet" type="text/css" media="screen"/>
 <link href="/static/mana1/css/datatable.css" rel="stylesheet" type="text/css" media="screen"/>
 <script>
@@ -57,11 +55,9 @@ $(document).ready(function(){
 </head>
 <body>
 <h1>商品配送单位规则</h1>
-<div id="shadowDiv" class="hidDiv"></div>
-<div id="tishi" class="hidDiv"><p align="center"><img src="/static/mana1/images/loading.gif"></img></p>正在加载数据!请稍后...</div>
 <input type="button" id="io" value="&nbsp;复制&nbsp;"/></br>
 <div id="edit_area" style="align=left">
-<table width="1000" id='result' class="tablesorter">
+<table width="100%" id='result' class="tablesorter">
     <thead><tr><th>代码</th><th>名称</th><th>代码说明</th><th>配货单位</th></tr></thead><tbody>
 {% for rs in result %}
     <tr><td>{{rs.0}}</td><td>{{rs.1}}</td><td>{{rs.2}}</td><td>{{rs.3}}</td></tr>

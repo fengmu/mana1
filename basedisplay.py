@@ -26,6 +26,39 @@ def import_basedisplay(request):
         rs1=trim_csv(value,itemlenth=5)
         rs2,rs1=verifyData(rs1,length=5,required=[0,2,4])
 
+        '门店代码长度为5位'
+        temp=[]
+        for rs in rs1:
+            if len(rs[0])<>5:
+                rs.append(u"门店代码长度应为5位!")
+                temp.append(rs)
+                rs2.append(rs)
+        if len(temp)>0:
+            for rs in temp:
+                rs1.remove(rs)
+
+        '门店代码长度为8位'
+        temp=[]
+        for rs in rs1:
+            if len(rs[2])<>8:
+                rs.append(u"商品代码长度应为8位!")
+                temp.append(rs)
+                rs2.append(rs)
+        if len(temp)>0:
+            for rs in temp:
+                rs1.remove(rs)
+
+        '基本陈列量必须是数值'
+        temp=[]
+        for rs in rs1:
+            if rs[4].isdigit()==False:
+                rs.append(u"基本陈列量必须是整数!")
+                temp.append(rs)
+                rs2.append(rs)
+        if len(temp)>0:
+            for rs in temp:
+                rs1.remove(rs)
+
         '重复项覆盖'
         temp=[]
         for rs in rs1:

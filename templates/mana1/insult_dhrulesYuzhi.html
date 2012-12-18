@@ -6,26 +6,30 @@
 <script type="text/javascript" src="/static/mana1/js/tablesorter_min.js"></script>
 <script type="text/javascript" src="/static/mana1/js/jquery.jeditable.js"></script>
 <script type="text/javascript" src="/static/mana1/js/htmltable2csv.js"></script>
+<script type="text/javascript" src="http://cl.gialen.com:20800/site_lib/DataTables-1.9.4/DataTables.min.js"></script>
+<link href="/static/mana1/css/datatable.css" rel="stylesheet" type="text/css" media="screen"/>
+<script type="text/javascript" src="http://cl.gialen.com:20800/site_lib/zeroclipboard/ZeroClipboard.js"></script>
+<script type="text/javascript" src="/static/mana1/js/clip.js"></script>
 <link href="/static/mana1/css/tablecloth.css" rel="stylesheet" type="text/css" media="screen"/>
 <script>
 var i=1
 $(document).ready(function(){
-    $("#io").bind("click", function(){
-         $("#edit_area").css("height","200");
-         $("#tips").empty();
-         $("#edit_area").trigger('showedit', [{"Id":'y'}]);
+    oTable = $('#result').dataTable({
+        "fnDrawCallback": function( oSettings ) {
+          },
+        "oLanguage": {
+            "sSearch": "搜索:",
+            "sLengthMenu": '显示 <select>'+
+              '<option value="10">10</option>'+
+              '<option value="20">20</option>'+                  
+              '<option value="50">50</option>'+
+              '<option value="-1">All</option>'+
+              '</select> 条记录',
+            "sInfo": "当前显示的是从第 _START_ 到第 _END_ 条记录 (共 _TOTAL_ 条)",
+            "sInfoFiltered": " 　来源记录共 _MAX_ 条"
+          }
     });
-
-    $('#edit_area').editable('', {
-             type      : 'textarea',
-             indicator : '...',
-             data      : function(value, setting){
-                return $(value).table2CSV({separator: '\t',delivery:"value"});
-             },
-             cancel    : 'Ok',
-             event     : 'showedit'
-    });
-
+    clip();
     $("#result").tablesorter();
 });
 </script>
@@ -42,8 +46,7 @@ $(document).ready(function(){
 <body><h1>促销订货量修改规则查询</h1>
 <input type="button" id="io" value="&nbsp;导&nbsp;出&nbsp;"/>
 <div id="edit_area" style="align=left">
-
-<table width="1200" id='result' class="tablesorter">
+<table width="100%" id='result' class="tablesorter">
 <thead><tr><th>门店代码</th><th>门店名称</th><th>代码</th><th>代码名称</th><th>代码说明</th><th>规则对象</th><th>规则说明</th><th>倍数</th><th>开始日期</th><th>结束日期</th><th>备注</th><th>添加日期</th></tr></thead><tbody>
 {% for rs in result %}
 <tr><td>{{rs.0}}</td><td>{{rs.1}}</td><td>{{rs.2}}</td><td>{{rs.3}}</td><td>{{rs.4}}</td><td>{{rs.5}}</td><td>{{rs.6}}</td><td>{{rs.7}}</td><td>{{rs.8}}</td><td>{{rs.9}}</td><td>{{rs.10}}</td><td>{{rs.11}}</td></tr>

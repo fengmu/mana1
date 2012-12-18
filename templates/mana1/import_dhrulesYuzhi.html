@@ -6,6 +6,8 @@
 <script type="text/javascript" src="/static/mana1/js/jquery.jeditable.js"></script>
 <script type="text/javascript" src="/static/mana1/js/htmltable2csv.js"></script>
 <link href="/static/mana1/css/tablecloth.css" rel="stylesheet" type="text/css" media="screen"/>
+<script type="text/javascript" src="/static/mana1/js/turn_off_light.js"></script>
+<link href="/static/mana1/css/turn_off_light.css" rel="stylesheet" type="text/css" media="screen"/>
 <script>
 $(function() {
     $("#import").bind('click',function(){
@@ -26,6 +28,7 @@ $(function() {
     });
 
     $("#save").bind('click',function(){
+        turn_off_light()
         var myobj={}
         myobj["table"]=$("#edit_area").table2CSV({separator: '\t',delivery:"table"})
         var myjson=JSON.stringify(myobj);
@@ -35,7 +38,7 @@ $(function() {
             data:"myjson="+myjson,
             success: function(msg){
                 json=JSON.parse(msg);
-                str="<table width='1200'><tr><th>门店代码</th><th>门店名称</th><th>代码</th><th>名称</th><th>代码说明</th><th>规则对象</th><th>倍数</th><th>开始日期</th><th>结束日期</th><th>备注</th></tr>"
+                str="<table width='100%'><tr><th>门店代码</th><th>门店名称</th><th>代码</th><th>名称</th><th>代码说明</th><th>规则对象</th><th>倍数</th><th>开始日期</th><th>结束日期</th><th>备注</th></tr>"
                 for(var i=0;i<json.length;i++)
                 {
                     str+="<tr><td>"+json[i].mdcode+"</td><td>"+json[i].mdname+"</td><td>"+json[i].xcode+"</td><td>"+json[i].name+"</td><td>"+json[i].excode+"</td><td>"+json[i].yqkey+"</td><td>"+json[i].yqvalue+"</td><td>"+json[i].startdate+"</td><td>"+json[i].enddate+"</td><td>"+json[i].remark+"</td>"
@@ -46,6 +49,7 @@ $(function() {
                 }
                 str+="</table>"
                 $("#edit_area").html(str)
+                turn_on_light()
             },
             error:function(){
                 alert("错误，数据无法保存！")
@@ -61,11 +65,11 @@ $(function() {
 <button id="save">保存</button>
 <button id="import">导入</button>
 <div id="edit_area" style="height:400px;width:850;align=left">
-<table width="1200">
+<table width="100%">
     <tr><th>门店代码</th><th>门店名称</th><th>代码</th><th>名称</th><th>代码说明</th><th>规则对象</th><th>倍数</th><th>开始日期</th><th>结束日期</th><th>备注</th></tr>
 </table>
 </div>
-<table width="1200" id="tips">
+<table width="100%" id="tips">
     <tr><td><p align="left">说明：</p><p align="left">代码说明只能填写“商品代码”，“品牌小类代码”，“大类代码”，“中类代码”，“小类代码”；时间格式为：yyyy-mm-dd。</p><p></p></td></tr>
 </table>
 </body>

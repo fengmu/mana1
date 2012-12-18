@@ -22,6 +22,7 @@ $(document).ready(function(){
 });
 
 function postdata(){                              //提交数据函数
+    turn_off_light()
     var myobj=new Object();
     myobj={}
     myobj["braid"]=$("#text1").val();
@@ -45,8 +46,7 @@ function postdata(){                              //提交数据函数
         str+="</tbody>"
         $("#result").html(str)
         $("#result").tablesorter();
-        $("#shadowDiv").attr("class", "hidDiv");
-        $("#tishi").attr("class", "hidDiv");
+        turn_on_light()
     },
     error:function(){
         alert("错误，数据无法保存！")
@@ -67,8 +67,6 @@ function postdata(){                              //提交数据函数
 </head>
 <body>
 <h1>查询门店订货日期</h1>
-<div id="shadowDiv" class="hidDiv"></div>
-<div id="tishi" class="hidDiv"><p align="center"><img src="/static/mana1/images/loading.gif"></img></p>正在加载数据!请稍后...</div>
 <table width="1000" id='chaxun'>
         <tr><th colspan="7">请输入查询条件:</th></tr>
         <tr>
@@ -87,7 +85,6 @@ function postdata(){                              //提交数据函数
                     <option value="星期日">星期日</option>
                 </select>
         　　</td>
-        
             <td><input type="button" id="sub" value="&nbsp;查&nbsp;询&nbsp;"/>&nbsp;<input type="button" id="io" value="&nbsp;复制&nbsp;"/></td>
         </tr>
 </table>

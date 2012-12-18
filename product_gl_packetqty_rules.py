@@ -18,17 +18,17 @@ def import_product_gl_packetqty_rules(request):
         temp=[]
         for rs in rs1:
             if rs[2]==u"商品代码" or rs[2]==u"小类代码":
-                if len(rs[2])<>8:
+                if len(rs[0])<>8:
                     rs.append(u'代码长度不符！')
                     temp.append(rs)
                     rs2.append(rs)
             if rs[2]==u"中类代码":
-                if len(rs[2])<>5:
+                if len(rs[0])<>5:
                     rs.append(u'代码长度不符！')
                     temp.append(rs)
                     rs2.append(rs)
             if rs[2]==u"大类代码":
-                if len(rs[2])<>2:
+                if len(rs[0])<>2:
                     rs.append(u'代码长度不符！')
                     temp.append(rs)
                     rs2.append(rs)
@@ -46,9 +46,10 @@ def import_product_gl_packetqty_rules(request):
                 excode='xl'
                 sqlstr="select * from product_all where proxl_id='"+rs[0]+"'"
             if rs[2]==u'中类代码':
+                sqlstr="select * from product_all where prozl_id='"+rs[0]+"'"
                 excode='zl'
             if rs[2]==u'大类代码':
-                sqlstr="select * from product_all where prozl_id='"+rs[0]+"'"
+                sqlstr="select * from product_all where prodl_id='"+rs[0]+"'"
                 excode='dl'
             '无匹配的代码名称'
             if confsql.checkExist(sqlstr)==0:

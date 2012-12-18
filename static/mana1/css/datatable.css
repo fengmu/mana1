@@ -1,12 +1,3 @@
-.dataTables_length {
-    width: 200px;
-}
-.dataTables_filter {
-    text-align: right;
-    left: 700px
-    width: 300px;
-}
-/************************************/
 .dataTables_wrapper {
     clear: both;
     position: relative;
@@ -30,6 +21,7 @@
 .dataTables_length {
     float: left;
     width: 40%;
+    padding: 10px 0;
 }
 .dataTables_filter {
     float: right;

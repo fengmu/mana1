@@ -8,8 +8,6 @@ function clip() {
             clip.setText(fm2csv(oTable.fnGetData()).join('\r\n'));
     });
     clip.addEventListener('complete', function (client, text) {
-            $("#shadowDiv").attr("class", "hidDiv");
-            $("#tishi").attr("class", "hidDiv");
             if (text.length>0){
                 alert("复制成功");
             } else{
@@ -39,8 +37,6 @@ function clip2() {
                 clip.setText2($("#result").table2CSV({separator: '\t',delivery:"value"}));
         });
         clip.addEventListener('complete', function (client, text) {
-                $("#shadowDiv").attr("class", "hidDiv");
-                $("#tishi").attr("class", "hidDiv");
                 if (text.length>0){
                     alert("复制成功")
                 } else{

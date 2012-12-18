@@ -24,7 +24,7 @@ def insult_shangxiaxian(request):
     if request.method=='POST':
         result=[]
         mendian=request.POST['mendian']
-        res=confsql.runquery(sqlstr=" select t1.braid,t1.mdname,t1.proid,t1.spname,t1.prodl_id||'_'||t1.prodl,t1.prozl_id||'_'||t1.prozl,t1.proxl_id||'_'||t1.proxl,week1_qty,week2_qty,week3_qty,week4_qty,t1.maxval,t1.minval,t1.oldmaxval,t1.oldminval from xiaoshou28_maxmin t1 where braid='"+mendian+"' limit 20000")
+        res=confsql.runquery(sqlstr=" select t1.braid,t1.mdname,t1.proid,t1.spname,t1.prodl_id||'_'||t1.prodl,t1.prozl_id||'_'||t1.prozl,t1.proxl_id||'_'||t1.proxl,week1_qty,week2_qty,week3_qty,week4_qty,t1.maxval,t1.minval,t1.oldmaxval,t1.oldminval from xiaoshou28_maxmin t1 where braid='"+mendian+"' or mdname like '%"+mendian+"%' limit 20000")
         for rs in res:
             items={}
             items['braid']=rs[0]
@@ -43,8 +43,9 @@ def insult_shangxiaxian(request):
             items['oldmaxval']=int(rs[13] or 0)
             items['oldminval']=int(rs[14] or 0)
             result.append(items)
-        jsonres=simplejson.dumps(result)
-        return  HttpResponse(jsonres)
+        t=get_template('mana1/insult_shangxiaxian.html')
+        html=t.render(Context({"result":result}))
+        return HttpResponse(html)
     else:
         t=get_template('mana1/insult_shangxiaxian.html')
         html=t.render(Context())

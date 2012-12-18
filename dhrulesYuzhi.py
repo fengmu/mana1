@@ -143,7 +143,7 @@ def import_dhrulesYuzhi(request):
             for rs in temp:
                 rs1.remove(rs)
 
-        html=u"<table width='1200'><tr><th>门店代码</th><th>门店名称</th><th>代码</th><th>名称</th><th>代码说明</th><th>规则对象</th><th>倍数</th><th>开始日期</th><th>结束日期</th><th>备注</th></tr>"
+        html=u"<table width='100%'><tr><th>门店代码</th><th>门店名称</th><th>代码</th><th>名称</th><th>代码说明</th><th>规则对象</th><th>倍数</th><th>开始日期</th><th>结束日期</th><th>备注</th></tr>"
         if len(rs2)>0:
             for rs in rs2:
                 html+="<tr>"

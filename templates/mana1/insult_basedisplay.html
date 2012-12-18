@@ -6,10 +6,34 @@
 <script type="text/javascript" src="/static/mana1/js/tablesorter_min.js"></script>
 <script type="text/javascript" src="/static/mana1/js/jquery.jeditable.js"></script>
 <script type="text/javascript" src="/static/mana1/js/htmltable2csv.js"></script>
+<script type="text/javascript" src="http://cl.gialen.com:20800/site_lib/DataTables-1.9.4/DataTables.min.js"></script>
+<script type="text/javascript" src="http://cl.gialen.com:20800/site_lib/zeroclipboard/ZeroClipboard.js"></script>
+<script type="text/javascript" src="/static/mana1/js/turn_off_light.js"></script>
+<script type="text/javascript" src="/static/mana1/js/clip.js"></script>
+<link href="/static/mana1/css/turn_off_light.css" rel="stylesheet" type="text/css" media="screen"/>
+<link href="/static/mana1/css/datatable.css" rel="stylesheet" type="text/css" media="screen"/>
 <link href="/static/mana1/css/tablecloth.css" rel="stylesheet" type="text/css" media="screen"/>
 <script>
 var i=1
 $(document).ready(function(){
+    oTable = $('#result').dataTable({
+        "fnDrawCallback": function( oSettings ) {
+          },
+        "oLanguage": {
+            "sSearch": "搜索:",
+            "sLengthMenu": '显示 <select>'+
+              '<option value="10">10</option>'+
+              '<option value="20">20</option>'+                  
+              '<option value="50">50</option>'+
+              '<option value="-1">All</option>'+
+              '</select> 条记录',
+            "sInfo": "当前显示的是从第 _START_ 到第 _END_ 条记录 (共 _TOTAL_ 条)",
+            "sInfoFiltered": " 　来源记录共 _MAX_ 条"
+          }
+    });
+
+    clip();
+
     $("#io").bind("click", function(){
          $("#edit_area").css("height","200");
          $("#tips").empty();
@@ -43,7 +67,7 @@ $(document).ready(function(){
 <input type="button" id="io" value="&nbsp;导&nbsp;出&nbsp;"/>
 <div id="edit_area" style="align=left">
 
-<table width="1000" id='result' class="tablesorter">
+<table width="100%" id='result' class="tablesorter">
 <thead><tr><th>门店代码</th><th>门店名称</th><th>商品代码</th><th>商品名称</th><th>基本陈列量</th></tr></thead>
 <tbody>
 {% for rs in result %}

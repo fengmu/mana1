@@ -7,24 +7,15 @@
 <script type="text/javascript" src="/static/mana1/js/jquery.jeditable.js"></script>
 <script type="text/javascript" src="/static/mana1/js/htmltable2csv.js"></script>
 <link href="/static/mana1/css/tablecloth.css" rel="stylesheet" type="text/css" media="screen"/>
+<script type="text/javascript" src="http://cl.gialen.com:20800/site_lib/zeroclipboard/ZeroClipboard.js"></script>
+<script type="text/javascript" src="/static/mana1/js/clip.js"></script>
 <script>
 var i=1
 $(document).ready(function(){
     $("#io").bind("click", function(){
-         $("#edit_area").css("height","200");
-         $("#tips").empty();
-         $("#edit_area").trigger('showedit', [{"Id":'y'}]);
-    });
 
-    $('#edit_area').editable('', {
-             type      : 'textarea',
-             indicator : '...',
-             data      : function(value, setting){
-                return $(value).table2CSV({separator: '\t',delivery:"value"});
-             },
-             cancel    : 'Ok',
-             event     : 'showedit'
     });
+    clip2()
 
     $("#result").tablesorter();
 });
@@ -40,7 +31,7 @@ $(document).ready(function(){
 <title>缺货商品查询</title>
 </head>
 <body><h1>缺货商品查询</h1>
-<input type="button" id="io" value="&nbsp;导&nbsp;出&nbsp;"/>
+<input type="button" id="io" value="&nbsp;复制&nbsp;"/>
 <div id="edit_area" style="align=left">
 
 <table width="96%" id='result' class="tablesorter">

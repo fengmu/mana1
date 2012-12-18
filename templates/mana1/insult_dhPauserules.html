@@ -7,28 +7,39 @@
 <script type="text/javascript" src="/static/mana1/js/jquery.jeditable.js"></script>
 <script type="text/javascript" src="/static/mana1/js/htmltable2csv.js"></script>
 <script type="text/javascript" src="http://cl.gialen.com:20800/site_lib/DataTables-1.9.4/DataTables.min.js"></script>
+<link href="/static/mana1/css/datatable.css" rel="stylesheet" type="text/css" media="screen"/>
 <script type="text/javascript" src="http://cl.gialen.com:20800/site_lib/zeroclipboard/ZeroClipboard.js"></script>
-<script type="text/javascript" src="/static/mana1/js/turn_off_light.js"></script>
 <script type="text/javascript" src="/static/mana1/js/clip.js"></script>
+<script type="text/javascript" src="/static/mana1/js/turn_off_light.js"></script>
 <link href="/static/mana1/css/turn_off_light.css" rel="stylesheet" type="text/css" media="screen"/>
 <link href="/static/mana1/css/tablecloth.css" rel="stylesheet" type="text/css" media="screen"/>
-<link href="/static/mana1/css/datatable.css" rel="stylesheet" type="text/css" media="screen"/>
 <script>
 var i=1
 $(document).ready(function(){
     oTable = $('#result').dataTable({
+        "bDestroy":true,
         "fnDrawCallback": function( oSettings ) {
           },
         "oLanguage": {
             "sSearch": "搜索:",
+            "sZeroRecords": "没有检索到数据",
             "sLengthMenu": '显示 <select>'+
               '<option value="10">10</option>'+
-              '<option value="20">20</option>'+                  
+              '<option value="20">20</option>'+
               '<option value="50">50</option>'+
               '<option value="-1">All</option>'+
               '</select> 条记录',
             "sInfo": "当前显示的是从第 _START_ 到第 _END_ 条记录 (共 _TOTAL_ 条)",
-            "sInfoFiltered": " 　来源记录共 _MAX_ 条"
+            "sInfoFiltered": " 　来源记录共 _MAX_ 条",
+            "sInfoEmtpy": "没有数据",
+            "sProcessing": "正在加载数据...",
+            "oPaginate":
+            {
+                "sFirst": "首页",
+                "sPrevious": "上一页",
+                "sNext": "下一页",
+                "sLast": "尾页"
+            }
           }
     });
     clip();
@@ -47,10 +58,6 @@ $(document).ready(function(){
 <title>商品暂停订货范围规则查询</title>
 </head>
 <body><h1>商品暂停订货范围规则查询</h1>
-<!-- 加载提示 -->
-<div id="shadowDiv" class="hidDiv"></div>
-<div id="tishi" class="hidDiv"><p align="center"><img src="/static/mana1/images/loading.gif"></img></p>正在加载数据!请稍后...</div>
-<!-- 加载提示 -->
 <input type="button" id="io" value="&nbsp;复制&nbsp;"/></ br>
 <div id="main" style="align=left" width="100%">
 <table id='result' class="tablesorter" width="100%">
