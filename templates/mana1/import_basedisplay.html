@@ -65,11 +65,13 @@ $(function() {
 <h1>基本陈列量设置</h1>
 <button id="save">保存</button>
 <button id="import">导入</button>
-<div id="edit_area" style="height:400;width:850;align=left">
-<table width="1000">
+<div id="edit_area" style="height:200px;width:850px;align=left">
+<table width="1000px">
     <tr><th>门店代码</th><th>门店名称</th><th>商品代码</th><th>商品名称</th><th>基本陈列量</th></tr>
 </table>
 </div>
+<table width="1000px" id="tips">
+    <tr><td><div id="title">说明：</div><ul><li>点击“导入”按钮，将表头复制到excel中，按表头准备好数据！</li><li>门店代码应为5位，商品代码应为8位，基本陈列量为数值。</li></td></tr>
 </table>
 </body>
 </html>

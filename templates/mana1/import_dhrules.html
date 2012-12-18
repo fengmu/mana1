@@ -66,13 +66,13 @@ $(function() {
 <h1>订货量修改规则配置</h1>
 <button id="sub">保存</button>
 <button id="import">导入</button>
-<div id="edit_area" style="height:400px;width:850px;align=left">
+<div id="edit_area" style="height:200px;width:850px;align=left">
 <table width="1200px">
     <tr><th>门店代码</th><th>门店名称</th><th>代码</th><th>名称</th><th>代码说明</th><th>规则对象</th><th>规则说明</th><th>规则值</th></tr>
 </table>
 </div>
 <table width="1200px" id="tips">
-    <tr><td><p align="left">说明：</p><p align="left">代码说明只能填写“商品代码”,“小类代码”,“中类代码”,“大类代码”或为空；规则对象只能填写“上阈值”,“下阈值”；规则说明只能填写“绝对值”,“相对值”；规则值应为数值。</p><p></p></td></tr>
+    <tr><td><div id="title">说明：</div><ul><li>代码说明只能填写“商品代码”,“小类代码”,“中类代码”,“大类代码”或为空；为空指对所有生效。</li><li>规则对象只能填写“上阈值”,“下阈值”。</li><li>规则说明只能填写“绝对值”,“相对值”。</li><li>规则值应为数值。</li></td></tr>
 </table>
 </body>
 </html>

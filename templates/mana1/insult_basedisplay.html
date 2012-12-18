@@ -17,39 +17,32 @@
 var i=1
 $(document).ready(function(){
     oTable = $('#result').dataTable({
+        "bDestroy":true,
         "fnDrawCallback": function( oSettings ) {
           },
         "oLanguage": {
             "sSearch": "搜索:",
+            "sZeroRecords": "没有检索到数据",
             "sLengthMenu": '显示 <select>'+
               '<option value="10">10</option>'+
-              '<option value="20">20</option>'+                  
+              '<option value="20">20</option>'+
               '<option value="50">50</option>'+
               '<option value="-1">All</option>'+
               '</select> 条记录',
             "sInfo": "当前显示的是从第 _START_ 到第 _END_ 条记录 (共 _TOTAL_ 条)",
-            "sInfoFiltered": " 　来源记录共 _MAX_ 条"
+            "sInfoFiltered": " 　来源记录共 _MAX_ 条",
+            "sInfoEmtpy": "没有数据",
+            "sProcessing": "正在加载数据...",
+            "oPaginate":
+            {
+                "sFirst": "首页",
+                "sPrevious": "上一页",
+                "sNext": "下一页",
+                "sLast": "尾页"
+            }
           }
     });
-
     clip();
-
-    $("#io").bind("click", function(){
-         $("#edit_area").css("height","200");
-         $("#tips").empty();
-         $("#edit_area").trigger('showedit', [{"Id":'y'}]);
-    });
-
-    $('#edit_area').editable('', {
-             type      : 'textarea',
-             indicator : '...',
-             data      : function(value, setting){
-                return $(value).table2CSV({separator: '\t',delivery:"value"});
-             },
-             cancel    : 'Ok',
-             event     : 'showedit'
-    });
-
     $("#result").tablesorter();
 });
 </script>
@@ -64,7 +57,7 @@ $(document).ready(function(){
 <title>基础陈列量查询</title>
 </head>
 <body><h1>基础陈列量查询</h1>
-<input type="button" id="io" value="&nbsp;导&nbsp;出&nbsp;"/>
+<input type="button" id="io" value="&nbsp;复制&nbsp;"/>
 <div id="edit_area" style="align=left">
 
 <table width="100%" id='result' class="tablesorter">

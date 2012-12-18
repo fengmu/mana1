@@ -30,3 +30,13 @@ td.selected, tr.even td.selected, tr.odd td.selected{background:#bce774;color:#5
 
 /* use this if you want to apply different styleing to empty table cells*/
 td.empty, tr.odd td.empty, tr.even td.empty{background:#fff;}
+
+#tips ul li{
+    text-align:left;
+    line-height:26px;
+}
+#title{
+    text-align:left;
+    font-size:26px;
+    font-weight:bold;
+}

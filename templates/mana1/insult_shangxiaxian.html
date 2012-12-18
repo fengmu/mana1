@@ -58,7 +58,7 @@ $(document).ready(function(){
 </head>
 <body><h1>查询按销售估算的上下限</h1>
 <form method="post" action="/mana1/insult_shangxiaxian/">
-请输入要查询的门店：<input type="text" id="mendian" name="mendian"/>&nbsp;<input type="submit" id="chaxun"  value="&nbsp;查询&nbsp;"/>&nbsp; <input type="button" id="io" value="&nbsp;复制&nbsp;"/>
+<span style="font-weight:bold;">请输入要查询的门店：</span></h3><input type="text" id="mendian" name="mendian"/>&nbsp;<input type="submit" id="chaxun"  value="&nbsp;查询&nbsp;"/>&nbsp; <input type="button" id="io" value="&nbsp;复制&nbsp;"/>
 <br /><br />
 <div id="edit_area" style="align=left">
 <table width="100%" id='result' class="tablesorter">
@@ -72,7 +72,9 @@ $(document).ready(function(){
 </form>
 <p></p>
 <table width="100%" id="tips">
-<tr><td><p align="left">提示：</p><p align="left">&nbsp;&nbsp;为空则显示所有结果(最多2万条记录）。门店代码商品代码支持多重查询，如要查询时代花园店和棠景店可在门店代码输：02001,02002 格式以英文逗号分隔。LW1指上周销售数量,LW2倒推两周销售数量,LW3倒推三周销售数量,LW4倒推四周销售数量。</p><p></p></td></tr>
+    <tr><td>
+            <div id="title">提示：</div>
+            <ul><li>可按门店代码或门店名称查询</li><li>LW1指上周销售数量,LW2倒推两周销售数量,LW3倒推三周销售数量,LW4倒推四周销售数量。</li></ul></td></tr>
 </table>
 </body>
 </html>
