@@ -12,9 +12,6 @@
 <script>
 var i=1
 $(document).ready(function(){
-    $("#io").bind("click", function(){
-
-    });
     clip2()
 
     $("#result").tablesorter();
@@ -31,17 +28,20 @@ $(document).ready(function(){
 <title>缺货商品查询</title>
 </head>
 <body><h1>缺货商品查询</h1>
-<input type="button" id="io" value="&nbsp;复制&nbsp;"/>
+<form action="/mana1/insult_quehuo/" method="POST">
+<span style="font-weight:bold;">请输入要查询的门店：</span><input type="text" name="mendian"/><input type="submit" id="sub" value="&nbsp;查询&nbsp;"/>&nbsp;<input type="button" id="io" value="&nbsp;复制&nbsp;"/>
+</form>
 <div id="edit_area" style="align=left">
-
 <table width="96%" id='result' class="tablesorter">
-    <thead><tr><th>门店代码</th><th>门店名称</th><th>条形码</th><th>商品代码</th><th>商品名称</th><th>商品大类</th><th>商品中类</th><th>商品小类</th><th>品牌小类</th><th>库存数量</th></tr></thead><tbody>
+<thead><tr><th>门店代码</th><th>门店名称</th><th>条形码</th><th>商品代码</th><th>商品名称</th><th>商品大类</th><th>商品中类</th><th>商品小类</th><th>品牌小类</th><th>库存数量</th></tr></thead><tbody>
 {% for rs in result %}
-    <tr><td>{{rs.0}}</td><td>{{rs.1}}</td><td>{{rs.2}}</td><td>{{rs.3}}</td><td>{{rs.4}}</td><td>{{rs.5}}</td><td>{{rs.6}}</td><td>{{rs.7}}</td><td>{{rs.8}}</td><td>{{rs.9}}</td></tr>
+<tr><td>{{rs.0}}</td><td>{{rs.1}}</td><td>{{rs.2}}</td><td>{{rs.3}}</td><td>{{rs.4}}</td><td>{{rs.5}}</td><td>{{rs.6}}</td><td>{{rs.7}}</td><td>{{rs.8}}</td><td>{{rs.9}}</td></tr>
 {% endfor %}
 </tbody>
 </table>
 </div>
-<p></p>
+<table width="96%" id="tips">
+    <tr><td><div id="title">说明：</div><ul><li>可输入门店代码门店名称查询。</li></ul></td></tr>
+</table>
 </body>
 </html>

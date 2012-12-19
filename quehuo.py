@@ -21,10 +21,15 @@ import datetime
 confsql=confsql.Confsql()
 def insult_quehuo(request):
     """ 缺货查询 """
-    t=get_template('mana1/insult_quehuo.html')
-    sqlstr="select mdcode,mdname,barcode,spcode,spname,prodl_id||'_'||prodl as prodl,prozl_id||'_'||prozl as prozl,proxl_id||'_'||proxl as proxl,braxl_id||'_'||braxl as braxl,curqty from dhalldata where assortment='youtu' and curqty<0"
-    result=confsql.runquery(sqlstr)
-    log(result)
-    html=t.render(Context({'result':result}))
-    return HttpResponse(html)
+    if request.method=="POST":
+        mendian=request.POST['mendian']
+        t=get_template('mana1/insult_quehuo.html')
+        sqlstr="select mdcode,mdname,barcode,spcode,spname,prodl_id||'_'||prodl as prodl,prozl_id||'_'||prozl as prozl,proxl_id||'_'||proxl as proxl,braxl_id||'_'||braxl as braxl,curqty from dhalldata where assortment='youtu' and curqty<=0 and (mdcode like '%"+mendian+"%' or mdname like '%"+mendian+"%')"
+        result=confsql.runquery(sqlstr)
+        html=t.render(Context({'result':result}))
+        return HttpResponse(html)
+    else:
+        t=get_template('mana1/insult_quehuo.html')
+        html=t.render(Context())
+        return HttpResponse(html)
 

@@ -7,42 +7,108 @@
 <script type="text/javascript" src="/static/mana1/js/jquery.jeditable.js"></script>
 <script type="text/javascript" src="/static/mana1/js/htmltable2csv.js"></script>
 <link href="/static/mana1/css/tablecloth.css" rel="stylesheet" type="text/css" media="screen"/>
-<script type="text/javascript" src="http://cl.gialen.com:20800/site_lib/DataTables-1.9.4/DataTables.min.js"></script>
-<link href="/static/mana1/css/datatable.css" rel="stylesheet" type="text/css" media="screen"/>
-<script type="text/javascript" src="http://cl.gialen.com:20800/site_lib/zeroclipboard/ZeroClipboard.js"></script>
-<script type="text/javascript" src="/static/mana1/js/clip.js"></script>
 <script>
 var i=1
 $(document).ready(function(){
-    oTable = $('#result').dataTable({
-        "bDestroy":true,
-        "fnDrawCallback": function( oSettings ) {
-          },
-        "oLanguage": {
-            "sSearch": "搜索:",
-            "sZeroRecords": "没有检索到数据",
-            "sLengthMenu": '显示 <select>'+
-              '<option value="10">10</option>'+
-              '<option value="20">20</option>'+
-              '<option value="50">50</option>'+
-              '<option value="-1">All</option>'+
-              '</select> 条记录',
-            "sInfo": "当前显示的是从第 _START_ 到第 _END_ 条记录 (共 _TOTAL_ 条)",
-            "sInfoFiltered": " 　来源记录共 _MAX_ 条",
-            "sInfoEmtpy": "没有数据",
-            "sProcessing": "正在加载数据...",
-            "oPaginate":
-            {
-                "sFirst": "首页",
-                "sPrevious": "上一页",
-                "sNext": "下一页",
-                "sLast": "尾页"
-            }
-          }
+    $("#sub").bind('click',function(){
+        postdata("sub");
     });
-    clip();
-    $("#result").tablesorter();
+    $("#juji").bind('click',function(){
+        postdata("juji");
+    });
+    $("#io").bind("click", function(){
+         $("#edit_area").css("height","200");
+         $("#tips").empty();
+         $("#edit_area").trigger('showedit', [{"Id":'y'}]);
+    });
+    
+    $('#edit_area').editable('', {
+             type      : 'textarea',
+             indicator : '...',
+             data      : function(value, setting){
+                return $(value).table2CSV({separator: '\t',delivery:"value"});
+             },
+             cancel    : 'Cancel',
+             event     : 'showedit',
+             submit    : 'OK'
+    });
 });
+
+function postdata(ty){                              //提交数据函数
+    var myobj=new Object();
+    myobj={}
+    myobj["spcode"]=$("#text1").val();
+    myobj["spname"]=$("#text2").val();
+    myobj["mdcode"]=$("#text3").val();
+    myobj["mdname"]=$("#text4").val();
+
+    var jsonlist=JSON.stringify(myobj);
+
+    $.ajax({ //调用jquery的ajax方法
+          type: "POST", //设置ajax方法提交数据的形式
+          url: "/mana1/insult_sugvalue/", //把数据提交到
+          data: "jsonlist="+jsonlist+"&ty="+ty, //输入框中的值作为提交的数据
+          success: function(msg){ //提交成功后的回调，msg变量是输出的内容。
+          //alert("数据提交成功"); //如果有必要，可以把msg变量的值显示到某个DIV元素中
+          if(msg!="[]"){
+                json=JSON.parse(msg);
+                var str="";
+                var row=0;
+                var myobj2={}
+                if (json[0]["商品代码"]){
+                    str+="<th>商品代码</th>"
+                }
+                if (json[0]["商品名称"]){
+                    str+="<th>商品名称</th>"
+                }
+                if (json[0]["门店代码"]){
+                    str+="<th>门店代码</th>"
+                }
+                if (json[0]["门店名称"]){
+                    str+="<th>门店名称</th>"
+                }
+                if (json[0]["建议配货量"]){
+                    str+="<th>建议配货量</th>"
+                }
+                if (json[0]["配货总金额"]){
+                    str+="<th>配货总金额</th>"
+                }
+                str="<thead><tr>"+str+"</tr></thead><tbody>"
+                for(var i=0;i<json.length;i++)
+                {
+                    str+="<tr>"
+                    if (json[i]["商品代码"]){
+                        str+="<td>"+json[i]["商品代码"]+"</td>"
+                    }
+                    if (json[i]["商品名称"]){
+                        str+="<td>"+json[i]["商品名称"]+"</td>"
+                    }
+                    if (json[i]["门店代码"]){
+                        str+="<td>"+json[i]["门店代码"]+"</td>"
+                    }
+                    if (json[i]["门店名称"]){
+                        str+="<td>"+json[i]["门店名称"]+"</td>"
+                    }
+                    if (json[i]["建议配货量"]){
+                        str+="<td>"+json[i]["建议配货量"]+"</td>"
+                    }
+                    if (json[i]["配货总金额"]){
+                        str+="<td>"+json[i]["配货总金额"]+"</td>"
+                    }
+                    str+="</tr>"
+                }
+                str+="</tbody>"
+                $("#result").html(str)
+                $("#result").tablesorter();
+          }
+          else
+          {
+              $("#result").html("")
+          }
+        }
+    });
+}
+
 </script>
 <style>
     .chaxun tr td{
@@ -52,22 +118,28 @@ $(document).ready(function(){
         border: 1px solid #E5F1F4;
     }
 </style>
-<title>配货量建议值查询</title>
+<title>建议订货明细查询</title>
 </head>
-<body><h1>配货量建议值查询</h1>
-<input type="button" id="io" value="&nbsp;复制&nbsp;"/></ br>
+<body><h1>建议订货明细查询</h1>
+    <table width="100%" class='chaxun'>
+        <tr><th colspan="8">请输入查询条件:</th></tr>
+        <tr>
+            <td>商品代码</td><td><input type='text' id='text1'/></td>
+            <td>商品名称</td><td><input type='text' id='text2'/></td>
+            <td>门店代码</td><td><input type='text' id='text3'/></td>
+            <td>门店名称</td><td><input type='text' id='text4'/></td>
+        </tr>
+        <tr>
+            <td colspan=8><input type="button" id="sub" value="&nbsp;查&nbsp;询&nbsp;"/>&nbsp;<input type="button" id="juji" value="&nbsp;聚&nbsp;集&nbsp;"/>&nbsp;<input type="button" id="io" value="&nbsp;导&nbsp;出&nbsp;"/></td>
+        </tr>
+    </table>
 <div id="edit_area" style="align=left">
 <table width="100%" id='result' class="tablesorter">
-<thead><tr><th>门店代码</th><th>门店名称</th><th>商品代码</th><th>商品名称</th><th>建议配货量</th><th>建议配货总金额</th></tr></thead><tbody>
-{% for rs in result %}
-<tr><td>{{ rs.braid }}</td><td>{{ rs.braname }}</td><td>{{ rs.proid}}</td><td>{{ rs.proname}}</td><td>{{ rs.suggest}}</td><td>{{ rs.suggestcost}}</td></tr>
-{% endfor %}
-</tbody>
 </table>
 </div>
 <p></p>
 <table width="100%" id="tips">
-    <tr><td><div id="title">提示：</div><ul><li>为空则显示所有结果。门店代码商品代码支持多重查询，以英文逗号分隔,例如：02001,02002 。</li></ul></td></tr>
+    <tr><td><div id="title">提示：</div><ul><li>为空则显示所有结果。门店代码商品代码支持多重查询，以英文逗号分隔,例如：02001,02002 。</li><li>点击聚集可按所填条件自动聚集查询结果。</li></ul></td></tr>
 </table>
 </body>
 </html>
