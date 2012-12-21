@@ -13,21 +13,21 @@
 '''
 from django.conf.urls.defaults import *
 urlpatterns = patterns('',
-    url(r'^insult_maxmin/$','mana1.maxmin.insult_maxmin'),  #上下限
-    url(r'^import_maxmin/$','mana1.maxmin.import_maxmin'),
-    url(r'^save_maxmin/$','mana1.maxmin.save_maxmin'),
-    url(r'^backup_maxmin/$','mana1.maxmin.backup_maxmin'),
+    url(r'^insult_maxmin/','mana1.maxmin.insult_maxmin'),  #上下限
+    url(r'^import_maxmin/','mana1.maxmin.import_maxmin'),
+    url(r'^save_maxmin/','mana1.maxmin.save_maxmin'),
+    url(r'^backup_maxmin/','mana1.maxmin.backup_maxmin'),
     
     url(r'^insult_shangxiaxian/','mana1.shangxiaxian.insult_shangxiaxian'), #计算新的上下限
-    url(r'^checkAdvMaxMin/$','mana1.checkAdvMaxMin.checkAdvMaxMin'),    
-    url(r'^save_checkadvmaxmin/$', 'mana1.checkAdvMaxMin.save_checkAdvMaxMin'),
-    url(r'^insult_checkAdvMaxMin/$','mana1.checkAdvMaxMin.insult_checkAdvMaxMin'),
+    url(r'^checkAdvMaxMin/','mana1.checkAdvMaxMin.checkAdvMaxMin'),    
+    url(r'^save_checkadvmaxmin/', 'mana1.checkAdvMaxMin.save_checkAdvMaxMin'),
+    url(r'^insult_checkAdvMaxMin/','mana1.checkAdvMaxMin.insult_checkAdvMaxMin'),
 
-    url(r'^insult_delivery/$','mana1.delivery.insult_delivery'), #配送日
-    url(r'^import_delivery/$','mana1.delivery.import_delivery'),
-    url(r'^delete_delivery/$','mana1.delivery.delete_delivery'),
-    url(r'^save_delivery/$','mana1.delivery.save_delivery'),
-    url(r'^deleteData_delivery/$','mana1.delivery.deleteData_delivery'),
+    url(r'^insult_delivery/','mana1.delivery.insult_delivery'), #配送日
+    url(r'^import_delivery/','mana1.delivery.import_delivery'),
+    url(r'^delete_delivery/','mana1.delivery.delete_delivery'),
+    url(r'^save_delivery/','mana1.delivery.save_delivery'),
+    url(r'^deleteData_delivery/','mana1.delivery.deleteData_delivery'),
 
     url(r'^insult_product_gl_packetqty_rules/','mana1.product_gl_packetqty_rules.insult_product_gl_packetqty_rules'), #商品配送单位规则查询界面
     url(r'^import_product_gl_packetqty_rules/','mana1.product_gl_packetqty_rules.import_product_gl_packetqty_rules'), #商品配送单位规则导入
@@ -49,11 +49,11 @@ urlpatterns = patterns('',
     url(r'^delete_dhPauserules/','mana1.dhPauserules.delete_dhPauserules'), 
     url(r'^deleteData_dhPauserules/','mana1.dhPauserules.deleteData_dhPauserules'), 
     
-    url(r'^insult_sugvalue/$','mana1.sugvalue.insult_sugvalue'),    
-    url(r'^tranedit/$', 'mana1.tranedit.tranedit'),
-    url(r'^rewrite/$', 'mana1.rewrite.rewrite'),                      #自动补货检查
-    url(r'^rewrite_verify/$', 'mana1.rewrite_verify.rewrite_verify'), #审核重写
-    url(r'^cleanmc_verify/$', 'mana1.cleanmc_verify.cleanmc_verify'), #审核重写
+    url(r'^insult_sugvalue/','mana1.sugvalue.insult_sugvalue'),    
+    url(r'^tranedit/', 'mana1.tranedit.tranedit'),
+    url(r'^rewrite/', 'mana1.rewrite.rewrite'),                      #自动补货检查
+    url(r'^rewrite_verify/', 'mana1.rewrite_verify.rewrite_verify'), #审核重写
+    url(r'^cleanmc_verify/', 'mana1.cleanmc_verify.cleanmc_verify'), #审核重写
     
     url(r'^insult_quantou/','mana1.quantou.insult_quantou'), #上下限计算规则中的拳头商品设置
     url(r'^import_quantou/','mana1.quantou.import_quantou'), 
@@ -89,4 +89,10 @@ urlpatterns = patterns('',
     url(r'^deleteData_dhrulesYuzhi/','mana1.dhrulesYuzhi.deleteData_dhrulesYuzhi'), #商品最大最小上下限规则删除
 
     url(r'^insult_quehuo/','mana1.quehuo.insult_quehuo'), #缺货商品查询
+
+    url(r'^insult_sku/','mana1.sku.insult_sku'), #配送日
+    url(r'^import_sku/','mana1.sku.import_sku'),
+    url(r'^delete_sku/','mana1.sku.delete_sku'),
+    url(r'^save_sku/','mana1.sku.save_sku'),
+    url(r'^deleteData_sku/','mana1.sku.deleteData_sku'),
 )

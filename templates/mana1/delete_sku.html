@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf8">
+<script type="text/javascript" src="/static/mana1/js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="/static/mana1/js/jquery.jeditable.js"></script>
+<script type="text/javascript" src="/static/mana1/js/htmltable2csv.js"></script>
+<link href="/static/mana1/css/tablecloth.css" rel="stylesheet" type="text/css" media="screen"/>
+<script type="text/javascript" src="/static/mana1/js/turn_off_light.js"></script>
+<link href="/static/mana1/css/turn_off_light.css" rel="stylesheet" type="text/css" media="screen"/>
+<script>
+$(function() {
+    $("#import").bind('click',function(){
+        $("#edit_area").css("height","200");
+        $("#tips").empty();
+        $("#edit_area").trigger('showedit', [{"Id":'y'}])
+    });
+
+    $('#edit_area').editable('/mana1/delete_sku/', {
+        type      : 'textarea',
+        indicator : 'Saving...',
+        data      : function(value, setting){
+           return $(value).table2CSV({separator: '\t',delivery:"value"});
+        },
+        cancel    : 'Cancel',
+        event     : 'showedit',
+        submit    : 'OK'
+    });
+
+    $("#save").bind('click',function(){
+        turn_off_light()
+        var myobj=new Object();
+        myobj={}
+        myobj["table"]=$("#edit_area").table2CSV({separator: '\t',delivery:"table"})
+        var myjson=JSON.stringify(myobj);
+        $.ajax({
+            type:"POST",
+            url:"/mana1/deleteData_sku/",
+            data:"myjson="+myjson,
+            success: function(msg){
+                json=JSON.parse(msg);
+                str="<table width='800'><tr><th>门店代码</th><th>门店名称</th><th>店面面积</th></tr>"
+                for(var i=0;i<json.length;i++)
+                {
+                    str+="<tr><td>"+json[i].braid+"</td><td>"+json[i].braname+"</td><td>"+json[i].mianji+"</td>";
+                    if (json[i].info=="删除成功!")
+                    str+="<td>"+json[i].info+"</td></tr>";
+                    else
+                    str+="<td style='background-color:yellow;'>"+json[i].info+"</td></tr>";
+
+                }
+                str+="</table>"
+                $("#edit_area").html(str)
+                turn_on_light()
+            }
+        });
+    });
+});
+</script>
+<title>sku新增门店信息删除</title>
+</head>
+<body>
+<h1>sku新增门店信息删除</h1>
+<button id="save">提交</button>
+<button id="import">导入</button>
+<div id="edit_area" style="height:200;align=left">
+<table width="800">
+    <tr><th>门店代码</th><th>门店名称</th><th>店面面积</th></tr>
+</table>
+</div>
+</table>
+</body>
+</html>

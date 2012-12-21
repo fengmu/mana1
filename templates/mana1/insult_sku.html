@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf8">
+<script type="text/javascript" src="/static/mana1/js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="/static/mana1/js/tablesorter_min.js"></script>
+<script type="text/javascript" src="/static/mana1/js/jquery.jeditable.js"></script>
+<script type="text/javascript" src="/static/mana1/js/htmltable2csv.js"></script>
+<link href="/static/mana1/css/tablecloth.css" rel="stylesheet" type="text/css" media="screen"/>
+<script type="text/javascript" src="http://cl.gialen.com:20800/site_lib/zeroclipboard/ZeroClipboard.js"></script>
+<script type="text/javascript" src="/static/mana1/js/clip.js"></script>
+<script>
+var i=1
+$(document).ready(function(){
+    clip2()
+
+    $("#result").tablesorter();
+});
+</script>
+<style>
+    .chaxun tr td{
+        border: 1px solid #E5F1F4;
+    }
+    .chaxun tr th{
+        border: 1px solid #E5F1F4;
+    }
+</style>
+<title>sku数查询</title>
+</head>
+<body><h1>sku数查询</h1>
+<form action="/mana1/insult_sku/" method="POST">
+<span style="font-weight:bold;">请输入要查询的月度(yyyymm)：</span><input type="text" name="yuedu"/><input type="submit" id="sub" value="&nbsp;查询&nbsp;"/>&nbsp;<input type="button" id="io" value="&nbsp;复制&nbsp;"/>
+</form>
+<div id="edit_area" style="align=left">
+<table width="96%" id='result' class="tablesorter">
+<thead><tr><th>门店代码</th><th>门店名称</th><th>店面面积</th><th>sku总数</th><th>流通品牌</th><th>自有品牌</th><th>彩妆l</th><th>彩妆z</th><th>护肤l</th><th>护肤z</th><th>化妆工具l</th><th>化妆工具z</th><th>美发护理l</th><th>美发护理z</th><th>男士护理l</th><th>男士护理z</th><th>日用品l</th><th>日用品z</th><th>身体护理l</th><th>身体护理z</th><th>婴童护理l</th><th>婴童护理z</th><th>食品l</th><th>食品z</th></tr></thead><tbody>
+{% for rs in result %}
+<tr><td>{{rs.0}}</td><td>{{rs.1}}</td><td>{{rs.2}}</td><td>{{rs.3}}</td><td>{{rs.4}}</td><td>{{rs.5}}</td><td>{{rs.6}}</td><td>{{rs.7}}</td><td>{{rs.8}}</td><td>{{rs.9}}</td><td>{{rs.10}}</td><td>{{rs.11}}</td><td>{{rs.12}}</td><td>{{rs.13}}</td><td>{{rs.14}}</td><td>{{rs.15}}</td><td>{{rs.16}}</td><td>{{rs.17}}</td><td>{{rs.18}}</td><td>{{rs.19}}</td><td>{{rs.20}}</td><td>{{rs.21}}</td><td>{{rs.22}}</td><td>{{rs.23}}</td></tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+<table width="96%" id="tips">
+    <tr><td><div id="title">说明：</div><ul><li>输入月份，如：201211，点击查询。</li></ul></td></tr>
+</table>
+</body>
+</html>
