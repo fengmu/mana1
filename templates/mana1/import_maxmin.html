@@ -66,10 +66,10 @@ $(function() {
             data:"myjson="+myjson,
             success: function(msg){
                 json=JSON.parse(msg);
-                str="<table width='80%'><tr><th>门店代码</th><th>门店名称</th><th>商品代码</th><th>商品名称</th><th>上限</th><th>下限</th><th>导入情况</th></tr>"
+                str="<table width='80%'><tr><th>门店代码</th><th>门店名称</th><th>商品代码</th><th>商品名称</th><th>上限</th><th>下限</th><th>属性</th></tr>"
                 for(var i=0;i<json.length;i++)
                 {
-                    str+="<tr><td>"+json[i].braid+"</td><td>"+json[i].braname+"</td><td>"+json[i].proid+"</td><td>"+json[i].proname+"</td><td>"+json[i].maxval+"</td><td>"+json[i].minval+"</td>"
+str+="<tr><td>"+json[i].braid+"</td><td>"+json[i].braname+"</td><td>"+json[i].proid+"</td><td>"+json[i].proname+"</td><td>"+json[i].maxval+"</td><td>"+json[i].minval+"</td><td>"+json[i].feature+"</td>"
                     if (json[i].info=="插入成功!")
                     str+="<td>"+json[i].info+"</td></tr>";
                     else
@@ -109,9 +109,16 @@ $(function() {
 </span>
 <div id="edit_area" style="height:400;width:850;align=left">
 <table width="80%">
-    <tr><th>门店代码</th><th>门店名称</th><th>商品代码</th><th>商品名称</th><th>上限</th><th>下限</th></tr>
+    <tr><th>门店代码</th><th>门店名称</th><th>商品代码</th><th>商品名称</th><th>上限</th><th>下限</th><th>属性</th></tr>
 </table>
 </div>
+</table>
+<table width="96%" id="tips">
+    <tr><td>
+            <div id="title">提示：</div>
+            <ul><li>属性中N为新品，T为生效，F为失效，并且属性只能填N、T、F。默认为T</li>
+            </ul>
+    </td></tr>
 </table>
 </body>
 </html>

@@ -356,6 +356,8 @@ def cuxiao(conn,cur):
     except:
         log("更新促销商品失败！")
 
+
+
 def yuanzheng(conn,cur):
     #上下限圆整
     try:

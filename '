@@ -55,9 +55,12 @@ dataserver = {"host":"localhost",
               "pwd": "zj",
               "database":"yq3"}
 
+
+
+ 
 def main():
     conn = psycopg2.connect(host=dataserver["host"], port=dataserver["port"],user=dataserver["user"],password=dataserver["pwd"],database=dataserver["database"])
-    cur = conn.cursor()
+    cur = conn.cursor(cursor_factory=LoggingCursor)
     doclean = [ cleantable(conn, cur, table) for table in tables]    
     doimport = [importdata(conn, cur, file) for file in yqfiles]
     
@@ -69,13 +72,10 @@ def main():
     
     setTodayDeliveryMd(conn, cur)
     print " setTodayDeliveryMd "+str(time.asctime())
-
+    
     setTodayMaxMin(conn, cur)
     print " setTodayMaxMin "+str(time.asctime())
     
-    setFixedMaxMin(conn,cur)
-    print " setFixedMaxMin "+str(time.asctime())
-
     setSugvalue(conn, cur)
     print " setSugvalue "+str(time.asctime())
     
@@ -93,6 +93,28 @@ def main():
     
     setTodayPmt(conn, cur)
     print " setTodayPmt "+str(time.asctime())
+    
+
+   
+    
+    
+    
+    
+   
+    
+    
+class LoggingCursor(psycopg2.extensions.cursor):
+    def execute(self, sql, args=None):
+        #logger = logging.getLogger('sql_debug')
+        #logger.info(self.mogrify(sql, args))
+
+        try:
+            psycopg2.extensions.cursor.execute(self, sql, args)
+        except Exception, exc:
+            #logger.error("%s: %s" % (exc.__class__.__name__, exc))
+            raise
+    
+
 
 def cleantable(conn, cur, table):
     try:
@@ -125,18 +147,9 @@ def importdata(conn, cur, file):
 def setTodayMaxMin(conn, cur):
     """本日有效的上下限,B版本优先"""
     today = datetime.datetime.now().strftime('%Y-%m-%d')
-    back28=datetime.datetime.strftime(datetime.datetime.now()-datetime.timedelta(days=28), "%Y-%m-%d") #倒推28天
+    
     sqlstr = "delete from maxminval_temp;"
-    cur.execute(sqlstr)
-    conn.commit()
-
-    sqlstr=" update maxmin"
-    sqlstr+=" set feature='F'"
-    sqlstr+=" where adddate<"+back28
-    cur.execute(sqlstr)
-    conn.commit()
-
-    sqlstr=" insert into maxminval_temp"
+    sqlstr+=" insert into maxminval_temp"
     sqlstr+=" select braid,proid,maxval,minval from maxmin "
     sqlstr+=" where banben ='A'"
     sqlstr+="    and proid||braid not in("
@@ -152,16 +165,17 @@ def setTodayMaxMin(conn, cur):
     sqlstr+="     and startdate<='"+today+"'"
     sqlstr+="     and '"+today+"'<enddate"
     sqlstr+="     and feature<>'F'"
+   
     cur.execute(sqlstr)
     conn.commit()
-
+    
 def setFixedMaxMin(conn,cur):
     """固定上下限名单"""
     #上下限范围波动上下30%以内的维持不变
     sqlstr="""
     update xiaoshou28_maxmin
     set maxval=oldmaxval
-    where maxval/oldmaxval<0.3 or oldmaxval/maxval<0.3
+    where maxval/oldmaxval<30% or oldmaxval/maxval<30%
     """
     cur.execute(sqlstr)
     conn.commit()
@@ -169,7 +183,7 @@ def setFixedMaxMin(conn,cur):
     sqlstr="""
     update xiaoshou28_maxmin
     set minval=oldminval
-    where minval/oldminval<0.3 or oldminval/minval<0.3
+    where minval/oldminval<30% or oldminval/minval<30%
     """
     cur.execute(sqlstr)
     conn.commit()
@@ -179,12 +193,12 @@ def setFixedMaxMin(conn,cur):
     update xiaoshou28_maxmin
     set maxval=t2.maxval,minval=t2.minval
     from maxminval_temp t2
-    where xiaoshou28_maxmin.braid=t2.braid
-    and xiaoshou28_maxmin.proid=t2.proid
+    where xiaoshou28_maxmin.braid=t2.mdcode
+    and xiaoshou28_maxmin.proid=t2.spcode
     """
     cur.execute(sqlstr)
     conn.commit()
-
+    
     sqlstr="""
     insert into maxminval
     select mdcode,spcode,maxval,minval
@@ -197,8 +211,9 @@ def setFixedMaxMin(conn,cur):
     sqlstr="""
     insert into maxminval
     select t1.* 
-    from maxminval_temp t1
-    where t1.braid||t1.proid not in (select braid||proid from xiaoshou28_maxmin)
+    from maxminval_temp t1,xiaoshou28_maxmin t2
+    where t1.braid not in t2.mdcode
+    and t1.proid not in t2.spcode
     """
     cur.execute(sqlstr)
     conn.commit()

@@ -53,6 +53,7 @@ CREATE TABLE maxmin
   banben character varying(4),
   startdate character varying(20),
   enddate character varying(20),
+  feature character varying(20),
   adddate character varying(20)
 )
 WITH (
@@ -73,6 +74,15 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE maxminval OWNER TO postgres;
+
+drop table if exists maxminval_temp;
+CREATE TABLE maxminval_temp
+(
+  braid character varying(100),
+  proid character varying(100),
+  maxval numeric(12,0),
+  minval numeric(12,0)
+);
 
 -- 配送建议值表
 CREATE TABLE sugvalue

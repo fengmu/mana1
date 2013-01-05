@@ -30,10 +30,10 @@ def import_maxmin(request):
         '''暂存数据 初步检查'''
         try:
             value=request.POST['value']
-            rs1=trim_csv(value,itemlenth=6) #去除行尾多余换行符 rs1存放初始值
-            rs2,rs1=verifyData(rs1,length=6,required=[4],maxmin=1)
+            rs1=trim_csv(value,itemlenth=7) #去除行尾多余换行符 rs1存放初始值
+            rs2,rs1=verifyData(rs1,length=7,required=[4],maxmin=1)
 
-            html=u"<table width='1000'><tr><th>门店代码</th><th>门店名称</th><th>商品代码</th><th>商品名称</th><th>上限</th><th>下限</th><th></th></tr>"
+            html=u"<table width='1000'><tr><th>门店代码</th><th>门店名称</th><th>商品代码</th><th>商品名称</th><th>上限</th><th>下限</th><th>属性</th></tr>"
             if len(rs2)>0:
                 for rs in rs2:
                     html+="<tr>"
@@ -43,7 +43,8 @@ def import_maxmin(request):
                     html+="<td>" + rs[3] + "</td>"
                     html+="<td>" + rs[4] + "</td>"
                     html+="<td>" + rs[5] + "</td>"
-                    html+="<td style='background-color:yellow'>" + rs[6] + "</td>"
+                    html+="<td>" + rs[6] + "</td>"
+                    html+="<td style='background-color:yellow'>" + rs[7] + "</td>"
                     html+="</tr>"
             if len(rs1)>0:
                 for rs in rs1:
@@ -54,6 +55,7 @@ def import_maxmin(request):
                     html+="<td>" + rs[3] + "</td>"
                     html+="<td>" + rs[4] + "</td>"
                     html+="<td>" + rs[5] + "</td>"
+                    html+="<td>" + rs[6] + "</td>"
                     html+="<td></td>"
                     html+="</tr>"
             html+="</table>"
@@ -72,7 +74,7 @@ def insult_maxmin(request):
             jlist=simplejson.loads(request.POST["jsonlist"])
 
             if jlist['proid']<>'' or jlist['proname']<>'' or jlist['braid']<>'' or jlist['braname']<>''  or jlist['banben']<>'' or jlist['prodl']<>'' or jlist['prozl']<>'' or jlist['proxl']<>'' or jlist['barcode']<>'': #不全为空,即按单个或多个条件查询
-                sqlstr="select * from (select t1.braid,t2.braname,t3.barcode,t1.proid,t3.proname,t1.maxval,t1.minval,t1.banben,t1.startdate,t1.enddate,t1.adddate ,t3.prodl_id||'_'||t3.prodl as prodl, t3.prozl_id||'_'||t3.prozl as prozl, t3.proxl_id||'_'||t3.proxl as proxl from maxmin t1 left outer join branch t2 on t1.braid=t2.braid left outer join product_all t3 on t1.proid=t3.proid) t1 where "
+                sqlstr="select * from (select t1.braid,t2.braname,t3.barcode,t1.proid,t3.proname,t1.maxval,t1.minval,t1.banben,t1.startdate,t1.enddate,t1.adddate ,t3.prodl_id||'_'||t3.prodl as prodl, t3.prozl_id||'_'||t3.prozl as prozl, t3.proxl_id||'_'||t3.proxl as proxl,feature from maxmin t1 left outer join branch t2 on t1.braid=t2.braid left outer join product_all t3 on t1.proid=t3.proid) t1 where "
                 for j in jlist:
                     if jlist[j]<>'':
                         li=jlist[j].split(",")
@@ -104,11 +106,12 @@ def insult_maxmin(request):
                     res['prodl'] = rs[11]
                     res['prozl'] = rs[12]
                     res['proxl'] = rs[13]
+                    res['feature'] = rs[14]
                     result.append(res)
                 jsonres=simplejson.dumps(result)
                 return  HttpResponse(jsonres)
             else: #全为空，查询所有
-                sqlstr="select t1.braid,t2.braname,t3.barcode,t1.proid,t3.proname,t1.maxval,t1.minval,t1.banben,t1.startdate,t1.enddate,t1.adddate,t3.prodl_id||'_'||t3.prodl as prodl, t3.prozl_id||'_'||t3.prozl as prozl, t3.proxl_id||'_'||t3.proxl as proxl from maxmin t1 left outer join branch t2 on t1.braid=t2.braid left outer join product_all t3 on t1.proid=t3.proid limit 20000"
+                sqlstr="select t1.braid,t2.braname,t3.barcode,t1.proid,t3.proname,t1.maxval,t1.minval,t1.banben,t1.startdate,t1.enddate,t1.adddate,t3.prodl_id||'_'||t3.prodl as prodl, t3.prozl_id||'_'||t3.prozl as prozl, t3.proxl_id||'_'||t3.proxl as proxl,feature from maxmin t1 left outer join branch t2 on t1.braid=t2.braid left outer join product_all t3 on t1.proid=t3.proid limit 20000"
                 lines=confsql.runquery(sqlstr)
                 result=[] #存放初始表头
                 for rs in lines:
@@ -127,6 +130,7 @@ def insult_maxmin(request):
                     res['prodl'] = rs[11]
                     res['prozl'] = rs[12]
                     res['proxl'] = rs[13]
+                    res['feature'] = rs[14]
                     result.append(res)
                 jsonres=simplejson.dumps(result)
                 log(jsonres)
@@ -151,16 +155,16 @@ def save_maxmin(request):
         #插入数据库
         sqlstr=""
         for rs in rs1:
-            if rs[6]=='':
+            if rs[7]=='':
                 sqlstr+="delete from maxmin where braid ='" + rs[0] + "' and proid='" + rs[2] + "' and banben='" + banben + "';"
         if sqlstr<>"":
             confsql.runSql(sqlstr)  #数据库
         sqlstr=""
         for rs in rs1:
-            if rs[6]=='':
+            if rs[7]=='':
                 adddate=datetime.datetime.now().strftime('%Y-%m-%d') #最后追加插入日期
-                sqlstr+="insert into maxmin(braid,proid,maxval,minval,banben,startdate,enddate,adddate) values('"+rs[0]+"','"+rs[2]+"','"+rs[4]+"','"+rs[5]+"','"+banben+"','"+startdate+"','"+enddate+"','"+adddate+"');"
-                rs[6]='插入成功!'
+                sqlstr+="insert into maxmin(braid,proid,maxval,minval,banben,startdate,enddate,feature,adddate) values('"+rs[0]+"','"+rs[2]+"','"+rs[4]+"','"+rs[5]+"','"+banben+"','"+startdate+"','"+enddate+"','"+rs[6]+"','"+adddate+"');"
+                rs[7]='插入成功!'
                 res={}
                 res['braid']=rs[0]
                 res['braname']=rs[1]
@@ -168,7 +172,8 @@ def save_maxmin(request):
                 res['proname']=rs[3]
                 res['maxval']=rs[4]
                 res['minval']=rs[5]
-                res['info']=rs[6]
+                res['feature']=rs[6]
+                res['info']=rs[7]
                 result.append(res)
             else:
                 res={}
@@ -178,7 +183,8 @@ def save_maxmin(request):
                 res['proname']=rs[3]
                 res['maxval']=rs[4]
                 res['minval']=rs[5]
-                res['info']=rs[6]
+                res['feature']=rs[6]
+                res['info']=rs[7]
                 result.append(res)
         if sqlstr<>"":
             confsql.runSql(sqlstr)  #数据库

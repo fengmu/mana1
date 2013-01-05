@@ -43,10 +43,10 @@ function postdata(){                              //提交数据函数
       success: function(msg){ //提交成功后的回调，msg变量是输出的内容。
         //alert("数据提交成功"); //如果有必要，可以把msg变量的值显示到某个DIV元素中
         json=JSON.parse(msg);
-        str="<thead><tr><th>门店代码</th><th>门店名称</th><th>条形码</th><th>商品代码</th><th>商品名称</th><th>商品大类</th><th>商品中类</th><th>商品小类</th><th>上限</th><th>下限</th><th>版本</th><th>开始日期</th><th>结束日期</th><th>写入日期</th></tr></thead><tbody>"
+        str="<thead><tr><th>门店代码</th><th>门店名称</th><th>条形码</th><th>商品代码</th><th>商品名称</th><th>商品大类</th><th>商品中类</th><th>商品小类</th><th>上限</th><th>下限</th><th>版本</th><th>开始日期</th><th>结束日期</th><th>写入日期</th><th>属性</th></tr></thead><tbody>"
         for(var i=0;i<json.length;i++)
         {
-           str+="<tr><td>"+json[i].braid+"</td><td>"+json[i].braname+"</td><td>"+json[i].barcode+"</td><td>"+json[i].proid+"</td><td>"+json[i].proname+"</td><td>"+json[i].prodl+"</td><td>"+json[i].prozl+"</td><td>"+json[i].proxl+"</td><td>"+json[i].maxval+"</td><td>"+json[i].minval+"</td><td>"+json[i].banben+"</td><td>"+json[i].startdate+"</td><td>"+json[i].enddate+"</td><td>"+json[i].adddate+"</td></tr>";
+           str+="<tr><td>"+json[i].braid+"</td><td>"+json[i].braname+"</td><td>"+json[i].barcode+"</td><td>"+json[i].proid+"</td><td>"+json[i].proname+"</td><td>"+json[i].prodl+"</td><td>"+json[i].prozl+"</td><td>"+json[i].proxl+"</td><td>"+json[i].maxval+"</td><td>"+json[i].minval+"</td><td>"+json[i].banben+"</td><td>"+json[i].startdate+"</td><td>"+json[i].enddate+"</td><td>"+json[i].adddate+"</td><td>"+json[i].feature+"</td></tr>";
         }
         str+="</tbody>"
         $("#result").html(str)
